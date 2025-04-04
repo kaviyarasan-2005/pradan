@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 export default function LoginScreen() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -33,25 +35,56 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-
-      <TextInput
-        placeholder="Enter ID"
-        value={username}
-        onChangeText={setUsername}
-        style={styles.input}
-        autoCapitalize="none"
+      <Image
+        source={{
+          uri: "https://cdn.builder.io/api/v1/image/assets/9d1cd6bf459045dbb6227baeceb3f918/867d62fa542fce490d0e2302b506e051838ec541?placeholderIfAbsent=true",
+        }}
+        style={styles.logo}
+        resizeMode="contain"
       />
-      <TextInput
-        placeholder="Enter Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        style={styles.input}
-      />
+      <View style={styles.titleContainer}>
+        <Text style={styles.titleText}>
+          <Text>Login to </Text>
+          <Text style={{ fontWeight: "bold" }}>Pradan</Text>
+        </Text>
+      </View>
+      <View style={{ margin: 18 }}></View>
 
-      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-        <Text style={styles.loginButtonText}>Login</Text>
+      {/* Username Input */}
+      <View style={styles.inputContainer}>
+        <Ionicons name="person-outline" size={20} color="#038003" style={styles.icon} />
+        <TextInput
+          style={styles.input}
+          placeholder="Enter ID"
+          placeholderTextColor="rgba(0, 0, 0, 0.5)"
+          value={username}
+          onChangeText={setUsername}
+          autoCapitalize="none"
+        />
+      </View>
+
+      {/* Password Input */}
+      <View style={styles.inputContainer}>
+        <Ionicons name="lock-closed-outline" size={20} color="#038003" style={styles.icon} />
+        <TextInput
+          style={styles.input}
+          placeholder="Enter Password"
+          placeholderTextColor="rgba(0, 0, 0, 0.5)"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={!showPassword}
+        />
+        <TouchableOpacity
+          style={styles.showButton}
+          onPress={() => setShowPassword(!showPassword)}
+        >
+          <Text style={styles.showButtonText}>{showPassword ? "Hide" : "Show"}</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Login Button */}
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text style={styles.buttonText}>LOGIN</Text>
       </TouchableOpacity>
     </View>
   );
@@ -60,35 +93,81 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff",
-    paddingHorizontal: 20,
+    marginHorizontal: "auto",
+    maxWidth: 480,
+    width: "100%",
+    paddingHorizontal: 39,
+    paddingVertical: 150,
+    alignItems: "stretch",
+    backgroundColor: "#f9f9f9",
   },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    marginBottom: 40,
+  logo: {
+    width: 200,
+    height: 70,
+    alignSelf: "center",
+  },
+  titleContainer: {
+    marginTop: 40,
+    marginBottom: 30,
+    alignItems: "center",
+  },
+  titleText: {
+    fontFamily: "Roboto",
+    fontSize: 32,
+    color: "#000",
+    lineHeight: 38,
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: 19,
+    borderColor: "#038003",
+    borderWidth: 1,
+    minWidth: 240,
+    width: "100%",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    justifyContent: "space-between",
+    marginBottom: 20,
+    backgroundColor: "#fff",
+  },
+  icon: {
+    marginRight: 10,
   },
   input: {
-    width: "100%",
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 10,
-    padding: 12,
-    marginVertical: 10,
+    flex: 1,
+    fontFamily: "Roboto",
     fontSize: 16,
+    color: "#000",
+    fontWeight: "500",
+    letterSpacing: 0.2,
   },
-  loginButton: {
+  showButton: {
+    marginLeft: 10,
+  },
+  showButtonText: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#038003",
+  },
+  button: {
+    alignSelf: "center",
+    borderRadius: 32,
     backgroundColor: "green",
-    paddingVertical: 15,
-    paddingHorizontal: 50,
-    borderRadius: 10,
-    marginTop: 20,
+    minHeight: 50,
+    width: 150,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 40,
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 2, height: 2 },
   },
-  loginButtonText: {
-    color: "white",
+  buttonText: {
     fontSize: 18,
     fontWeight: "bold",
+    color: "#fff",
+    textTransform: "uppercase",
   },
 });
