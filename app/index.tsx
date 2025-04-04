@@ -1,46 +1,58 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useState, useEffect } from "react";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 
-export default function Dashboard() {
+export default function LoginScreen() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const router = useRouter();
+
+  useEffect(() => {
+    const checkLogin = async () => {
+      const user = await AsyncStorage.getItem("user");
+      if (user === "loggedIn") {
+        router.replace("/dashboard");
+      }
+    };
+    checkLogin();
+  }, []);
+
+  const handleLogin = async () => {
+    if (username.trim() === "123" && password.trim() === "123") {
+      try {
+        await AsyncStorage.setItem("user", "loggedIn");
+        router.replace("/dashboard");
+      } catch (error) {
+        Alert.alert("Error", "Failed to save login state.");
+      }
+    } else {
+      Alert.alert("Invalid Credentials", "Please enter valid ID and Password");
+    }
+  };
 
   return (
     <View style={styles.container}>
-      {/* Sidebar */}
-      <View style={styles.sidebar}>
-        <TouchableOpacity onPress={() => router.replace("/dashboard")}>
-          <Text style={styles.sidebarItem}>Dashboard</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push("/settings")}>
-          <Text style={styles.sidebarItem}>Settings</Text>
-        </TouchableOpacity>
-      </View>
+      <Text style={styles.title}>Login</Text>
 
-      {/* Main Content */}
-      <View style={styles.mainContent}>
-        <Text style={styles.title}>Welcome to Dashboard</Text>
+      <TextInput
+        placeholder="Enter ID"
+        value={username}
+        onChangeText={setUsername}
+        style={styles.input}
+        autoCapitalize="none"
+      />
+      <TextInput
+        placeholder="Enter Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+        style={styles.input}
+      />
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => router.push("/totalSubmit")}
-        >
-          <Text style={styles.buttonText}>Total Submit</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => router.push("/pending")}
-        >
-          <Text style={styles.buttonText}>Pending</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => router.push("/approved")}
-        >
-          <Text style={styles.buttonText}>Approved</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+        <Text style={styles.loginButtonText}>Login</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -48,41 +60,35 @@ export default function Dashboard() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "row", // Side-by-side layout
-  },
-  sidebar: {
-    width: 100,
-    backgroundColor: "#f0f0f0",
-    paddingTop: 40,
-    alignItems: "center",
-  },
-  sidebarItem: {
-    fontSize: 16,
-    marginVertical: 20,
-    color: "blue",
-  },
-  mainContent: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#fff",
+    paddingHorizontal: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "bold",
-    marginBottom: 30,
+    marginBottom: 40,
   },
-  button: {
-    backgroundColor: "#007bff",
-    padding: 15,
+  input: {
+    width: "100%",
+    borderWidth: 1,
+    borderColor: "#ccc",
     borderRadius: 10,
-    width: "80%",
-    alignItems: "center",
+    padding: 12,
     marginVertical: 10,
+    fontSize: 16,
   },
-  buttonText: {
-    color: "#fff",
+  loginButton: {
+    backgroundColor: "green",
+    paddingVertical: 15,
+    paddingHorizontal: 50,
+    borderRadius: 10,
+    marginTop: 20,
+  },
+  loginButtonText: {
+    color: "white",
     fontSize: 18,
-    fontWeight: "600",
+    fontWeight: "bold",
   },
 });
