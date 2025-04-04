@@ -36,12 +36,10 @@ export default function LoginScreen() {
   return (
     <View style={styles.container}>
       <Image
-        source={{
-          uri: "https://cdn.builder.io/api/v1/image/assets/9d1cd6bf459045dbb6227baeceb3f918/867d62fa542fce490d0e2302b506e051838ec541?placeholderIfAbsent=true",
-        }}
-        style={styles.logo}
-        resizeMode="contain"
-      />
+  source={require("../assets/images/pradan_logo.png")} // Adjust path based on your project structure
+  style={styles.logo}
+  resizeMode="contain"
+/>
       <View style={styles.titleContainer}>
         <Text style={styles.titleText}>
           <Text>Login to </Text>
