@@ -1,40 +1,58 @@
-import { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import { useState, useEffect } from "react";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useRouter } from "expo-router"; // Correct way to navigate in Expo Router
+import { useRouter } from "expo-router";
 
 export default function LoginScreen() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter(); // Use router instead of navigation
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkLogin = async () => {
+      const user = await AsyncStorage.getItem("user");
+      if (user === "loggedIn") {
+        router.replace("/dashboard");
+      }
+    };
+    checkLogin();
+  }, []);
 
   const handleLogin = async () => {
-    if (username === "123" && password === "123") {
-      await AsyncStorage.setItem("user", "loggedIn");
-      router.replace("/dashboard"); // Correct navigation for Expo Router
+    if (username.trim() === "123" && password.trim() === "123") {
+      try {
+        await AsyncStorage.setItem("user", "loggedIn");
+        router.replace("/dashboard");
+      } catch (error) {
+        Alert.alert("Error", "Failed to save login state.");
+      }
     } else {
-      alert("Invalid credentials!");
+      Alert.alert("Invalid Credentials", "Please enter valid ID and Password");
     }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
-      <TextInput 
+
+      <TextInput
         placeholder="Enter ID"
         value={username}
         onChangeText={setUsername}
         style={styles.input}
+        autoCapitalize="none"
       />
-      <TextInput 
+      <TextInput
         placeholder="Enter Password"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
         style={styles.input}
       />
-      <View style={styles.buttonSpacing} />
-      <Button title="Login" onPress={handleLogin} color="green" />
+
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+        <Text style={styles.loginButtonText}>Login</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -44,19 +62,33 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#fff",
+    paddingHorizontal: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "bold",
-    marginBottom: 20,
+    marginBottom: 40,
   },
   input: {
+    width: "100%",
     borderWidth: 1,
-    padding: 10,
-    width: "80%",
+    borderColor: "#ccc",
+    borderRadius: 10,
+    padding: 12,
     marginVertical: 10,
+    fontSize: 16,
   },
-  buttonSpacing: {
-    margin: 10,
+  loginButton: {
+    backgroundColor: "green",
+    paddingVertical: 15,
+    paddingHorizontal: 50,
+    borderRadius: 10,
+    marginTop: 20,
+  },
+  loginButtonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });
