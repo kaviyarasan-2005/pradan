@@ -1,11 +1,18 @@
 import { useRouter } from "expo-router";
-import { View, ScrollView, StyleSheet } from "react-native";
+import { View, ScrollView, StyleSheet, Alert } from "react-native";
 import { useFormStore } from "./useFormStore";
 import { Card, Text, Button, Divider } from "react-native-paper";
 
 export default function Preview() {
   const router = useRouter();
   const { data } = useFormStore();
+
+  // Function to handle form submission
+  const handleSubmit = () => {
+    Alert.alert("Success", "Form Successfully Submitted!", [
+      { text: "OK", onPress: () => router.push("/dashboard") }
+    ]);
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -51,7 +58,7 @@ export default function Preview() {
 
       {/* Submit Button */}
       <View style={styles.buttonContainer}>
-        <Button mode="contained" onPress={() => alert("Form Submitted!")}>Submit</Button>
+        <Button mode="contained" onPress={handleSubmit}>Submit</Button>
       </View>
     </ScrollView>
   );
