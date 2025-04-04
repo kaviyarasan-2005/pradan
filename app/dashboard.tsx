@@ -10,6 +10,7 @@ import {
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import React from "react";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -90,63 +91,61 @@ export default function Dashboard() {
       </View>
 
       {/* Bottom Sheet Modal */}
-      <Modal
-        visible={showFormModal}
-        animationType="slide"
-        transparent
-        onRequestClose={() => setShowFormModal(false)}
+      {/* Bottom Sheet Modal */}
+<Modal
+  visible={showFormModal}
+  animationType="slide"
+  transparent
+  onRequestClose={() => setShowFormModal(false)}
+>
+  <View style={styles.modalOverlay}>
+    <TouchableOpacity
+      style={styles.overlayTouchable}
+      activeOpacity={1}
+      onPressOut={() => setShowFormModal(false)}
+    />
+    <View style={styles.bottomSheet}>
+      <TouchableOpacity
+        style={styles.modalButton}
+        onPress={() => {
+          setShowFormModal(false);
+          router.push("/landform");
+        }}
       >
-        <View style={styles.modalOverlay}>
-          {/* This allows clicking outside the modal to close it */}
-          <TouchableOpacity
-            style={styles.overlayTouchable}
-            activeOpacity={1}
-            onPressOut={() => setShowFormModal(false)}
-          />
+        <Text style={styles.modalButtonText}>Land Form</Text>
+      </TouchableOpacity>
 
-          <View style={styles.bottomSheet}>
-            <Text style={styles.modalTitle}>Choose a Form</Text>
+      <TouchableOpacity
+        style={styles.modalButton}
+        onPress={() => {
+          setShowFormModal(false);
+          router.push("/pondform");
+        }}
+      >
+        <Text style={styles.modalButtonText}>Pond Form</Text>
+      </TouchableOpacity>
 
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={() => {
-                router.push("/form1");
-                setShowFormModal(false);
-              }}
-            >
-              <Text style={styles.modalButtonText}>Form 1</Text>
-            </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.modalButton}
+        onPress={() => {
+          setShowFormModal(false);
+          router.push("/plantationform");
+        }}
+      >
+        <Text style={styles.modalButtonText}>Plantation Form</Text>
+      </TouchableOpacity>
 
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={() => {
-                router.push("/form2");
-                setShowFormModal(false);
-              }}
-            >
-              <Text style={styles.modalButtonText}>Form 2</Text>
-            </TouchableOpacity>
+      {/* Cancel Button */}
+      <TouchableOpacity
+        style={[styles.modalButton, { backgroundColor: "gray" }]}
+        onPress={() => setShowFormModal(false)}
+      >
+        <Text style={styles.modalButtonText}>Cancel</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+</Modal>
 
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={() => {
-                router.push("/form3");
-                setShowFormModal(false);
-              }}
-            >
-              <Text style={styles.modalButtonText}>Form 3</Text>
-            </TouchableOpacity>
-
-            {/* Cancel Button */}
-            <TouchableOpacity
-              style={styles.cancelButton}
-              onPress={() => setShowFormModal(false)}
-            >
-              <Text style={styles.cancelButtonText}>Cancel</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
     </View>
   );
 }
