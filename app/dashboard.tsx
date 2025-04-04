@@ -5,13 +5,16 @@ import {
   TouchableOpacity,
   StyleSheet,
   Animated,
+  Modal,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { Ionicons } from "@expo/vector-icons"; // make sure you have expo/vector-icons
+import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Dashboard() {
   const router = useRouter();
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [showFormModal, setShowFormModal] = useState(false);
   const slideAnim = useState(new Animated.Value(-200))[0];
 
   const toggleSidebar = () => {
@@ -22,6 +25,11 @@ export default function Dashboard() {
       useNativeDriver: false,
     }).start();
     setSidebarVisible(!sidebarVisible);
+  };
+
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem("user");
+    router.replace("/");
   };
 
   return (
@@ -41,6 +49,9 @@ export default function Dashboard() {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => router.push("/settings")}>
           <Text style={styles.sidebarItem}>Settings</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleLogout}>
+          <Text style={[styles.sidebarItem, { color: "red" }]}>Logout</Text>
         </TouchableOpacity>
       </Animated.View>
 
@@ -68,7 +79,74 @@ export default function Dashboard() {
         >
           <Text style={styles.buttonText}>Approved</Text>
         </TouchableOpacity>
+
+        {/* New Form Button */}
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => setShowFormModal(true)}
+        >
+          <Text style={styles.buttonText}>New Form</Text>
+        </TouchableOpacity>
       </View>
+
+      {/* Bottom Sheet Modal */}
+      <Modal
+        visible={showFormModal}
+        animationType="slide"
+        transparent
+        onRequestClose={() => setShowFormModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          {/* This allows clicking outside the modal to close it */}
+          <TouchableOpacity
+            style={styles.overlayTouchable}
+            activeOpacity={1}
+            onPressOut={() => setShowFormModal(false)}
+          />
+
+          <View style={styles.bottomSheet}>
+            <Text style={styles.modalTitle}>Choose a Form</Text>
+
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                router.push("/form1");
+                setShowFormModal(false);
+              }}
+            >
+              <Text style={styles.modalButtonText}>Form 1</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                router.push("/form2");
+                setShowFormModal(false);
+              }}
+            >
+              <Text style={styles.modalButtonText}>Form 2</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                router.push("/form3");
+                setShowFormModal(false);
+              }}
+            >
+              <Text style={styles.modalButtonText}>Form 3</Text>
+            </TouchableOpacity>
+
+            {/* Cancel Button */}
+            <TouchableOpacity
+              style={styles.cancelButton}
+              onPress={() => setShowFormModal(false)}
+            >
+              <Text style={styles.cancelButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -103,6 +181,9 @@ const styles = StyleSheet.create({
     marginVertical: 15,
     color: "blue",
   },
+  overlayTouchable: {
+    flex: 1,
+  },
   mainContent: {
     flex: 1,
     justifyContent: "center",
@@ -127,4 +208,44 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
   },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: "flex-end",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  bottomSheet: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 10,
+  },
+  modalButton: {
+    padding: 15,
+    backgroundColor: "#007bff",
+    borderRadius: 10,
+    marginVertical: 5,
+  },
+  modalButtonText: {
+    color: "#fff",
+    textAlign: "center",
+    fontWeight: "600",
+  },
+  cancelButton: {
+    padding: 15,
+    backgroundColor: "red",
+    borderRadius: 10,
+    marginTop: 10,
+  },
+  cancelButtonText: {
+    color: "#fff",
+    textAlign: "center",
+    fontWeight: "600",
+  },
 });
+
