@@ -51,11 +51,10 @@ export default function BasicDetails() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Title */}
       <Text style={styles.title}>Land Form</Text>
       <Text style={styles.subtitle}>Basic Details</Text>
 
-      {/* Questions */}
+      {/* Existing Questions */}
       <Text style={styles.question}>1. Name of Farmer:</Text>
       <TextInput
         value={form.name}
@@ -137,13 +136,16 @@ export default function BasicDetails() {
       ))}
 
       <Text style={styles.question}>11. Household Members:</Text>
+      <Text style={styles.question}>Adult:</Text>
       <TextInput
+      
         value={form.adults}
         onChangeText={(text) => setForm({ ...form, adults: text })}
         style={styles.input}
         placeholder="Adults"
         keyboardType="numeric"
       />
+      <Text style={styles.question}>children:</Text>
       <TextInput
         value={form.children}
         onChangeText={(text) => setForm({ ...form, children: text })}
@@ -207,8 +209,70 @@ export default function BasicDetails() {
           onPress={() => setForm({ ...form, houseType: item })}
         />
       ))}
+      <Text style={styles.question}>17. Drinking Water Source:</Text>
+      {["Ponds", "Well & Borewells", "Trucks"].map((item) => (
+        <Checkbox.Item
+          key={item}
+          label={item}
+          status={form.drinkingWater.includes(item) ? "checked" : "unchecked"}
+          onPress={() => toggleCheckbox("drinkingWater", item)}
+        />
+      ))}
 
-      {/* Rest of the questions go here */}
+      {/* Potability */}
+      <Text style={styles.question}>18. Potability:</Text>
+      {["Ponds", "Tanks", "Well & Borewells"].map((item) => (
+        <Checkbox.Item
+          key={item}
+          label={item}
+          status={form.potability.includes(item) ? "checked" : "unchecked"}
+          onPress={() => toggleCheckbox("potability", item)}
+        />
+      ))}
+
+      {/* Domestic Water Source */}
+      <Text style={styles.question}>19. Domestic Water Source:</Text>
+      {["Ponds", "Tanks", "Well & Borewells"].map((item) => (
+        <Checkbox.Item
+          key={item}
+          label={item}
+          status={form.domesticWater.includes(item) ? "checked" : "unchecked"}
+          onPress={() => toggleCheckbox("domesticWater", item)}
+        />
+      ))}
+
+      {/* Toilet Availability */}
+      <Text style={styles.question}>20. Toilet Availability:</Text>
+      {["Yes", "No"].map((item) => (
+        <Checkbox.Item
+          key={item}
+          label={item}
+          status={form.toiletAvailability === item ? "checked" : "unchecked"}
+          onPress={() => setForm({ ...form, toiletAvailability: item })}
+        />
+      ))}
+
+      {/* Toilet Condition */}
+      <Text style={styles.question}>21. Toilet Condition:</Text>
+      {["Working", "Not Working"].map((item) => (
+        <Checkbox.Item
+          key={item}
+          label={item}
+          status={form.toiletCondition === item ? "checked" : "unchecked"}
+          onPress={() => setForm({ ...form, toiletCondition: item })}
+        />
+      ))}
+
+      {/* Education of Householder */}
+      <Text style={styles.question}>22. Education of Householder:</Text>
+      {["Illiterate", "Primary", "Secondary", "University"].map((item) => (
+        <Checkbox.Item
+          key={item}
+          label={item}
+          status={form.education === item ? "checked" : "unchecked"}
+          onPress={() => setForm({ ...form, education: item })}
+        />
+      ))}
 
       <Button mode="contained" onPress={handleNext} style={styles.button}>
         Next
