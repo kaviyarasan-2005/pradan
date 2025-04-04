@@ -109,7 +109,7 @@ export default function Dashboard() {
         style={styles.modalButton}
         onPress={() => {
           setShowFormModal(false);
-          router.push("/landform");
+          router.push("/landform/basicDetails.tsx");
         }}
       >
         <Text style={styles.modalButtonText}>Land Form</Text>
@@ -119,7 +119,7 @@ export default function Dashboard() {
         style={styles.modalButton}
         onPress={() => {
           setShowFormModal(false);
-          router.push("/pondform");
+          router.push("/pondform/pondform");
         }}
       >
         <Text style={styles.modalButtonText}>Pond Form</Text>
@@ -129,7 +129,7 @@ export default function Dashboard() {
         style={styles.modalButton}
         onPress={() => {
           setShowFormModal(false);
-          router.push("/plantationform");
+          router.push("/plantationform/plantationform");
         }}
       >
         <Text style={styles.modalButtonText}>Plantation Form</Text>
