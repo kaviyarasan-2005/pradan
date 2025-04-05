@@ -44,7 +44,7 @@ export default function LandDevelopment() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Land Development Form</Text>
+      <Text style={styles.title}>Land Form</Text>
       <Text style={styles.subtitle}>Land Development Details</Text>
 
       <Text style={styles.label}>31. S.F. No. of the land to be developed</Text>
@@ -185,34 +185,10 @@ export default function LandDevelopment() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    fontWeight: "600",
-    textAlign: "center",
-    marginBottom: 16,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: "500",
-    marginTop: 12,
-    marginBottom: 4,
-  },
-  input: {
-    marginBottom: 12,
-  },
-  divider: {
-    marginVertical: 10,
-  },
-  button: {
-    marginTop: 20,
-  },
+  container: { padding: 20 },
+  title: { fontSize: 24, fontWeight: "bold", textAlign: "center" },
+  subtitle: { fontSize: 18, fontWeight: "600", textAlign: "center", marginBottom: 20 },
+  question: { fontWeight: "bold", marginTop: 10 },
+  input: {  marginBottom: 10, borderRadius: 5000},
+  button: { marginTop: 20 },
 });
