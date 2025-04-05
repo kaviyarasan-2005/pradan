@@ -133,13 +133,7 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingTop: 50, // So content doesn't hide behind the icon
   },
-  backButton: {
-    position: "absolute",
-    top: 10,
-    left: 10,
-    zIndex: 10,
-    backgroundColor: "white", // Optional: match screen background
-  },
+ 
   card: {
     marginBottom: 20,
   },
