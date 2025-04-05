@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import { FontAwesome } from '@expo/vector-icons';
+
 
 export default function LoginScreen() {
   const [username, setUsername] = useState("");
@@ -50,10 +51,10 @@ export default function LoginScreen() {
 
       {/* Username Input */}
       <View style={styles.inputContainer}>
-        <Ionicons name="person-outline" size={20} color="#038003" style={styles.icon} />
+      <FontAwesome name="envelope" size={20} style={styles.icon} />
         <TextInput
           style={styles.input}
-          placeholder="Enter ID"
+          placeholder="abc123@gmail.com"
           placeholderTextColor="rgba(0, 0, 0, 0.5)"
           value={username}
           onChangeText={setUsername}
@@ -63,7 +64,7 @@ export default function LoginScreen() {
 
       {/* Password Input */}
       <View style={styles.inputContainer}>
-        <Ionicons name="lock-closed-outline" size={20} color="#038003" style={styles.icon} />
+      <FontAwesome name="lock" size={20} style={styles.icon} />
         <TextInput
           style={styles.input}
           placeholder="Enter Password"
@@ -131,13 +132,14 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 10,
+    color:'#4a7744',
   },
   input: {
     flex: 1,
     fontFamily: "Roboto",
     fontSize: 16,
     color: "#000",
-    fontWeight: "500",
+    fontWeight: "100",
     letterSpacing: 0.2,
   },
   showButton: {
@@ -150,8 +152,8 @@ const styles = StyleSheet.create({
   },
   button: {
     alignSelf: "center",
-    borderRadius: 32,
-    backgroundColor: "green",
+    borderRadius: 8,
+    backgroundColor: "#134e13",
     minHeight: 50,
     width: 150,
     justifyContent: "center",
