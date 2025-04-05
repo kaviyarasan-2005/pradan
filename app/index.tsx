@@ -16,7 +16,7 @@ export default function LoginScreen() {
       if (user === "loggedIn") {
         router.replace("/dashboard");
       }
-    };
+    };gdsfjhfbdjdjbfj
     checkLogin();
   }, []);
 
@@ -36,7 +36,7 @@ export default function LoginScreen() {
   return (
     <View style={styles.container}>
       <Image
-  source={require("../assets/images/pradan_logo.png")} // Adjust path based on your project structure
+  source={require("../assets/images/pradan_logo.png")} 
   style={styles.logo}
   resizeMode="contain"
 />
