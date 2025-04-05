@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { View, Text, TextInput, ScrollView, StyleSheet } from "react-native";
-import { Checkbox, Button } from "react-native-paper";
+import { Checkbox, Button,IconButton } from "react-native-paper";
 import { useFormStore } from "./useFormStore";
 
 export default function LandOwnership() {
@@ -40,6 +40,12 @@ export default function LandOwnership() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+        <IconButton
+        icon="arrow-left"
+        size={24}
+        style={styles.backButton}
+        onPress={() => router.back()}
+      />
       <Text style={styles.title}>Land Form</Text>
       <Text style={styles.subtitle}>Land Ownership & Livestock</Text>
 
