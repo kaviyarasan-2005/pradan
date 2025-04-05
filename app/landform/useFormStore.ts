@@ -9,3 +9,4 @@ export const useFormStore = create<FormState>((set) => ({
   data: {}, // Store form data here
   setData: (newData) => set((state) => ({ data: { ...state.data, ...newData } })),
 }));
+export default FormState;

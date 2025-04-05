@@ -1,12 +1,41 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { View, Text, TextInput, Button } from "react-native";
+import { View, ScrollView, StyleSheet } from "react-native";
+import { Text, TextInput, Button, Checkbox, Divider } from "react-native-paper";
 import { useFormStore } from "./useFormStore";
 
 export default function LandDevelopment() {
   const router = useRouter();
   const { data, setData } = useFormStore();
-  const [form, setForm] = useState(data.landDevelopment || { irrigation: "", crops: "" });
+
+  const [form, setForm] = useState(() => {
+    const initial = data.landDevelopment || {};
+    return {
+      sfNumber: initial.sfNumber || "",
+      soilType: initial.soilType || [],
+      landBenefit: initial.landBenefit || "",
+      inspectionBy: initial.inspectionBy || "",
+      approvedBy: initial.approvedBy || "",
+      dateInspectionText: initial.dateInspectionText || "",
+      dateApprovalText: initial.dateApprovalText || "",
+      workType: initial.workType || [],
+      workTypeText: initial.workTypeText || "",
+      proposalArea: initial.proposalArea || "",
+      otherWorks: initial.otherWorks || "",
+      pradanContribution: initial.pradanContribution || "",
+      farmerContribution: initial.farmerContribution || "",
+      totalEstimate: initial.totalEstimate || "",
+    };
+  });
+
+  const toggleCheckbox = (field: string, value: string) => {
+    const list = form[field] || [];
+    if (list.includes(value)) {
+      setForm({ ...form, [field]: list.filter((item) => item !== value) });
+    } else {
+      setForm({ ...form, [field]: [...list, value] });
+    }
+  };
 
   const handleNext = () => {
     setData({ landDevelopment: form });
@@ -14,20 +43,176 @@ export default function LandDevelopment() {
   };
 
   return (
-    <View style={{ padding: 20 }}>
-      <Text>Irrigation Type:</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>Land Development Form</Text>
+      <Text style={styles.subtitle}>Land Development Details</Text>
+
+      <Text style={styles.label}>31. S.F. No. of the land to be developed</Text>
       <TextInput
-        value={form.irrigation}
-        onChangeText={(text) => setForm({ ...form, irrigation: text })}
-        style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+        value={form.sfNumber}
+        onChangeText={(text) => setForm({ ...form, sfNumber: text })}
+        style={styles.input}
+        mode="outlined"
       />
-      <Text>Crops Grown:</Text>
+
+      <Text style={styles.label}>32. Soil Type</Text>
+      {["Red Soil", "Black Cotton", "Sandy Loam", "Laterite"].map((type) => (
+        <Checkbox.Item
+          key={type}
+          label={type}
+          status={form.soilType.includes(type) ? "checked" : "unchecked"}
+          onPress={() => toggleCheckbox("soilType", type)}
+        />
+      ))}
+
+      <Divider style={styles.divider} />
+
+      <Text style={styles.label}>33. Land to benefit (ha)</Text>
       <TextInput
-        value={form.crops}
-        onChangeText={(text) => setForm({ ...form, crops: text })}
-        style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+        value={form.landBenefit}
+        onChangeText={(text) => setForm({ ...form, landBenefit: text })}
+        style={styles.input}
+        keyboardType="numeric"
+        mode="outlined"
       />
-      <Button title="Next" onPress={handleNext} />
-    </View>
+
+      <Text style={styles.label}>34. Field Inspection done by</Text>
+      {["Associate", "Professional"].map((role) => (
+        <Checkbox.Item
+          key={role}
+          label={role}
+          status={form.inspectionBy === role ? "checked" : "unchecked"}
+          onPress={() => setForm({ ...form, inspectionBy: role })}
+        />
+      ))}
+
+      <Text style={styles.label}>35. Site Approved by</Text>
+      {["Coordinator", "Team Leader"].map((role) => (
+        <Checkbox.Item
+          key={role}
+          label={role}
+          status={form.approvedBy === role ? "checked" : "unchecked"}
+          onPress={() => setForm({ ...form, approvedBy: role })}
+        />
+      ))}
+
+      <Text style={styles.label}>36. Date of Inspection</Text>
+      <TextInput
+        value={form.dateInspectionText}
+        onChangeText={(text) => setForm({ ...form, dateInspectionText: text })}
+        style={styles.input}
+        placeholder="DD/MM/YYYY"
+        mode="outlined"
+      />
+
+      <Text style={styles.label}>37. Date of Approval</Text>
+      <TextInput
+        value={form.dateApprovalText}
+        onChangeText={(text) => setForm({ ...form, dateApprovalText: text })}
+        style={styles.input}
+        placeholder="DD/MM/YYYY"
+        mode="outlined"
+      />
+
+      <Text style={styles.label}>38. Type of work proposed</Text>
+      {["Prosopis removal", "Redevelopment of eroded lands", "Silt application", "Other"].map(
+        (work) => (
+          <Checkbox.Item
+            key={work}
+            label={work}
+            status={form.workType.includes(work) ? "checked" : "unchecked"}
+            onPress={() => toggleCheckbox("workType", work)}
+          />
+        )
+      )}
+      <TextInput
+        value={form.workTypeText}
+        onChangeText={(text) => setForm({ ...form, workTypeText: text })}
+        style={styles.input}
+        placeholder="Details about work types"
+        mode="outlined"
+      />
+
+      <Text style={styles.label}>39. Area benefited by proposal works (ha)</Text>
+      <TextInput
+        value={form.proposalArea}
+        onChangeText={(text) => setForm({ ...form, proposalArea: text })}
+        style={styles.input}
+        keyboardType="numeric"
+        mode="outlined"
+      />
+
+      <Text style={styles.label}>40. Any other works proposed</Text>
+      <TextInput
+        value={form.otherWorks}
+        onChangeText={(text) => setForm({ ...form, otherWorks: text })}
+        style={styles.input}
+        mode="outlined"
+      />
+
+      <Text style={styles.label}>41. PRADAN Contribution</Text>
+      <TextInput
+        value={form.pradanContribution}
+        onChangeText={(text) => setForm({ ...form, pradanContribution: text })}
+        style={styles.input}
+        keyboardType="numeric"
+        mode="outlined"
+      />
+
+      <Text style={styles.label}>42. Farmer Contribution</Text>
+      <TextInput
+        value={form.farmerContribution}
+        onChangeText={(text) => setForm({ ...form, farmerContribution: text })}
+        style={styles.input}
+        keyboardType="numeric"
+        mode="outlined"
+      />
+
+      <Text style={styles.label}>43. Total Estimate Amount</Text>
+      <TextInput
+        value={form.totalEstimate}
+        onChangeText={(text) => setForm({ ...form, totalEstimate: text })}
+        style={styles.input}
+        keyboardType="numeric"
+        mode="outlined"
+      />
+
+      <Button mode="contained" onPress={handleNext} style={styles.button}>
+        Next
+      </Button>
+    </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    textAlign: "center",
+    marginBottom: 16,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: "500",
+    marginTop: 12,
+    marginBottom: 4,
+  },
+  input: {
+    marginBottom: 12,
+  },
+  divider: {
+    marginVertical: 10,
+  },
+  button: {
+    marginTop: 20,
+  },
+});
