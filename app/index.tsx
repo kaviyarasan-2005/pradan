@@ -16,7 +16,7 @@ export default function LoginScreen() {
       if (user === "loggedIn") {
         router.replace("/dashboard");
       }
-    };gdsfjhfbdjdjbfj
+    };
     checkLogin();
   }, []);
 
