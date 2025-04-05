@@ -1,65 +1,99 @@
+import React from "react";
 import { useRouter } from "expo-router";
-import { View, ScrollView, StyleSheet, Alert } from "react-native";
-import { useFormStore } from "./useFormStore";
+import { ScrollView, StyleSheet, Alert, View } from "react-native";
 import { Card, Text, Button, Divider } from "react-native-paper";
+import { useFormStore } from "./useFormStore";
 
 export default function Preview() {
   const router = useRouter();
   const { data } = useFormStore();
 
-  // Function to handle form submission
   const handleSubmit = () => {
     Alert.alert("Success", "Form Successfully Submitted!", [
-      { text: "OK", onPress: () => router.push("/dashboard") }
+      { text: "OK", onPress: () => router.push("/dashboard") },
     ]);
   };
 
+  const renderSection = (title: string, fields: { label: string; value: any }[], editRoute: string) => (
+    <Card style={styles.card}>
+      <Card.Title title={title} />
+      <Card.Content>
+        {fields.map((field, index) => (
+          <View key={index} style={styles.fieldContainer}>
+            <Text style={styles.label}>{field.label}</Text>
+            {Array.isArray(field.value) ? (
+              field.value.map((item, idx) => <Text key={idx} style={styles.value}>{item}</Text>)
+            ) : (
+              <Text style={styles.value}>{field.value}</Text>
+            )}
+            <Divider style={styles.divider} />
+          </View>
+        ))}
+      </Card.Content>
+      <Card.Actions>
+        <Button mode="outlined" onPress={() => router.push(editRoute)}>Edit</Button>
+      </Card.Actions>
+    </Card>
+  );
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Basic Details Section */}
-      <Card style={styles.card}>
-        <Card.Title title="Preview Details" />
-        <Card.Content>
-          <View style={styles.row}>
-            <Text variant="titleMedium" style={styles.sectionTitle}>Basic Details</Text>
-            <Button mode="outlined" onPress={() => router.push("/landform/basicDetails.tsx")}>Edit</Button>
-          </View>
-          <Text>Name: {data.basicDetails?.name}</Text>
-          <Text>Age: {data.basicDetails?.age}</Text>
-          <Divider style={styles.divider} />
+       {renderSection("Basic Details", [
+        { label: "1. Name of Farmer", value: data.basicDetails?.name },
+        { label: "2. Mobile Number", value: data.basicDetails?.mobile },
+        { label: "3. Hamlet", value: data.basicDetails?.hamlet },
+        { label: "4. Panchayat", value: data.basicDetails?.panchayat },
+        { label: "5. Block", value: data.basicDetails?.block },
+        { label: "6. Identity Card", value: data.basicDetails?.idCardType },
+        { label: "7. ID Card Number", value: data.basicDetails?.idCardNumber },
+        { label: "8. Gender", value: data.basicDetails?.gender },
+        { label: "9. Father / Spouse Name", value: data.basicDetails?.fatherSpouse },
+        { label: "10. Type of Household", value: data.basicDetails?.householdType },
+        { label: "11. Household Members - Adults", value: data.basicDetails?.adults },
+        { label: "    Household Members - Children", value: data.basicDetails?.children },
+        { label: "12. Occupation of Household Members", value: data.basicDetails?.occupation },
+        { label: "13. Special Category", value: data.basicDetails?.specialCategory ? "Yes" : "No" },
+        { label: "    Special Category Number", value: data.basicDetails?.specialCategoryNumber },
+        { label: "14. Caste", value: data.basicDetails?.caste },
+        { label: "15. House Ownership", value: data.basicDetails?.houseOwnership },
+        { label: "16. Type of House", value: data.basicDetails?.houseType },
+        { label: "17. Drinking Water Source", value: data.basicDetails?.drinkingWater },
+        { label: "18. Potability", value: data.basicDetails?.potability },
+        { label: "19. Domestic Water Source", value: data.basicDetails?.domesticWater },
+        { label: "20. Toilet Availability", value: data.basicDetails?.toiletAvailability },
+        { label: "21. Toilet Condition", value: data.basicDetails?.toiletCondition },
+        { label: "22. Education of Householder", value: data.basicDetails?.education },
+      ], "./basicDetails")}
+      {renderSection("Land Development Details", [
+        { label: "31. S.F. No. of the land to be developed", value: data.landDevelopment?.sfNumber },
+        { label: "32. Soil Type", value: data.landDevelopment?.soilType },
+        { label: "33. Land to benefit (ha)", value: data.landDevelopment?.landBenefit },
+        { label: "34. Field Inspection done by", value: data.landDevelopment?.inspectionBy },
+        { label: "35. Site Approved by", value: data.landDevelopment?.approvedBy },
+        { label: "36. Date of Inspection", value: data.landDevelopment?.dateInspectionText },
+        { label: "37. Date of Approval", value: data.landDevelopment?.dateApprovalText },
+        { label: "38. Type of work proposed", value: data.landDevelopment?.workType },
+        { label: "   Details about work types", value: data.landDevelopment?.workTypeText },
+        { label: "39. Area benefited by proposal works (ha)", value: data.landDevelopment?.proposalArea },
+        { label: "40. Any other works proposed", value: data.landDevelopment?.otherWorks },
+        { label: "41. PRADAN Contribution", value: data.landDevelopment?.pradanContribution },
+        { label: "42. Farmer Contribution", value: data.landDevelopment?.farmerContribution },
+        { label: "43. Total Estimate Amount", value: data.landDevelopment?.totalEstimate },
+      ], "./landDevelopment")}
 
-          {/* Land Ownership Section */}
-          <View style={styles.row}>
-            <Text variant="titleMedium" style={styles.sectionTitle}>Land Ownership</Text>
-            <Button mode="outlined" onPress={() => router.push("./landOwnership")}>Edit</Button>
-          </View>
-          <Text>Land Size: {data.landOwnership?.landSize}</Text>
-          <Text>Livestock: {data.landOwnership?.livestock}</Text>
-          <Divider style={styles.divider} />
+      {renderSection("Bank Details", [
+        { label: "44. Name of Account Holder", value: data.bankDetails?.accountHolderName },
+        { label: "45. Account Number", value: data.bankDetails?.accountNumber },
+        { label: "46. Name of the Bank", value: data.bankDetails?.bankName },
+        { label: "47. Branch", value: data.bankDetails?.branch },
+        { label: "48. IFSC", value: data.bankDetails?.ifscCode },
+        { label: "49. Farmer has agreed for the work and his contribution", value: data.bankDetails?.farmerAgreed },
+        { label: "50. Files submitted", value: data.bankDetails?.submittedFiles },
+      ], "./bankDetails")}
 
-          {/* Land Development Section */}
-          <View style={styles.row}>
-            <Text variant="titleMedium" style={styles.sectionTitle}>Land Development</Text>
-            <Button mode="outlined" onPress={() => router.push("./landDevelopment")}>Edit</Button>
-          </View>
-          <Text>Irrigation Type: {data.landDevelopment?.irrigation}</Text>
-          <Text>Crops Grown: {data.landDevelopment?.crops}</Text>
-          <Divider style={styles.divider} />
-
-          {/* Bank Details Section */}
-          <View style={styles.row}>
-            <Text variant="titleMedium" style={styles.sectionTitle}>Bank Details</Text>
-            <Button mode="outlined" onPress={() => router.push("./bankDetails")}>Edit</Button>
-          </View>
-          <Text>Account Number: {data.bankDetails?.accountNumber}</Text>
-          <Text>IFSC Code: {data.bankDetails?.ifscCode}</Text>
-        </Card.Content>
-      </Card>
-
-      {/* Submit Button */}
-      <View style={styles.buttonContainer}>
-        <Button mode="contained" onPress={handleSubmit}>Submit</Button>
-      </View>
+      <Button mode="contained" onPress={handleSubmit} style={styles.submitButton}>
+        Submit
+      </Button>
     </ScrollView>
   );
 }
@@ -67,25 +101,23 @@ export default function Preview() {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    flexGrow: 1,
   },
   card: {
-    padding: 10,
+    marginBottom: 20,
   },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 5,
+  fieldContainer: {
+    marginBottom: 10,
   },
-  sectionTitle: {
+  label: {
     fontWeight: "bold",
   },
-  divider: {
-    marginVertical: 10,
+  value: {
+    marginLeft: 10,
   },
-  buttonContainer: {
+  divider: {
+    marginVertical: 5,
+  },
+  submitButton: {
     marginTop: 20,
-    alignItems: "center",
   },
 });
