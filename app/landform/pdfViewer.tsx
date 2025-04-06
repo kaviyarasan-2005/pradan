@@ -1,34 +1,36 @@
-import React from "react";
-import { View, StyleSheet } from "react-native";
+import React, { useEffect } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { IconButton } from "react-native-paper";
-import { WebView } from "react-native-webview";
+import * as IntentLauncher from "expo-intent-launcher";
+import * as FileSystem from "expo-file-system";
+import { Alert, Platform } from "react-native";
 
-export default function PDFViewer() {
-  const router = useRouter();
+export default function PdfViewer() {
   const { uri } = useLocalSearchParams();
+  const router = useRouter();
 
-  return (
-    <View style={{ flex: 1 }}>
-      <IconButton
-        icon="arrow-left"
-        size={24}
-        style={styles.backButton}
-        onPress={() => router.back()}
-      />
-      <WebView
-        source={{ uri: uri as string }}
-        style={{ flex: 1 }}
-      />
-    </View>
-  );
+  useEffect(() => {
+    const openPdf = async () => {
+      try {
+        const decodedUri = decodeURIComponent(uri as string);
+
+        if (Platform.OS === "android") {
+          IntentLauncher.startActivityAsync("android.intent.action.VIEW", {
+            data: decodedUri,
+            flags: 1,
+            type: "application/pdf",
+          });
+          router.back(); // Go back after launching
+        } else {
+          Alert.alert("Unsupported", "This preview method is Android only.");
+        }
+      } catch (err) {
+        console.error("Error opening PDF:", err);
+        Alert.alert("Error", "Could not open the PDF.");
+      }
+    };
+
+    if (uri) openPdf();
+  }, [uri]);
+
+  return null;
 }
-
-const styles = StyleSheet.create({
-  backButton: {
-    position: "absolute",
-    top: 10,
-    left: 10,
-    zIndex: 1,
-  },
-});

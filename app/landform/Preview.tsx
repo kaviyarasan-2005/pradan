@@ -1,3 +1,4 @@
+// app/landform/preview.tsx
 import React from "react";
 import { useRouter } from "expo-router";
 import { ScrollView, StyleSheet, Alert, View } from "react-native";
@@ -21,26 +22,43 @@ export default function Preview() {
         {fields.map((field, index) => (
           <View key={index} style={styles.fieldContainer}>
             <Text style={styles.label}>{field.label}</Text>
+
             {Array.isArray(field.value) ? (
-              field.value.map((item, idx) =>
-                typeof item === "object" && item.uri ? (
-                  <Button
-                    key={idx}
-                    mode="outlined"
-                    onPress={() =>
-                      router.push({
-                        pathname: "/pdfViewer",
-                        params: { uri: item.uri },
-                      })
-                    }
-                    style={{ marginVertical: 4 }}
-                  >
-                    {item.name || `View File ${idx + 1}`}
-                  </Button>
-                ) : (
-                  <Text key={idx} style={styles.value}>{item}</Text>
-                )
-              )
+              field.value.map((item, idx) => {
+                if (typeof item === "object" && item?.label && item?.uri) {
+                  return (
+                    <View
+                      key={idx}
+                      style={styles.fileRow}
+                    >
+                      <Text style={styles.value}>{item.label}</Text>
+                      <Button
+                        mode="text"
+                        onPress={() =>
+                          router.push(
+                            `/landform/pdfViewer?uri=${encodeURIComponent(item.uri)}`
+                          )
+                        }
+                        compact
+                      >
+                        View
+                      </Button>
+                    </View>
+                  );
+                } else if (typeof item === "object") {
+                  return (
+                    <Text key={idx} style={styles.value}>
+                      {JSON.stringify(item)}
+                    </Text>
+                  );
+                } else {
+                  return (
+                    <Text key={idx} style={styles.value}>
+                      {item}
+                    </Text>
+                  );
+                }
+              })
             ) : typeof field.value === "object" && field.value !== null ? (
               Object.entries(field.value).map(([key, val], idx) => (
                 <Text key={idx} style={styles.value}>{`${key}: ${val}`}</Text>
@@ -48,12 +66,23 @@ export default function Preview() {
             ) : (
               <Text style={styles.value}>{field.value}</Text>
             )}
+
             <Divider style={styles.divider} />
           </View>
         ))}
       </Card.Content>
       <Card.Actions>
-        <Button mode="outlined" onPress={() => router.push(editRoute)}>Edit</Button>
+        <Button
+          mode="outlined"
+          onPress={() =>
+            router.push({
+              pathname: editRoute,
+              params: { returnTo: "/landform/Preview" },
+            })
+          }
+        >
+          Edit
+        </Button>
       </Card.Actions>
     </Card>
   );
@@ -67,7 +96,8 @@ export default function Preview() {
         onPress={() => router.back()}
       />
 
-      {renderSection("Basic Details", [
+    
+{renderSection("Basic Details", [
         { label: "1. Name of Farmer", value: data.basicDetails?.name },
         { label: "2. Mobile Number", value: data.basicDetails?.mobile },
         { label: "3. Hamlet", value: data.basicDetails?.hamlet },
@@ -92,7 +122,7 @@ export default function Preview() {
         { label: "20. Toilet Availability", value: data.basicDetails?.toiletAvailability },
         { label: "21. Toilet Condition", value: data.basicDetails?.toiletCondition },
         { label: "22. Education of Householder", value: data.basicDetails?.education },
-      ], "./basicDetails.tsx")}
+      ], "/landform/basicDetails")}
 
       {renderSection("Land Ownership & Livestock", [
         { label: "23. Land Ownership", value: data.landOwnership?.landOwnershipType },
@@ -104,7 +134,7 @@ export default function Preview() {
         { label: "28. Revenue Village", value: data.landOwnership?.revenueVillage },
         { label: "29. Crop Season", value: data.landOwnership?.cropSeason },
         { label: "30. Livestock at Home", value: data.landOwnership?.livestock },
-      ], "./landOwnership")}
+      ], "/landform/landOwnership")}
 
       {renderSection("Land Development Details", [
         { label: "31. S.F. No. of the land to be developed", value: data.landDevelopment?.sfNumber },
@@ -121,7 +151,7 @@ export default function Preview() {
         { label: "41. PRADAN Contribution", value: data.landDevelopment?.pradanContribution },
         { label: "42. Farmer Contribution", value: data.landDevelopment?.farmerContribution },
         { label: "43. Total Estimate Amount", value: data.landDevelopment?.totalEstimate },
-      ], "./landDevelopment")}
+      ], "/landform/landDevelopment")}
 
       {renderSection("Bank Details", [
         { label: "44. Name of Account Holder", value: data.bankDetails?.accountHolderName },
@@ -137,10 +167,14 @@ export default function Preview() {
             Object.values(data.bankDetails.submittedFiles).some(Boolean)
               ? Object.entries(data.bankDetails.submittedFiles)
                   .filter(([_, val]) => !!val)
-                  .map(([key, val]) => ({ name: `${key}: ${val.name}` }))
-              : "No files uploaded",
+                  .map(([key, val]) => ({
+                    label: `${key}: ${val.name}`,
+                    uri: val.uri,
+                  }))
+              : ["No files uploaded"],
         }
-      ], "./bankDetails")}
+      ], "/landform/bankDetails")}
+
 
       <Button mode="contained" onPress={handleSubmit} style={styles.submitButton}>
         Submit
@@ -177,5 +211,11 @@ const styles = StyleSheet.create({
     top: 10,
     left: 10,
     zIndex: 1,
+  },
+  fileRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 4,
   },
 });
