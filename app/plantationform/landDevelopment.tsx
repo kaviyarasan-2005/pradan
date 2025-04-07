@@ -153,29 +153,32 @@ export default function LandDevelopment() {
         placeholder="DD/MM/YYYY"
         mode="outlined"
       />
+<Text style={styles.label}>38. Type of Plantation Proposed</Text>
+{[
+  "Mango",
+  "Guava",
+  "Lemon",
+  "Moringa",
+  "other"
+].map((work) => (
+  <Checkbox.Item
+    key={work}
+    label={work}
+    status={form.workType.includes(work) ? "checked" : "unchecked"}
+    onPress={() => toggleCheckbox("workType", work)}
+  />
+))}
 
-      <Text style={styles.label}>38. Type of Plantation Proposed</Text>
-      {[
-        "Prosopis removal",
-        "Redevelopment of eroded lands",
-        "Silt application",
-        "Other",
-      ].map((work) => (
-        <Checkbox.Item
-          key={work}
-          label={work}
-          status={form.workType.includes(work) ? "checked" : "unchecked"}
-          onPress={() => toggleCheckbox("workType", work)}
-        />
-      ))}
-
-      <TextInput
-        value={form.workTypeText}
-        onChangeText={(text) => setForm({ ...form, workTypeText: text })}
-        style={styles.input}
-        placeholder="Details about work types"
-        mode="outlined"
-      />
+{/* Only show this if "other" is selected */}
+{form.workType.includes("other") && (
+  <TextInput
+    value={form.workTypeText}
+    onChangeText={(text) => setForm({ ...form, workTypeText: text })}
+    style={styles.input}
+    placeholder="Specify the type of Plantation"
+    mode="outlined"
+  />
+)}
 
       <Text style={styles.label}>
         39. Area benefited by proposal works (ha)

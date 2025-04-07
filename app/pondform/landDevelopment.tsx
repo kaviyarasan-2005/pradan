@@ -196,7 +196,7 @@ export default function LandDevelopment() {
         mode="outlined"
       />
 
-      <Text style={styles.label}>41.Volume of Excavation</Text>
+      <Text style={styles.label}>41. PRADAN Contribution</Text>
       <TextInput
         value={form.pradanContribution}
         onChangeText={(text) => setForm({ ...form, pradanContribution: text })}
