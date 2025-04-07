@@ -148,24 +148,17 @@ export default function Preview() {
         { label: "41. PRADAN Contribution", value: data.landDevelopment?.pradanContribution },
         { label: "42. Farmer Contribution", value: data.landDevelopment?.farmerContribution },
         { label: "43. Total Estimate Amount", value: data.landDevelopment?.totalEstimate },
-        {
-          label: "44. Geo Location (Lat, Long)",
-          value:
-            data.landDevelopment?.location?.latitude && data.landDevelopment?.location?.longitude
-              ? `${data.landDevelopment.location.latitude}, ${data.landDevelopment.location.longitude}`
-              : "Not captured",
-        },
       ], "/landform/landDevelopment")}
 
       {renderSection("Bank Details", [
-        { label: "45. Name of Account Holder", value: data.bankDetails?.accountHolderName },
-        { label: "46. Account Number", value: data.bankDetails?.accountNumber },
-        { label: "47. Name of the Bank", value: data.bankDetails?.bankName },
-        { label: "48. Branch", value: data.bankDetails?.branch },
-        { label: "49. IFSC", value: data.bankDetails?.ifscCode },
-        { label: "50. Farmer has agreed for the work and his contribution", value: data.bankDetails?.farmerAgreed },
+        { label: "44. Name of Account Holder", value: data.bankDetails?.accountHolderName },
+        { label: "45. Account Number", value: data.bankDetails?.accountNumber },
+        { label: "46. Name of the Bank", value: data.bankDetails?.bankName },
+        { label: "47. Branch", value: data.bankDetails?.branch },
+        { label: "48. IFSC", value: data.bankDetails?.ifscCode },
+        { label: "49. Farmer has agreed for the work and his contribution", value: data.bankDetails?.farmerAgreed },
         {
-          label: "51. Files submitted",
+          label: "50. Files submitted",
           value:
             data.bankDetails?.submittedFiles &&
             Object.values(data.bankDetails.submittedFiles).some(Boolean)
