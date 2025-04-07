@@ -70,7 +70,7 @@ export default function BankDetails() {
       <Text style={styles.title}>Pond Form</Text>
       <Text style={styles.subtitle}>Bank Details</Text>
 
-      <Text style={styles.question}>44. Name of Account Holder:</Text>
+      <Text style={styles.question}>45. Name of Account Holder:</Text>
       <TextInput
         value={form.accountHolderName}
         onChangeText={(text) =>
@@ -79,7 +79,7 @@ export default function BankDetails() {
         style={styles.input}
       />
 
-      <Text style={styles.question}>45. Account Number:</Text>
+      <Text style={styles.question}>46. Account Number:</Text>
       <TextInput
         value={form.accountNumber}
         onChangeText={(text) =>
@@ -89,7 +89,7 @@ export default function BankDetails() {
         keyboardType="numeric"
       />
 
-      <Text style={styles.question}>46. Name of the Bank:</Text>
+      <Text style={styles.question}>47. Name of the Bank:</Text>
       <TextInput
         value={form.bankName}
         onChangeText={(text) =>
@@ -98,14 +98,14 @@ export default function BankDetails() {
         style={styles.input}
       />
 
-      <Text style={styles.question}>47. Branch:</Text>
+      <Text style={styles.question}>48. Branch:</Text>
       <TextInput
         value={form.branch}
         onChangeText={(text) => setForm({ ...form, branch: text })}
         style={styles.input}
       />
 
-      <Text style={styles.question}>48. IFSC:</Text>
+      <Text style={styles.question}>49. IFSC:</Text>
       <TextInput
         value={form.ifscCode}
         onChangeText={(text) => setForm({ ...form, ifscCode: text })}
@@ -114,7 +114,7 @@ export default function BankDetails() {
       />
 
       <Text style={styles.question}>
-        49. Farmer has agreed for the work and his contribution:
+        50. Farmer has agreed for the work and his contribution:
       </Text>
       {["Yes", "No"].map((option) => (
         <Checkbox.Item
@@ -125,7 +125,7 @@ export default function BankDetails() {
         />
       ))}
 
-      <Text style={styles.question}>50. Upload Documents:</Text>
+      <Text style={styles.question}>51. Upload Documents:</Text>
 
       {[
         { label: "Patta", key: "patta", type: "pdf" },

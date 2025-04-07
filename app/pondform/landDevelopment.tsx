@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { View, ScrollView, StyleSheet } from "react-native";
 import {
   Text,
@@ -15,7 +15,7 @@ export default function LandDevelopment() {
   const router = useRouter();
   const { data, setData, latitude, setLatitude, longitude, setLongitude } =
     useFormStore();
-
+    
   const [form, setForm] = useState(() => {
     const initial = data.landDevelopment || {};
     return {
@@ -29,14 +29,30 @@ export default function LandDevelopment() {
       // workType: initial.workType || [],
       // workTypeText: initial.workTypeText || "",
       length:initial.length || "",
-      proposalArea: initial.proposalArea || "",
-      otherWorks: initial.otherWorks || "",
+      breadth: initial.breadth || "",
+      depth: initial.depth || "",
+      volume: (
+        (parseFloat(initial.length) || 0) *
+        (parseFloat(initial.breadth) || 0) *
+        (parseFloat(initial.depth) || 0)
+      ).toFixed(2),
       pradanContribution: initial.pradanContribution || "",
       farmerContribution: initial.farmerContribution || "",
       totalEstimate: initial.totalEstimate || "",
     };
   });
+  useEffect(() => {
+    const length = parseFloat(form.length);
+    const breadth = parseFloat(form.breadth);
+    const depth = parseFloat(form.depth);
 
+    if (!isNaN(length) && !isNaN(breadth) && !isNaN(depth)) {
+      const volume = (length * breadth * depth).toFixed(2);
+      setForm((prev) => ({ ...prev, volume }));
+    } else {
+      setForm((prev) => ({ ...prev, volume: "" }));
+    }
+  }, [form.length, form.breadth, form.depth]);
   const toggleCheckbox = (field: string, value: string) => {
     const list = form[field] || [];
     if (list.includes(value)) {
@@ -168,8 +184,8 @@ export default function LandDevelopment() {
         39.Breadth in meter
       </Text>
       <TextInput
-        value={form.proposalArea}
-        onChangeText={(text) => setForm({ ...form, proposalArea: text })}
+        value={form.breadth}
+        onChangeText={(text) => setForm({ ...form, breadth: text })}
         style={styles.input}
         keyboardType="numeric"
         mode="outlined"
@@ -177,14 +193,24 @@ export default function LandDevelopment() {
 
       <Text style={styles.label}>40. Depth in meter</Text>
       <TextInput
-        value={form.otherWorks}
-        onChangeText={(text) => setForm({ ...form, otherWorks: text })}
+        value={form.depth}
+        onChangeText={(text) => setForm({ ...form, depth: text })}
         style={styles.input}
         keyboardType="numeric"
         mode="outlined"
       />
+      <Text style={styles.label}>41. Volume of Excavation</Text>
+<TextInput
+  value={form.volume}
+  onChangeText={(text) => setForm((prev) => ({ ...prev, length: text }))}
+  style={styles.input}
+  keyboardType="numeric"
+  mode="outlined"
+  editable={false}
+/>
 
-      <Text style={styles.label}>41. PRADAN Contribution</Text>
+
+      <Text style={styles.label}>42. PRADAN Contribution</Text>
       <TextInput
         value={form.pradanContribution}
         onChangeText={(text) => setForm({ ...form, pradanContribution: text })}
@@ -193,7 +219,7 @@ export default function LandDevelopment() {
         mode="outlined"
       />
 
-      <Text style={styles.label}>42. Farmer Contribution</Text>
+      <Text style={styles.label}>43. Farmer Contribution</Text>
       <TextInput
         value={form.farmerContribution}
         onChangeText={(text) => setForm({ ...form, farmerContribution: text })}
@@ -202,7 +228,7 @@ export default function LandDevelopment() {
         mode="outlined"
       />
 
-      <Text style={styles.label}>43. Total Estimate Amount</Text>
+      <Text style={styles.label}>44. Total Estimate Amount</Text>
       <TextInput
         value={form.totalEstimate}
         onChangeText={(text) => setForm({ ...form, totalEstimate: text })}
