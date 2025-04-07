@@ -119,7 +119,7 @@ export default function Dashboard() {
         style={styles.modalButton}
         onPress={() => {
           setShowFormModal(false);
-          router.push("/pondform/pondform");
+          router.push("/pondform/basicDetails");
         }}
       >
         <Text style={styles.modalButtonText}>Pond Form</Text>
@@ -129,7 +129,7 @@ export default function Dashboard() {
         style={styles.modalButton}
         onPress={() => {
           setShowFormModal(false);
-          router.push("/plantationform/plantationform");
+          router.push("/plantationform/basicDetails");
         }}
       >
         <Text style={styles.modalButtonText}>Plantation Form</Text>
