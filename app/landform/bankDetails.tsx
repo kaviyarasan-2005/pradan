@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { ScrollView, Text, TextInput, StyleSheet } from "react-native";
 import { Checkbox, Button, IconButton } from "react-native-paper";
 import * as DocumentPicker from "expo-document-picker";
-import { useFormStore } from "./landform/useFormStore";
+import { useFormStore } from "./useFormStore";
 
 export default function BankDetails() {
   const router = useRouter();

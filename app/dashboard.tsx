@@ -109,7 +109,7 @@ export default function Dashboard() {
         style={styles.modalButton}
         onPress={() => {
           setShowFormModal(false);
-          router.push("/basicDetails");
+          router.push("/landform/basicDetails");
         }}
       >
         <Text style={styles.modalButtonText}>Land Form</Text>

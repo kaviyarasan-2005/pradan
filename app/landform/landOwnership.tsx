@@ -2,7 +2,7 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { View, Text, TextInput, ScrollView, StyleSheet } from "react-native";
 import { Checkbox, Button,IconButton } from "react-native-paper";
-import { useFormStore } from "./landform/useFormStore";
+import { useFormStore } from "./useFormStore";
 
 export default function LandOwnership() {
   const router = useRouter();
@@ -43,7 +43,7 @@ export default function LandOwnership() {
         <IconButton
         icon="arrow-left"
         size={24}
-        style={styles.backButton}
+        // style={styles.backButton}
         onPress={() => router.back()}
       />
       <Text style={styles.title}>Land Form</Text>

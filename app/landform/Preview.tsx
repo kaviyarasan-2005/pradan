@@ -119,7 +119,7 @@ export default function Preview() {
         { label: "20. Toilet Availability", value: data.basicDetails?.toiletAvailability },
         { label: "21. Toilet Condition", value: data.basicDetails?.toiletCondition },
         { label: "22. Education of Householder", value: data.basicDetails?.education },
-      ],"/basicDetails")}
+      ],"/landform/basicDetails")}
 
       {renderSection("Land Ownership & Livestock", [
         { label: "23. Land Ownership", value: data.landOwnership?.landOwnershipType },
@@ -131,7 +131,7 @@ export default function Preview() {
         { label: "28. Revenue Village", value: data.landOwnership?.revenueVillage },
         { label: "29. Crop Season", value: data.landOwnership?.cropSeason },
         { label: "30. Livestock at Home", value: data.landOwnership?.livestock },
-      ], "/landOwnership")}
+      ], "/landform/landOwnership")}
 
       {renderSection("Land Development Details", [
         { label: "31. S.F. No. of the land to be developed", value: data.landDevelopment?.sfNumber },
@@ -177,7 +177,7 @@ export default function Preview() {
                   }))
               : ["No files uploaded"],
         },
-      ], "/bankDetails")}
+      ], "/landform/bankDetails")}
 
       <Button mode="contained" onPress={handleSubmit} style={styles.submitButton}>
         Submit

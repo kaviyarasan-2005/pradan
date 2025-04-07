@@ -47,7 +47,7 @@ export default function LandDevelopment() {
 
   const handleNext = () => {
     setData({ landDevelopment: form });
-    router.push("/bankDetails");
+    router.push("./bankDetails");
   };
 
   return (
