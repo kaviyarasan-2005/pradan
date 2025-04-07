@@ -154,7 +154,7 @@ export default function LandDevelopment() {
         mode="outlined"
       />
 
-      <Text style={styles.label}>38. Type of work proposed</Text>
+      <Text style={styles.label}>38. Length in meter</Text>
       {[
         "Prosopis removal",
         "Redevelopment of eroded lands",
@@ -178,7 +178,7 @@ export default function LandDevelopment() {
       />
 
       <Text style={styles.label}>
-        39. Area benefited by proposal works (ha)
+        39.Breadth in meter
       </Text>
       <TextInput
         value={form.proposalArea}
@@ -188,7 +188,7 @@ export default function LandDevelopment() {
         mode="outlined"
       />
 
-      <Text style={styles.label}>40. Any other works proposed</Text>
+      <Text style={styles.label}>40. Depth in meter</Text>
       <TextInput
         value={form.otherWorks}
         onChangeText={(text) => setForm({ ...form, otherWorks: text })}
@@ -196,7 +196,7 @@ export default function LandDevelopment() {
         mode="outlined"
       />
 
-      <Text style={styles.label}>41. PRADAN Contribution</Text>
+      <Text style={styles.label}>41.Volume of Excavation</Text>
       <TextInput
         value={form.pradanContribution}
         onChangeText={(text) => setForm({ ...form, pradanContribution: text })}

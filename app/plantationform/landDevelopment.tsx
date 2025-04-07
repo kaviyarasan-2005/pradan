@@ -154,7 +154,7 @@ export default function LandDevelopment() {
         mode="outlined"
       />
 
-      <Text style={styles.label}>38. Type of work proposed</Text>
+      <Text style={styles.label}>38. Type of Plantation Proposed</Text>
       {[
         "Prosopis removal",
         "Redevelopment of eroded lands",
