@@ -26,8 +26,9 @@ export default function LandDevelopment() {
       approvedBy: initial.approvedBy || "",
       dateInspectionText: initial.dateInspectionText || "",
       dateApprovalText: initial.dateApprovalText || "",
-      workType: initial.workType || [],
-      workTypeText: initial.workTypeText || "",
+      // workType: initial.workType || [],
+      // workTypeText: initial.workTypeText || "",
+      length:initial.length || "",
       proposalArea: initial.proposalArea || "",
       otherWorks: initial.otherWorks || "",
       pradanContribution: initial.pradanContribution || "",
@@ -155,25 +156,11 @@ export default function LandDevelopment() {
       />
 
       <Text style={styles.label}>38. Length in meter</Text>
-      {[
-        "Prosopis removal",
-        "Redevelopment of eroded lands",
-        "Silt application",
-        "Other",
-      ].map((work) => (
-        <Checkbox.Item
-          key={work}
-          label={work}
-          status={form.workType.includes(work) ? "checked" : "unchecked"}
-          onPress={() => toggleCheckbox("workType", work)}
-        />
-      ))}
-
       <TextInput
-        value={form.workTypeText}
-        onChangeText={(text) => setForm({ ...form, workTypeText: text })}
+        value={form.length}
+        onChangeText={(text) => setForm({ ...form, length: text })}
         style={styles.input}
-        placeholder="Details about work types"
+        keyboardType="numeric"
         mode="outlined"
       />
 
@@ -193,6 +180,7 @@ export default function LandDevelopment() {
         value={form.otherWorks}
         onChangeText={(text) => setForm({ ...form, otherWorks: text })}
         style={styles.input}
+        keyboardType="numeric"
         mode="outlined"
       />
 
