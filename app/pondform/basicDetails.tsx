@@ -57,7 +57,7 @@ export default function BasicDetails() {
     
         onPress={() => router.back()}
       />
-      <Text style={styles.title}>Land Form</Text>
+      <Text style={styles.title}>Pond Form</Text>
       <Text style={styles.subtitle}>Basic Details</Text>
 
       {/* Existing Questions */}

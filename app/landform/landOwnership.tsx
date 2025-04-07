@@ -35,7 +35,7 @@ export default function LandOwnership() {
 
   const handleNext = () => {
     setData({ landOwnership: form });
-    router.push("/landform/landDevelopment");
+    router.push("./landDevelopment");
   };
 
   return (

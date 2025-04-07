@@ -35,7 +35,7 @@ export default function LandOwnership() {
 
   const handleNext = () => {
     setData({ landOwnership: form });
-    router.push("/landform/landDevelopment");
+    router.push("./landDevelopment");
   };
 
   return (
@@ -46,7 +46,7 @@ export default function LandOwnership() {
         // style={styles.backButton}
         onPress={() => router.back()}
       />
-      <Text style={styles.title}>Land Form</Text>
+      <Text style={styles.title}>Plantation Form</Text>
       <Text style={styles.subtitle}>Land Ownership & Livestock</Text>
 
       <Text style={styles.question}>23. Land Ownership:</Text>

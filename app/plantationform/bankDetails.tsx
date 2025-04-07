@@ -55,7 +55,7 @@ export default function BankDetails() {
 
   const handlePreview = () => {
     setData({ bankDetails: form });
-    router.push("/landform/Preview");
+    router.push("./Preview");
   };
 
   return (
@@ -67,7 +67,7 @@ export default function BankDetails() {
         onPress={() => router.back()}
       />
 
-      <Text style={styles.title}>Land Form</Text>
+      <Text style={styles.title}>Plantation Form</Text>
       <Text style={styles.subtitle}>Bank Details</Text>
 
       <Text style={styles.question}>44. Name of Account Holder:</Text>

@@ -59,7 +59,7 @@ export default function LandDevelopment() {
         onPress={() => router.back()}
       />
 
-      <Text style={styles.title}>Land Form</Text>
+      <Text style={styles.title}>Plantation Form</Text>
       <Text style={styles.subtitle}>Land Development Details</Text>
 
       {/* Question 31 */}
