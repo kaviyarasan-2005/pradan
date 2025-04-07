@@ -24,14 +24,15 @@ export default function BankDetails() {
         fmb: null,
         farmerPhoto: null,
         bankPassbook: null,
+        geoTag: null,
       },
     };
   });
 
-  const handleUpload = async (field) => {
+  const handleUpload = async (field, fileType = "pdf") => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
-        type: "application/pdf",
+        type: fileType === "image" ? "image/*" : "application/pdf",
       });
 
       if (!result.canceled && result.assets?.[0]) {
@@ -127,16 +128,17 @@ export default function BankDetails() {
       <Text style={styles.question}>50. Upload Documents:</Text>
 
       {[
-        { label: "Patta", key: "patta" },
-        { label: "ID Card", key: "idCard" },
-        { label: "FMB", key: "fmb" },
-        { label: "Photo of Farmer", key: "farmerPhoto" },
-        { label: "Bank Passbook", key: "bankPassbook" },
+        { label: "Patta", key: "patta", type: "pdf" },
+        { label: "ID Card", key: "idCard", type: "pdf" },
+        { label: "FMB", key: "fmb", type: "pdf" },
+        { label: "Photo of Farmer", key: "farmerPhoto", type: "image" },
+        { label: "Bank Passbook", key: "bankPassbook", type: "pdf" },
+        { label: "Geo Tag", key: "geoTag", type: "image" },
       ].map((file) => (
         <React.Fragment key={file.key}>
           <Button
             mode="outlined"
-            onPress={() => handleUpload(file.key)}
+            onPress={() => handleUpload(file.key, file.type)}
             style={styles.uploadButton}
           >
             Upload {file.label}

@@ -15,7 +15,7 @@ export default function Preview() {
     ]);
   };
 
-  const renderSection = (title, fields, editRoute) => (
+  const renderSection = (title: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined, fields: any[], editRoute: string) => (
     <Card style={styles.card}>
       <Card.Title title={title} />
       <Card.Content>
@@ -24,7 +24,7 @@ export default function Preview() {
             <Text style={styles.label}>{field.label}</Text>
 
             {Array.isArray(field.value) ? (
-              field.value.map((item, idx) => {
+              field.value.map((item: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined, idx: React.Key | null | undefined) => {
                 if (typeof item === "object" && item?.label && item?.uri) {
                   return (
                     <View
@@ -35,10 +35,12 @@ export default function Preview() {
                       <Button
                         mode="text"
                         onPress={() =>
-                          router.push(
-                            `/landform/pdfViewer?uri=${encodeURIComponent(item.uri)}`
-                          )
+                          router.push({
+                            pathname: "/landform/pdfViewer",
+                            params: { uri: item.uri },
+                          })
                         }
+                        
                         compact
                       >
                         View
@@ -136,22 +138,29 @@ export default function Preview() {
         { label: "30. Livestock at Home", value: data.landOwnership?.livestock },
       ], "/landform/landOwnership")}
 
-      {renderSection("Land Development Details", [
-        { label: "31. S.F. No. of the land to be developed", value: data.landDevelopment?.sfNumber },
-        { label: "32. Soil Type", value: data.landDevelopment?.soilType },
-        { label: "33. Land to benefit (ha)", value: data.landDevelopment?.landBenefit },
-        { label: "34. Field Inspection done by", value: data.landDevelopment?.inspectionBy },
-        { label: "35. Site Approved by", value: data.landDevelopment?.approvedBy },
-        { label: "36. Date of Inspection", value: data.landDevelopment?.dateInspectionText },
-        { label: "37. Date of Approval", value: data.landDevelopment?.dateApprovalText },
-        { label: "38. Type of work proposed", value: data.landDevelopment?.workType },
-        { label: "   Details about work types", value: data.landDevelopment?.workTypeText },
-        { label: "39. Area benefited by proposal works (ha)", value: data.landDevelopment?.proposalArea },
-        { label: "40. Any other works proposed", value: data.landDevelopment?.otherWorks },
-        { label: "41. PRADAN Contribution", value: data.landDevelopment?.pradanContribution },
-        { label: "42. Farmer Contribution", value: data.landDevelopment?.farmerContribution },
-        { label: "43. Total Estimate Amount", value: data.landDevelopment?.totalEstimate },
-      ], "/landform/landDevelopment")}
+{renderSection("Land Development Details", [
+  { label: "31. S.F. No. of the land to be developed", value: data.landDevelopment?.sfNumber },
+  { label: "32. Soil Type", value: data.landDevelopment?.soilType },
+  { label: "33. Land to benefit (ha)", value: data.landDevelopment?.landBenefit },
+  { label: "34. Field Inspection done by", value: data.landDevelopment?.inspectionBy },
+  { label: "35. Site Approved by", value: data.landDevelopment?.approvedBy },
+  { label: "36. Date of Inspection", value: data.landDevelopment?.dateInspectionText },
+  { label: "37. Date of Approval", value: data.landDevelopment?.dateApprovalText },
+  { label: "38. Type of work proposed", value: data.landDevelopment?.workType },
+  { label: "    Details about work types", value: data.landDevelopment?.workTypeText },
+  { label: "39. Area benefited by proposal works (ha)", value: data.landDevelopment?.proposalArea },
+  { label: "40. Any other works proposed", value: data.landDevelopment?.otherWorks },
+  { label: "41. PRADAN Contribution", value: data.landDevelopment?.pradanContribution },
+  { label: "42. Farmer Contribution", value: data.landDevelopment?.farmerContribution },
+  { label: "43. Total Estimate Amount", value: data.landDevelopment?.totalEstimate },
+  {
+    label: "44. Geo Location (Lat, Long)",
+    value:
+      data.landDevelopment?.location?.latitude && data.landDevelopment?.location?.longitude
+        ? `${data.landDevelopment.location.latitude}, ${data.landDevelopment.location.longitude}`
+        : "Not captured",
+  },
+], "/landform/landDevelopment")}
 
       {renderSection("Bank Details", [
         { label: "44. Name of Account Holder", value: data.bankDetails?.accountHolderName },

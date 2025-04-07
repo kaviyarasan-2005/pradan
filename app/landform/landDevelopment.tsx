@@ -1,12 +1,20 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { View, ScrollView, StyleSheet } from "react-native";
-import { Text, TextInput, Button, Checkbox, Divider,IconButton } from "react-native-paper";
+import {
+  Text,
+  TextInput,
+  Button,
+  Checkbox,
+  Divider,
+  IconButton,
+} from "react-native-paper";
 import { useFormStore } from "./useFormStore";
 
 export default function LandDevelopment() {
   const router = useRouter();
-  const { data, setData } = useFormStore();
+  const { data, setData, latitude, setLatitude, longitude, setLongitude } =
+    useFormStore();
 
   const [form, setForm] = useState(() => {
     const initial = data.landDevelopment || {};
@@ -44,15 +52,17 @@ export default function LandDevelopment() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-        <IconButton
+      <IconButton
         icon="arrow-left"
         size={24}
         style={styles.backButton}
         onPress={() => router.back()}
       />
+
       <Text style={styles.title}>Land Form</Text>
       <Text style={styles.subtitle}>Land Development Details</Text>
 
+      {/* Question 31 */}
       <Text style={styles.label}>31. S.F. No. of the land to be developed</Text>
       <TextInput
         value={form.sfNumber}
@@ -61,6 +71,30 @@ export default function LandDevelopment() {
         mode="outlined"
       />
 
+      {/* Question 31.a */}
+      <Text style={styles.label}>31.a) Latitude and Longitude</Text>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <TextInput
+          mode="outlined"
+          style={[styles.input, { flex: 1, marginRight: 5 }]}
+          placeholder="Latitude"
+          placeholderTextColor="#888"
+          value={latitude}
+          onChangeText={setLatitude}
+          keyboardType="numeric"
+        />
+        <TextInput
+          mode="outlined"
+          style={[styles.input, { flex: 1, marginLeft: 5 }]}
+          placeholder="Longitude"
+          placeholderTextColor="#888"
+          value={longitude}
+          onChangeText={setLongitude}
+          keyboardType="numeric"
+        />
+      </View>
+
+      {/* Remaining fields... */}
       <Text style={styles.label}>32. Soil Type</Text>
       {["Red Soil", "Black Cotton", "Sandy Loam", "Laterite"].map((type) => (
         <Checkbox.Item
@@ -121,16 +155,20 @@ export default function LandDevelopment() {
       />
 
       <Text style={styles.label}>38. Type of work proposed</Text>
-      {["Prosopis removal", "Redevelopment of eroded lands", "Silt application", "Other"].map(
-        (work) => (
-          <Checkbox.Item
-            key={work}
-            label={work}
-            status={form.workType.includes(work) ? "checked" : "unchecked"}
-            onPress={() => toggleCheckbox("workType", work)}
-          />
-        )
-      )}
+      {[
+        "Prosopis removal",
+        "Redevelopment of eroded lands",
+        "Silt application",
+        "Other",
+      ].map((work) => (
+        <Checkbox.Item
+          key={work}
+          label={work}
+          status={form.workType.includes(work) ? "checked" : "unchecked"}
+          onPress={() => toggleCheckbox("workType", work)}
+        />
+      ))}
+
       <TextInput
         value={form.workTypeText}
         onChangeText={(text) => setForm({ ...form, workTypeText: text })}
@@ -139,7 +177,9 @@ export default function LandDevelopment() {
         mode="outlined"
       />
 
-      <Text style={styles.label}>39. Area benefited by proposal works (ha)</Text>
+      <Text style={styles.label}>
+        39. Area benefited by proposal works (ha)
+      </Text>
       <TextInput
         value={form.proposalArea}
         onChangeText={(text) => setForm({ ...form, proposalArea: text })}
@@ -193,8 +233,13 @@ export default function LandDevelopment() {
 const styles = StyleSheet.create({
   container: { padding: 20 },
   title: { fontSize: 24, fontWeight: "bold", textAlign: "center" },
-  subtitle: { fontSize: 18, fontWeight: "600", textAlign: "center", marginBottom: 20 },
-  question: { fontWeight: "bold", marginTop: 10 },
-  input: {  marginBottom: 10, borderRadius: 5000},
+  subtitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  label: { fontWeight: "bold", marginTop: 10 },
+  input: { marginBottom: 10, borderRadius: 5000 },
   button: { marginTop: 20 },
 });

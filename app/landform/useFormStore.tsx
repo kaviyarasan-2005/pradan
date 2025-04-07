@@ -5,7 +5,7 @@ interface FormState {
   setData: (newData: any) => void;
 }
 
-export const useFormStore = create<FormState>((set) => ({
+export  const useFormStore = create<FormState>((set) => ({
   data: {}, // Store form data here
   setData: (newData) => set((state) => ({ data: { ...state.data, ...newData } })),
 }));
