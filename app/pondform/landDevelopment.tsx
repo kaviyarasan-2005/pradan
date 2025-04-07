@@ -163,7 +163,7 @@ export default function LandDevelopment() {
         keyboardType="numeric"
         mode="outlined"
       />
-
+      
       <Text style={styles.label}>
         39.Breadth in meter
       </Text>
