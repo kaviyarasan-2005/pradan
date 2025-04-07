@@ -2,7 +2,7 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { View, Text, TextInput, ScrollView, StyleSheet } from "react-native";
 import { Checkbox, Button,IconButton } from "react-native-paper";
-import { useFormStore } from "./useFormStore";
+import { useFormStore } from "./landform/useFormStore";
 
 export default function LandOwnership() {
   const router = useRouter();
@@ -35,7 +35,7 @@ export default function LandOwnership() {
 
   const handleNext = () => {
     setData({ landOwnership: form });
-    router.push("./landDevelopment");
+    router.push("/landform/landDevelopment");
   };
 
   return (

@@ -15,7 +15,7 @@ export default function Preview() {
     ]);
   };
 
-  const renderSection = (title: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined, fields: any[], editRoute: string) => (
+  const renderSection = (title: string, fields: any[], editRoute: "/landform/basicDetails" | "/landform/landOwnership" | "/landform/landDevelopment" | "/landform/bankDetails") => (
     <Card style={styles.card}>
       <Card.Title title={title} />
       <Card.Content>
@@ -24,13 +24,10 @@ export default function Preview() {
             <Text style={styles.label}>{field.label}</Text>
 
             {Array.isArray(field.value) ? (
-              field.value.map((item: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined, idx: React.Key | null | undefined) => {
+              field.value.map((item, idx) => {
                 if (typeof item === "object" && item?.label && item?.uri) {
                   return (
-                    <View
-                      key={idx}
-                      style={styles.fileRow}
-                    >
+                    <View key={idx} style={styles.fileRow}>
                       <Text style={styles.value}>{item.label}</Text>
                       <Button
                         mode="text"
@@ -40,7 +37,6 @@ export default function Preview() {
                             params: { uri: item.uri },
                           })
                         }
-                        
                         compact
                       >
                         View
@@ -79,7 +75,7 @@ export default function Preview() {
           onPress={() =>
             router.push({
               pathname: editRoute,
-              params: { returnTo: "/landform/Preview" },
+              params: { returnTo: "/landform/preview" },
             })
           }
         >
@@ -98,8 +94,7 @@ export default function Preview() {
         onPress={() => router.back()}
       />
 
-    
-{renderSection("Basic Details", [
+      {renderSection("Basic Details", [
         { label: "1. Name of Farmer", value: data.basicDetails?.name },
         { label: "2. Mobile Number", value: data.basicDetails?.mobile },
         { label: "3. Hamlet", value: data.basicDetails?.hamlet },
@@ -124,7 +119,7 @@ export default function Preview() {
         { label: "20. Toilet Availability", value: data.basicDetails?.toiletAvailability },
         { label: "21. Toilet Condition", value: data.basicDetails?.toiletCondition },
         { label: "22. Education of Householder", value: data.basicDetails?.education },
-      ], "/landform/basicDetails")}
+      ],"/basicDetails")}
 
       {renderSection("Land Ownership & Livestock", [
         { label: "23. Land Ownership", value: data.landOwnership?.landOwnershipType },
@@ -136,41 +131,41 @@ export default function Preview() {
         { label: "28. Revenue Village", value: data.landOwnership?.revenueVillage },
         { label: "29. Crop Season", value: data.landOwnership?.cropSeason },
         { label: "30. Livestock at Home", value: data.landOwnership?.livestock },
-      ], "/landform/landOwnership")}
+      ], "/landOwnership")}
 
-{renderSection("Land Development Details", [
-  { label: "31. S.F. No. of the land to be developed", value: data.landDevelopment?.sfNumber },
-  { label: "32. Soil Type", value: data.landDevelopment?.soilType },
-  { label: "33. Land to benefit (ha)", value: data.landDevelopment?.landBenefit },
-  { label: "34. Field Inspection done by", value: data.landDevelopment?.inspectionBy },
-  { label: "35. Site Approved by", value: data.landDevelopment?.approvedBy },
-  { label: "36. Date of Inspection", value: data.landDevelopment?.dateInspectionText },
-  { label: "37. Date of Approval", value: data.landDevelopment?.dateApprovalText },
-  { label: "38. Type of work proposed", value: data.landDevelopment?.workType },
-  { label: "    Details about work types", value: data.landDevelopment?.workTypeText },
-  { label: "39. Area benefited by proposal works (ha)", value: data.landDevelopment?.proposalArea },
-  { label: "40. Any other works proposed", value: data.landDevelopment?.otherWorks },
-  { label: "41. PRADAN Contribution", value: data.landDevelopment?.pradanContribution },
-  { label: "42. Farmer Contribution", value: data.landDevelopment?.farmerContribution },
-  { label: "43. Total Estimate Amount", value: data.landDevelopment?.totalEstimate },
-  {
-    label: "44. Geo Location (Lat, Long)",
-    value:
-      data.landDevelopment?.location?.latitude && data.landDevelopment?.location?.longitude
-        ? `${data.landDevelopment.location.latitude}, ${data.landDevelopment.location.longitude}`
-        : "Not captured",
-  },
-], "/landform/landDevelopment")}
+      {renderSection("Land Development Details", [
+        { label: "31. S.F. No. of the land to be developed", value: data.landDevelopment?.sfNumber },
+        { label: "32. Soil Type", value: data.landDevelopment?.soilType },
+        { label: "33. Land to benefit (ha)", value: data.landDevelopment?.landBenefit },
+        { label: "34. Field Inspection done by", value: data.landDevelopment?.inspectionBy },
+        { label: "35. Site Approved by", value: data.landDevelopment?.approvedBy },
+        { label: "36. Date of Inspection", value: data.landDevelopment?.dateInspectionText },
+        { label: "37. Date of Approval", value: data.landDevelopment?.dateApprovalText },
+        { label: "38. Type of work proposed", value: data.landDevelopment?.workType },
+        { label: "    Details about work types", value: data.landDevelopment?.workTypeText },
+        { label: "39. Area benefited by proposal works (ha)", value: data.landDevelopment?.proposalArea },
+        { label: "40. Any other works proposed", value: data.landDevelopment?.otherWorks },
+        { label: "41. PRADAN Contribution", value: data.landDevelopment?.pradanContribution },
+        { label: "42. Farmer Contribution", value: data.landDevelopment?.farmerContribution },
+        { label: "43. Total Estimate Amount", value: data.landDevelopment?.totalEstimate },
+        {
+          label: "44. Geo Location (Lat, Long)",
+          value:
+            data.landDevelopment?.location?.latitude && data.landDevelopment?.location?.longitude
+              ? `${data.landDevelopment.location.latitude}, ${data.landDevelopment.location.longitude}`
+              : "Not captured",
+        },
+      ], "/landform/landDevelopment")}
 
       {renderSection("Bank Details", [
-        { label: "44. Name of Account Holder", value: data.bankDetails?.accountHolderName },
-        { label: "45. Account Number", value: data.bankDetails?.accountNumber },
-        { label: "46. Name of the Bank", value: data.bankDetails?.bankName },
-        { label: "47. Branch", value: data.bankDetails?.branch },
-        { label: "48. IFSC", value: data.bankDetails?.ifscCode },
-        { label: "49. Farmer has agreed for the work and his contribution", value: data.bankDetails?.farmerAgreed },
+        { label: "45. Name of Account Holder", value: data.bankDetails?.accountHolderName },
+        { label: "46. Account Number", value: data.bankDetails?.accountNumber },
+        { label: "47. Name of the Bank", value: data.bankDetails?.bankName },
+        { label: "48. Branch", value: data.bankDetails?.branch },
+        { label: "49. IFSC", value: data.bankDetails?.ifscCode },
+        { label: "50. Farmer has agreed for the work and his contribution", value: data.bankDetails?.farmerAgreed },
         {
-          label: "50. Files submitted",
+          label: "51. Files submitted",
           value:
             data.bankDetails?.submittedFiles &&
             Object.values(data.bankDetails.submittedFiles).some(Boolean)
@@ -181,9 +176,8 @@ export default function Preview() {
                     uri: val.uri,
                   }))
               : ["No files uploaded"],
-        }
-      ], "/landform/bankDetails")}
-
+        },
+      ], "/bankDetails")}
 
       <Button mode="contained" onPress={handleSubmit} style={styles.submitButton}>
         Submit
