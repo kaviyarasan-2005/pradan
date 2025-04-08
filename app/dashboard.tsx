@@ -32,25 +32,6 @@ export default function Dashboard() {
 
   return (
     <View style={styles.container}>
-      {/* Top bar with hamburger */}
-      <View style={styles.topBar}>
-        <TouchableOpacity onPress={toggleSidebar}>
-          <Ionicons name="menu" size={30} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.topTitle}>Dashboard</Text>
-      </View>
-
-      {/* Sidebar */}
-      <Animated.View style={[styles.sidebar, { left: slideAnim }]}>
-        <TouchableOpacity onPress={() => router.replace("/dashboard")}>
-          <Text style={styles.sidebarItem}>Dashboard</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push("/settings")}>
-          <Text style={styles.sidebarItem}>Settings</Text>
-        </TouchableOpacity>
-        
-      </Animated.View>
-
       {/* Main content */}
       <View style={styles.mainContent}>
         <Text style={styles.title}>Welcome to Dashboard</Text>
@@ -163,32 +144,6 @@ export default function Dashboard() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  topBar: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 15,
-    backgroundColor: "#eaeaea",
-  },
-  topTitle: {
-    marginLeft: 15,
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  sidebar: {
-    position: "absolute",
-    top: 60,
-    bottom: 0,
-    width: 200,
-    backgroundColor: "#f0f0f0",
-    paddingTop: 20,
-    paddingLeft: 10,
-    zIndex: 1,
-  },
-  sidebarItem: {
-    fontSize: 16,
-    marginVertical: 15,
-    color: "blue",
   },
   overlayTouchable: {
     flex: 1,
