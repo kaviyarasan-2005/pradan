@@ -3,7 +3,7 @@ import React from "react";
 import { useRouter } from "expo-router";
 import { ScrollView, StyleSheet, Alert, View } from "react-native";
 import { Card, Text, Button, Divider, IconButton } from "react-native-paper";
-import { useFormStore } from "./useFormStore";
+import { useFormStore } from "../../storage/useFormStore";
 
 export default function Preview() {
   const router = useRouter();

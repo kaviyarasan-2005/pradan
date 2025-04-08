@@ -4,7 +4,7 @@ import { ScrollView, Text, TextInput, StyleSheet } from "react-native";
 import { Checkbox, Button, IconButton } from "react-native-paper";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from 'expo-image-picker';
-import { useFormStore } from "./useFormStore";
+import { useFormStore } from "../../storage/useFormStore";
 
 export default function BankDetails() {
   const router = useRouter();
