@@ -8,27 +8,12 @@ import {
   Modal,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
 
 import React from "react";
-
 export default function Dashboard() {
   const router = useRouter();
-  const [sidebarVisible, setSidebarVisible] = useState(false);
   const [showFormModal, setShowFormModal] = useState(false);
-  const slideAnim = useState(new Animated.Value(-200))[0];
 
-  const toggleSidebar = () => {
-    const toValue = sidebarVisible ? -200 : 0;
-    Animated.timing(slideAnim, {
-      toValue,
-      duration: 300,
-      useNativeDriver: false,
-    }).start();
-    setSidebarVisible(!sidebarVisible);
-  };
-
- 
 
   return (
     <View style={styles.container}>
