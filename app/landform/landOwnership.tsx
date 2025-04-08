@@ -43,7 +43,6 @@ export default function LandOwnership() {
         <IconButton
         icon="arrow-left"
         size={24}
-        // style={styles.backButton}
         onPress={() => router.back()}
       />
       <Text style={styles.title}>Land Form</Text>
