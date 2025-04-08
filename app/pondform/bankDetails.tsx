@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { ScrollView, Text, TextInput, StyleSheet } from "react-native";
 import { Checkbox, Button, IconButton } from "react-native-paper";
 import * as DocumentPicker from "expo-document-picker";
+import * as ImagePicker from 'expo-image-picker';
 import { useFormStore } from "./useFormStore";
 
 export default function BankDetails() {
@@ -29,29 +30,60 @@ export default function BankDetails() {
     };
   });
 
+  
   const handleUpload = async (field, fileType = "pdf") => {
     try {
-      const result = await DocumentPicker.getDocumentAsync({
-        type: fileType === "image" ? "image/*" : "application/pdf",
-      });
-
-      if (!result.canceled && result.assets?.[0]) {
-        const file = result.assets[0];
-        setForm((prev) => ({
-          ...prev,
-          submittedFiles: {
-            ...prev.submittedFiles,
-            [field]: {
-              name: file.name,
-              uri: file.uri,
+      if (fileType === "image") {
+        // Ask for camera permissions
+        const permission = await ImagePicker.requestCameraPermissionsAsync();
+        if (!permission.granted) {
+          alert("Camera permission is required to take a photo.");
+          return;
+        }
+  
+        const result = await ImagePicker.launchCameraAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          allowsEditing: true,
+          quality: 0.7,
+        });
+  
+        if (!result.canceled && result.assets?.[0]) {
+          const file = result.assets[0];
+          setForm((prev) => ({
+            ...prev,
+            submittedFiles: {
+              ...prev.submittedFiles,
+              [field]: {
+                name: file.fileName || `${field}.jpg`,
+                uri: file.uri,
+              },
             },
-          },
-        }));
+          }));
+        }
+      } else {
+        const result = await DocumentPicker.getDocumentAsync({
+          type: "application/pdf",
+        });
+  
+        if (!result.canceled && result.assets?.[0]) {
+          const file = result.assets[0];
+          setForm((prev) => ({
+            ...prev,
+            submittedFiles: {
+              ...prev.submittedFiles,
+              [field]: {
+                name: file.name,
+                uri: file.uri,
+              },
+            },
+          }));
+        }
       }
     } catch (err) {
       console.log(`Upload error for ${field}:`, err);
     }
   };
+  
 
   const handlePreview = () => {
     setData({ bankDetails: form });

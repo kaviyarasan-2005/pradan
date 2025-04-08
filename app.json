@@ -2,6 +2,8 @@
   "expo": {
     "name": "pradan",
     "slug": "pradan",
+    "permissions": ["CAMERA"],
+    "plugins": ["expo-image-picker"],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/prdanicon.png",
@@ -22,6 +24,7 @@
       },
       "package": "com.kavi2005.pradan"
     },
+    
     "web": {
       "bundler": "metro",
       "output": "static",
