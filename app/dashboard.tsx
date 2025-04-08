@@ -59,6 +59,13 @@ export default function Dashboard() {
       {/* Main content */}
       <View style={styles.mainContent}>
         <Text style={styles.title}>Welcome to Dashboard</Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => router.push("/profile")}
+        >
+          <Text style={styles.buttonText}>Profile</Text>
+        </TouchableOpacity>
+
 
         <TouchableOpacity
           style={styles.button}
