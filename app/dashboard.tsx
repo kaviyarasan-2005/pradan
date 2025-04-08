@@ -73,6 +73,14 @@ export default function Dashboard() {
         >
           <Text style={styles.buttonText}>Pending</Text>
         </TouchableOpacity>
+        
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => router.push("/rejected")}
+        >
+          <Text style={styles.buttonText}>Rejected</Text>
+        </TouchableOpacity>
+
 
         <TouchableOpacity
           style={styles.button}
