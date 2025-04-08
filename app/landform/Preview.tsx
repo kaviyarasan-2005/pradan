@@ -135,6 +135,8 @@ export default function Preview() {
 
       {renderSection("Land Development Details", [
         { label: "31. S.F. No. of the land to be developed", value: data.landDevelopment?.sfNumber },
+        {label: "31.a) Latitude", value: data.landDevelopment?.latitude},
+        {label: "      Longitude", value: data.landDevelopment?.longitude},
         { label: "32. Soil Type", value: data.landDevelopment?.soilType },
         { label: "33. Land to benefit (ha)", value: data.landDevelopment?.landBenefit },
         { label: "34. Field Inspection done by", value: data.landDevelopment?.inspectionBy },

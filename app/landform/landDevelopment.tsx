@@ -13,7 +13,7 @@ import { useFormStore } from "./useFormStore";
 
 export default function LandDevelopment() {
   const router = useRouter();
-  const { data, setData, latitude, setLatitude, longitude, setLongitude } =
+  const { data, setData } =
     useFormStore();
 
   const [form, setForm] = useState(() => {
@@ -30,6 +30,8 @@ export default function LandDevelopment() {
       workTypeText: initial.workTypeText || "",
       proposalArea: initial.proposalArea || "",
       otherWorks: initial.otherWorks || "",
+      latitude:initial.latitude || "",
+      longitude:initial.longitude ||"",
       pradanContribution: initial.pradanContribution || "",
       farmerContribution: initial.farmerContribution || "",
       totalEstimate: initial.totalEstimate || "",
@@ -55,7 +57,6 @@ export default function LandDevelopment() {
       <IconButton
         icon="arrow-left"
         size={24}
-        style={styles.backButton}
         onPress={() => router.back()}
       />
 
@@ -79,8 +80,8 @@ export default function LandDevelopment() {
           style={[styles.input, { flex: 1, marginRight: 5 }]}
           placeholder="Latitude"
           placeholderTextColor="#888"
-          value={latitude}
-          onChangeText={setLatitude}
+          value={form.latitude}
+          onChangeText={(text) => setForm({ ...form, latitude: text })}
           keyboardType="numeric"
         />
         <TextInput
@@ -88,8 +89,8 @@ export default function LandDevelopment() {
           style={[styles.input, { flex: 1, marginLeft: 5 }]}
           placeholder="Longitude"
           placeholderTextColor="#888"
-          value={longitude}
-          onChangeText={setLongitude}
+          value={form.longitude}
+          onChangeText={(text) => setForm({ ...form, longitude: text })}
           keyboardType="numeric"
         />
       </View>
@@ -105,7 +106,7 @@ export default function LandDevelopment() {
         />
       ))}
 
-      <Divider style={styles.divider} />
+      <Divider />
 
       <Text style={styles.label}>33. Land to benefit (ha)</Text>
       <TextInput

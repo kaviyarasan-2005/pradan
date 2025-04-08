@@ -13,7 +13,7 @@ import { useFormStore } from "./useFormStore";
 
 export default function LandDevelopment() {
   const router = useRouter();
-  const { data, setData, latitude, setLatitude, longitude, setLongitude } =
+  const { data, setData } =
     useFormStore();
 
   const [form, setForm] = useState(() => {
@@ -26,8 +26,8 @@ export default function LandDevelopment() {
       approvedBy: initial.approvedBy || "",
       dateInspectionText: initial.dateInspectionText || "",
       dateApprovalText: initial.dateApprovalText || "",
-      workType: initial.workType || [],
-      workTypeText: initial.workTypeText || "",
+      latitude:initial.latitude || "",
+      longitude:initial.longitude ||"",
       proposalArea: initial.proposalArea || "",
       otherWorks: initial.otherWorks || "",
       pradanContribution: initial.pradanContribution || "",
@@ -70,17 +70,15 @@ export default function LandDevelopment() {
         style={styles.input}
         mode="outlined"
       />
-
-      {/* Question 31.a */}
-      <Text style={styles.label}>31.a) Latitude and Longitude</Text>
+ <Text style={styles.label}>31.a) Latitude and Longitude</Text>
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <TextInput
           mode="outlined"
           style={[styles.input, { flex: 1, marginRight: 5 }]}
           placeholder="Latitude"
           placeholderTextColor="#888"
-          value={latitude}
-          onChangeText={setLatitude}
+          value={form.latitude}
+          onChangeText={(text) => setForm({ ...form, latitude: text })}
           keyboardType="numeric"
         />
         <TextInput
@@ -88,8 +86,8 @@ export default function LandDevelopment() {
           style={[styles.input, { flex: 1, marginLeft: 5 }]}
           placeholder="Longitude"
           placeholderTextColor="#888"
-          value={longitude}
-          onChangeText={setLongitude}
+          value={form.longitude}
+          onChangeText={(text) => setForm({ ...form, longitude: text })}
           keyboardType="numeric"
         />
       </View>
