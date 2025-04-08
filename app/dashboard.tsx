@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import React from "react";
 
 export default function Dashboard() {
@@ -28,10 +28,7 @@ export default function Dashboard() {
     setSidebarVisible(!sidebarVisible);
   };
 
-  const handleLogout = async () => {
-    await AsyncStorage.removeItem("user");
-    router.replace("/");
-  };
+ 
 
   return (
     <View style={styles.container}>
@@ -51,9 +48,7 @@ export default function Dashboard() {
         <TouchableOpacity onPress={() => router.push("/settings")}>
           <Text style={styles.sidebarItem}>Settings</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleLogout}>
-          <Text style={[styles.sidebarItem, { color: "red" }]}>Logout</Text>
-        </TouchableOpacity>
+        
       </Animated.View>
 
       {/* Main content */}
