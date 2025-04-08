@@ -119,7 +119,7 @@ export default function Preview() {
         { label: "20. Toilet Availability", value: data.basicDetails?.toiletAvailability },
         { label: "21. Toilet Condition", value: data.basicDetails?.toiletCondition },
         { label: "22. Education of Householder", value: data.basicDetails?.education },
-      ],"/landform/basicDetails")}
+      ],"./basicDetails")}
 
       {renderSection("Land Ownership & Livestock", [
         { label: "23. Land Ownership", value: data.landOwnership?.landOwnershipType },
@@ -131,7 +131,7 @@ export default function Preview() {
         { label: "28. Revenue Village", value: data.landOwnership?.revenueVillage },
         { label: "29. Crop Season", value: data.landOwnership?.cropSeason },
         { label: "30. Livestock at Home", value: data.landOwnership?.livestock },
-      ], "/landform/landOwnership")}
+      ], "./landOwnership")}
 
       {renderSection("Land Development Details", [
         { label: "31. S.F. No. of the land to be developed", value: data.landDevelopment?.sfNumber },
@@ -148,7 +148,7 @@ export default function Preview() {
         { label: "41. PRADAN Contribution", value: data.landDevelopment?.pradanContribution },
         { label: "42. Farmer Contribution", value: data.landDevelopment?.farmerContribution },
         { label: "43. Total Estimate Amount", value: data.landDevelopment?.totalEstimate },
-      ], "/landform/landDevelopment")}
+      ], "./landDevelopment")}
 
       {renderSection("Bank Details", [
         { label: "44. Name of Account Holder", value: data.bankDetails?.accountHolderName },
@@ -170,7 +170,7 @@ export default function Preview() {
                   }))
               : ["No files uploaded"],
         },
-      ], "/landform/bankDetails")}
+      ], "./bankDetails")}
 
       <Button mode="contained" onPress={handleSubmit} style={styles.submitButton}>
         Submit

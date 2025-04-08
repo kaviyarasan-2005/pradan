@@ -72,7 +72,6 @@ export default function LandDevelopment() {
       <IconButton
         icon="arrow-left"
         size={24}
-        style={styles.backButton}
         onPress={() => router.back()}
       />
 
