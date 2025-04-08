@@ -33,8 +33,8 @@ export default function BankDetails() {
   
   const handleUpload = async (field, fileType = "pdf") => {
     try {
-      if (fileType === "image") {
-        // Ask for camera permissions
+      // Only open camera if it's the "Photo of Farmer"
+      if (fileType === "image" && field === "farmerPhoto") {
         const permission = await ImagePicker.requestCameraPermissionsAsync();
         if (!permission.granted) {
           alert("Camera permission is required to take a photo.");
@@ -61,8 +61,9 @@ export default function BankDetails() {
           }));
         }
       } else {
+        // Open document picker for everything else
         const result = await DocumentPicker.getDocumentAsync({
-          type: "application/pdf",
+          type: fileType === "image" ? "image/*" : "application/pdf",
         });
   
         if (!result.canceled && result.assets?.[0]) {
@@ -83,8 +84,6 @@ export default function BankDetails() {
       console.log(`Upload error for ${field}:`, err);
     }
   };
-  
-
   const handlePreview = () => {
     setData({ bankDetails: form });
     router.push("./Preview");
