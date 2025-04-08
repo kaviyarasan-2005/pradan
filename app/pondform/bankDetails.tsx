@@ -89,6 +89,7 @@ export default function BankDetails() {
     router.push("./Preview");
   };
 
+  
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <IconButton
