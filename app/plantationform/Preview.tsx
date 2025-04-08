@@ -33,7 +33,7 @@ export default function Preview() {
                         mode="text"
                         onPress={() =>
                           router.push({
-                            pathname: "/landform/pdfViewer",
+                            pathname: "/../storage/pdfViewer",
                             params: { uri: item.uri },
                           })
                         }
