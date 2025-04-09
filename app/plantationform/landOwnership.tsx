@@ -1,31 +1,47 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { View, Text, TextInput, ScrollView, StyleSheet } from "react-native";
-import { Checkbox, Button,IconButton } from "react-native-paper";
+import { Checkbox, Button, IconButton } from "react-native-paper";
 import { useFormStore } from "../../storage/useFormStore";
 
 export default function LandOwnership() {
   const router = useRouter();
   const { data, setData } = useFormStore();
 
-  const [form, setForm] = useState(data.landOwnership || {
-    landOwnershipType: "",
-    hasWell: "",
-    areaIrrigated: "",
-    irrigatedLand: {
-      rainfed: "",
-      tankfed: "",
-      wellIrrigated: "",
-    },
-    pattaNumber: "",
-    totalArea: "",
-    revenueVillage: "",
-    cropSeason: [],
-    livestock: [],
-  });
+  const [form, setForm] = useState(
+    data.landOwnership || {
+      landOwnershipType: "",
+      hasWell: "",
+      areaIrrigated: "",
+      irrigatedLand: {
+        rainfed: "",
+        tankfed: "",
+        wellIrrigated: "",
+      },
+      pattaNumber: "",
+      totalArea: "",
+      revenueVillage: "",
+      cropSeason: [],
+      livestock: [],
+    }
+  );
+
+  const updateField = (field: string, value: any) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const updateNestedField = (parent: string, field: string, value: any) => {
+    setForm((prev) => ({
+      ...prev,
+      [parent]: {
+        ...prev[parent],
+        [field]: value,
+      },
+    }));
+  };
 
   const toggleCheckbox = (field: string, value: string) => {
-    setForm((prev: { [x: string]: any; }) => ({
+    setForm((prev) => ({
       ...prev,
       [field]: prev[field].includes(value)
         ? prev[field].filter((item: string) => item !== value)
@@ -33,8 +49,32 @@ export default function LandOwnership() {
     }));
   };
 
+  const renderCheckboxGroup = (
+    field: string,
+    options: string[],
+    isSingle: boolean = false
+  ) =>
+    options.map((item) => (
+      <Checkbox.Item
+        key={item}
+        label={item}
+        status={
+          isSingle
+            ? form[field] === item
+              ? "checked"
+              : "unchecked"
+            : form[field].includes(item)
+            ? "checked"
+            : "unchecked"
+        }
+        onPress={() =>
+          isSingle ? updateField(field, item) : toggleCheckbox(field, item)
+        }
+      />
+    ));
+
   const handleNext = () => {
-    setData({ landOwnership: form });
+    setData("landOwnership", form);
     router.push("./landDevelopment");
   };
 

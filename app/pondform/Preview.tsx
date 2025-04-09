@@ -1,30 +1,42 @@
-// app/landform/preview.tsx
+
 import React from "react";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import { ScrollView, StyleSheet, Alert, View } from "react-native";
 import { Card, Text, Button, Divider, IconButton } from "react-native-paper";
 import { useFormStore } from "../../storage/useFormStore";
-
 export default function Preview() {
   const router = useRouter();
-  const { data } = useFormStore();
+  const { id } = useLocalSearchParams<{ id?: string }>();
+  const { data, submittedForms, setData, submitForm } = useFormStore();
 
- const handleSubmit = async () => {
-     try {
-       // Set formType here
-       useFormStore.getState().setData("formType", "POND"); // Replace with dynamic value if needed
-   
-       await useFormStore.getState().submitForm();
-   
-       Alert.alert("Success", "Form Successfully Submitted!", [
-         { text: "OK", onPress: () => router.push("/dashboard") },
-       ]);
-     } catch (error) {
-       Alert.alert("Error", "Failed to submit the form. Please try again."+ error);
-     }
-   };
+  const isSubmittedPreview = !!id;
+  const selectedForm = isSubmittedPreview
+    ? submittedForms.find((form) => form.id === id)
+    : data;
 
-  const renderSection = (title: string, fields: any[], editRoute: "/landform/basicDetails" | "/landform/landOwnership" | "/landform/landDevelopment" | "/landform/bankDetails") => (
+  if (!selectedForm) {
+    return (
+      <View style={styles.container}>
+        <Text style={{ textAlign: "center", color: "red" }}>Form not found!</Text>
+      </View>
+    );
+  }
+
+  const handleSubmit = async () => {
+    try {
+      setData("formType", "POND");
+      await submitForm();
+      Alert.alert("Success", "Form Successfully Submitted!", [
+        { text: "OK", onPress: () => router.push("/dashboard") },
+      ]);
+    } catch (error) {
+      Alert.alert("Error", "Failed to submit the form. Please try again.\n" + error);
+    }
+  };
+
+  
+
+  const renderSection = (title: string, fields: any[], editRoute: "/pondform/basicDetails" | "/pondform/landOwnership" | "/pondform/landDevelopment" | "/pondform/bankDetails") => (
     <Card style={styles.card}>
       <Card.Title title={title} />
       <Card.Content>
@@ -84,7 +96,7 @@ export default function Preview() {
           onPress={() =>
             router.push({
               pathname: editRoute,
-              params: { returnTo: "/landform/preview" },
+              params: { returnTo: "/pondform/Preview" },
             })
           }
         >

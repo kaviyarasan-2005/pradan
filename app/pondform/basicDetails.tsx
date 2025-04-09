@@ -1,42 +1,48 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { View, Text, TextInput, ScrollView, StyleSheet } from "react-native";
-import { Checkbox, Button,IconButton } from "react-native-paper";
+import { Checkbox, Button, IconButton } from "react-native-paper";
 import { useFormStore } from "../../storage/useFormStore";
 
 export default function BasicDetails() {
   const router = useRouter();
   const { data, setData } = useFormStore();
 
-  const [form, setForm] = useState(data.basicDetails || {
-    name: "",
-    mobile: "",
-    hamlet: "",
-    panchayat: "",
-    block: "",
-    idCardType: "",
-    idCardNumber: "",
-    gender: "",
-    fatherSpouse: "",
-    householdType: "",
-    adults: "",
-    children: "",
-    occupation: [],
-    specialCategory: false,
-    specialCategoryNumber: "",
-    caste: "",
-    houseOwnership: "",
-    houseType: "",
-    drinkingWater: [],
-    potability: [],
-    domesticWater: [],
-    toiletAvailability: "",
-    toiletCondition: "",
-    education: "",
-  });
+  const [form, setForm] = useState(
+    data.basicDetails || {
+      name: "",
+      mobile: "",
+      hamlet: "",
+      panchayat: "",
+      block: "",
+      idCardType: "",
+      idCardNumber: "",
+      gender: "",
+      fatherSpouse: "",
+      householdType: "",
+      adults: "",
+      children: "",
+      occupation: [],
+      specialCategory: false,
+      specialCategoryNumber: "",
+      caste: "",
+      houseOwnership: "",
+      houseType: "",
+      drinkingWater: [],
+      potability: [],
+      domesticWater: [],
+      toiletAvailability: "",
+      toiletCondition: "",
+      education: "",
+    }
+  );
+
+  const updateField = (field: string, value: any) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  };
 
   const toggleCheckbox = (field: string, value: string) => {
-    setForm((prev: { [x: string]: any; }) => ({
+    setForm((prev) => ({
       ...prev,
       [field]: prev[field].includes(value)
         ? prev[field].filter((item: string) => item !== value)
@@ -45,9 +51,33 @@ export default function BasicDetails() {
   };
 
   const handleNext = () => {
-    setData({ basicDetails: form });
+    setData("basicDetails", form);
     router.push("./landOwnership");
   };
+
+  const renderCheckboxGroup = (
+    field: string,
+    options: string[],
+    isSingle: boolean = false
+  ) =>
+    options.map((item) => (
+      <Checkbox.Item
+        key={item}
+        label={item}
+        status={
+          isSingle
+            ? form[field] === item
+              ? "checked"
+              : "unchecked"
+            : form[field].includes(item)
+            ? "checked"
+            : "unchecked"
+        }
+        onPress={() =>
+          isSingle ? updateField(field, item) : toggleCheckbox(field, item)
+        }
+      />
+    ));
 
   return (
     <ScrollView contentContainerStyle={styles.container}>

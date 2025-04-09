@@ -2,7 +2,7 @@ import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { ScrollView, Text, TextInput, StyleSheet } from "react-native";
 import { Checkbox, Button, IconButton } from "react-native-paper";
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from "expo-image-picker";
 import * as DocumentPicker from "expo-document-picker";
 import { useFormStore } from "../../storage/useFormStore";
 
@@ -10,16 +10,15 @@ export default function BankDetails() {
   const router = useRouter();
   const { data, setData } = useFormStore();
 
-  const [form, setForm] = useState(() => {
-    const initial = data.bankDetails || {};
-    return {
-      accountHolderName: initial.accountHolderName || "",
-      accountNumber: initial.accountNumber || "",
-      bankName: initial.bankName || "",
-      branch: initial.branch || "",
-      ifscCode: initial.ifscCode || "",
-      farmerAgreed: initial.farmerAgreed || "",
-      submittedFiles: initial.submittedFiles || {
+  const [form, setForm] = useState(
+    data.bankDetails || {
+      accountHolderName: "",
+      accountNumber: "",
+      bankName: "",
+      branch: "",
+      ifscCode: "",
+      farmerAgreed: "",
+      submittedFiles: {
         patta: null,
         idCard: null,
         fmb: null,
@@ -27,25 +26,28 @@ export default function BankDetails() {
         bankPassbook: null,
         geoTag: null,
       },
-    };
-  });
-  
-  const handleUpload = async (field, fileType = "pdf") => {
+    }
+  );
+
+  const updateField = (field: string, value: any) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleUpload = async (field: string, fileType = "pdf") => {
     try {
-      // Only open camera if it's the "Photo of Farmer"
       if (fileType === "image" && field === "farmerPhoto") {
         const permission = await ImagePicker.requestCameraPermissionsAsync();
         if (!permission.granted) {
           alert("Camera permission is required to take a photo.");
           return;
         }
-  
+
         const result = await ImagePicker.launchCameraAsync({
           mediaTypes: ImagePicker.MediaTypeOptions.Images,
           allowsEditing: true,
           quality: 0.7,
         });
-  
+
         if (!result.canceled && result.assets?.[0]) {
           const file = result.assets[0];
           setForm((prev) => ({
@@ -60,11 +62,10 @@ export default function BankDetails() {
           }));
         }
       } else {
-        // Open document picker for everything else
         const result = await DocumentPicker.getDocumentAsync({
           type: fileType === "image" ? "image/*" : "application/pdf",
         });
-  
+
         if (!result.canceled && result.assets?.[0]) {
           const file = result.assets[0];
           setForm((prev) => ({
@@ -83,11 +84,10 @@ export default function BankDetails() {
       console.log(`Upload error for ${field}:`, err);
     }
   };
-  
 
   const handlePreview = () => {
-    setData({ bankDetails: form });
-    router.push("./Preview");
+    setData("bankDetails", form);
+    router.push("/landform/Preview");
   };
 
   return (
