@@ -9,11 +9,20 @@ export default function Preview() {
   const router = useRouter();
   const { data } = useFormStore();
 
-  const handleSubmit = () => {
-    Alert.alert("Success", "Form Successfully Submitted!", [
-      { text: "OK", onPress: () => router.push("/dashboard") },
-    ]);
-  };
+ const handleSubmit = async () => {
+     try {
+       // Set formType here
+       useFormStore.getState().setData("formType", "POND"); // Replace with dynamic value if needed
+   
+       await useFormStore.getState().submitForm();
+   
+       Alert.alert("Success", "Form Successfully Submitted!", [
+         { text: "OK", onPress: () => router.push("/dashboard") },
+       ]);
+     } catch (error) {
+       Alert.alert("Error", "Failed to submit the form. Please try again."+ error);
+     }
+   };
 
   const renderSection = (title: string, fields: any[], editRoute: "/landform/basicDetails" | "/landform/landOwnership" | "/landform/landDevelopment" | "/landform/bankDetails") => (
     <Card style={styles.card}>
