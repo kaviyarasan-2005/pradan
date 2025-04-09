@@ -1,42 +1,48 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { View, Text, TextInput, ScrollView, StyleSheet } from "react-native";
-import { Checkbox, Button,IconButton } from "react-native-paper";
+import { Checkbox, Button, IconButton } from "react-native-paper";
 import { useFormStore } from "../../storage/useFormStore";
 
 export default function BasicDetails() {
   const router = useRouter();
   const { data, setData } = useFormStore();
 
-  const [form, setForm] = useState(data.basicDetails || {
-    name: "",
-    mobile: "",
-    hamlet: "",
-    panchayat: "",
-    block: "",
-    idCardType: "",
-    idCardNumber: "",
-    gender: "",
-    fatherSpouse: "",
-    householdType: "",
-    adults: "",
-    children: "",
-    occupation: [],
-    specialCategory: false,
-    specialCategoryNumber: "",
-    caste: "",
-    houseOwnership: "",
-    houseType: "",
-    drinkingWater: [],
-    potability: [],
-    domesticWater: [],
-    toiletAvailability: "",
-    toiletCondition: "",
-    education: "",
-  });
+  const [form, setForm] = useState(
+    data.basicDetails || {
+      name: "",
+      mobile: "",
+      hamlet: "",
+      panchayat: "",
+      block: "",
+      idCardType: "",
+      idCardNumber: "",
+      gender: "",
+      fatherSpouse: "",
+      householdType: "",
+      adults: "",
+      children: "",
+      occupation: [],
+      specialCategory: false,
+      specialCategoryNumber: "",
+      caste: "",
+      houseOwnership: "",
+      houseType: "",
+      drinkingWater: [],
+      potability: [],
+      domesticWater: [],
+      toiletAvailability: "",
+      toiletCondition: "",
+      education: "",
+    }
+  );
+
+  const updateField = (field: string, value: any) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  };
 
   const toggleCheckbox = (field: string, value: string) => {
-    setForm((prev: { [x: string]: any; }) => ({
+    setForm((prev) => ({
       ...prev,
       [field]: prev[field].includes(value)
         ? prev[field].filter((item: string) => item !== value)
@@ -45,33 +51,53 @@ export default function BasicDetails() {
   };
 
   const handleNext = () => {
-    setData({ basicDetails: form });
+    setData("basicDetails", form);
     router.push("./landOwnership");
   };
 
+  const renderCheckboxGroup = (
+    field: string,
+    options: string[],
+    isSingle: boolean = false
+  ) =>
+    options.map((item) => (
+      <Checkbox.Item
+        key={item}
+        label={item}
+        status={
+          isSingle
+            ? form[field] === item
+              ? "checked"
+              : "unchecked"
+            : form[field].includes(item)
+            ? "checked"
+            : "unchecked"
+        }
+        onPress={() =>
+          isSingle ? updateField(field, item) : toggleCheckbox(field, item)
+        }
+      />
+    ));
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-        <IconButton
-        icon="arrow-left"
-        size={24}
-    
-        onPress={() => router.back()}
-      />
+      <IconButton icon="arrow-left" size={24} onPress={() => router.back()} />
+
       <Text style={styles.title}>Land Form</Text>
       <Text style={styles.subtitle}>Basic Details</Text>
 
-      {/* Existing Questions */}
+      {/* Inputs */}
       <Text style={styles.question}>1. Name of Farmer:</Text>
       <TextInput
         value={form.name}
-        onChangeText={(text) => setForm({ ...form, name: text })}
+        onChangeText={(text) => updateField("name", text)}
         style={styles.input}
       />
 
       <Text style={styles.question}>2. Mobile Number:</Text>
       <TextInput
         value={form.mobile}
-        onChangeText={(text) => setForm({ ...form, mobile: text })}
+        onChangeText={(text) => updateField("mobile", text)}
         style={styles.input}
         keyboardType="numeric"
       />
@@ -79,107 +105,76 @@ export default function BasicDetails() {
       <Text style={styles.question}>3. Hamlet:</Text>
       <TextInput
         value={form.hamlet}
-        onChangeText={(text) => setForm({ ...form, hamlet: text })}
+        onChangeText={(text) => updateField("hamlet", text)}
         style={styles.input}
       />
 
       <Text style={styles.question}>4. Panchayat:</Text>
       <TextInput
         value={form.panchayat}
-        onChangeText={(text) => setForm({ ...form, panchayat: text })}
+        onChangeText={(text) => updateField("panchayat", text)}
         style={styles.input}
       />
 
       <Text style={styles.question}>5. Block:</Text>
       <TextInput
         value={form.block}
-        onChangeText={(text) => setForm({ ...form, block: text })}
+        onChangeText={(text) => updateField("block", text)}
         style={styles.input}
       />
 
       <Text style={styles.question}>6. Identity Card:</Text>
-      {["Aadhar", "EPIC", "Driving License"].map((item) => (
-        <Checkbox.Item
-          key={item}
-          label={item}
-          status={form.idCardType === item ? "checked" : "unchecked"}
-          onPress={() => setForm({ ...form, idCardType: item })}
-        />
-      ))}
+      {renderCheckboxGroup("idCardType", ["Aadhar", "EPIC", "Driving License"], true)}
 
       <Text style={styles.question}>7. ID Card Number:</Text>
       <TextInput
         value={form.idCardNumber}
-        onChangeText={(text) => setForm({ ...form, idCardNumber: text })}
+        onChangeText={(text) => updateField("idCardNumber", text)}
         style={styles.input}
       />
 
       <Text style={styles.question}>8. Gender:</Text>
-      {["Male", "Female", "Transgender"].map((item) => (
-        <Checkbox.Item
-          key={item}
-          label={item}
-          status={form.gender === item ? "checked" : "unchecked"}
-          onPress={() => setForm({ ...form, gender: item })}
-        />
-      ))}
+      {renderCheckboxGroup("gender", ["Male", "Female", "Transgender"], true)}
 
       <Text style={styles.question}>9. Father / Spouse Name:</Text>
       <TextInput
         value={form.fatherSpouse}
-        onChangeText={(text) => setForm({ ...form, fatherSpouse: text })}
+        onChangeText={(text) => updateField("fatherSpouse", text)}
         style={styles.input}
       />
 
       <Text style={styles.question}>10. Type of Household:</Text>
-      {["Nuclear", "Joint"].map((item) => (
-        <Checkbox.Item
-          key={item}
-          label={item}
-          status={form.householdType === item ? "checked" : "unchecked"}
-          onPress={() => setForm({ ...form, householdType: item })}
-        />
-      ))}
+      {renderCheckboxGroup("householdType", ["Nuclear", "Joint"], true)}
 
       <Text style={styles.question}>11. Household Members:</Text>
-      <Text style={styles.question}>Adult:</Text>
       <TextInput
-      
         value={form.adults}
-        onChangeText={(text) => setForm({ ...form, adults: text })}
+        onChangeText={(text) => updateField("adults", text)}
         style={styles.input}
         placeholder="Adults"
         keyboardType="numeric"
       />
-      <Text style={styles.question}>children:</Text>
       <TextInput
         value={form.children}
-        onChangeText={(text) => setForm({ ...form, children: text })}
+        onChangeText={(text) => updateField("children", text)}
         style={styles.input}
         placeholder="Children"
         keyboardType="numeric"
       />
 
       <Text style={styles.question}>12. Occupation of Household Members:</Text>
-      {["Agriculture", "Business", "Other"].map((item) => (
-        <Checkbox.Item
-          key={item}
-          label={item}
-          status={form.occupation.includes(item) ? "checked" : "unchecked"}
-          onPress={() => toggleCheckbox("occupation", item)}
-        />
-      ))}
+      {renderCheckboxGroup("occupation", ["Agriculture", "Business", "Other"])}
 
       <Text style={styles.question}>13. Special Category:</Text>
       <Checkbox.Item
         label="Disabled"
         status={form.specialCategory ? "checked" : "unchecked"}
-        onPress={() => setForm({ ...form, specialCategory: !form.specialCategory })}
+        onPress={() => updateField("specialCategory", !form.specialCategory)}
       />
       {form.specialCategory && (
         <TextInput
           value={form.specialCategoryNumber}
-          onChangeText={(text) => setForm({ ...form, specialCategoryNumber: text })}
+          onChangeText={(text) => updateField("specialCategoryNumber", text)}
           style={styles.input}
           placeholder="Number of Disabled Persons"
           keyboardType="numeric"
@@ -187,98 +182,31 @@ export default function BasicDetails() {
       )}
 
       <Text style={styles.question}>14. Caste:</Text>
-      {["OC", "OBC", "SC", "ST"].map((item) => (
-        <Checkbox.Item
-          key={item}
-          label={item}
-          status={form.caste === item ? "checked" : "unchecked"}
-          onPress={() => setForm({ ...form, caste: item })}
-        />
-      ))}
+      {renderCheckboxGroup("caste", ["OC", "OBC", "SC", "ST"], true)}
 
       <Text style={styles.question}>15. House Ownership:</Text>
-      {["Rented", "Owned"].map((item) => (
-        <Checkbox.Item
-          key={item}
-          label={item}
-          status={form.houseOwnership === item ? "checked" : "unchecked"}
-          onPress={() => setForm({ ...form, houseOwnership: item })}
-        />
-      ))}
+      {renderCheckboxGroup("houseOwnership", ["Rented", "Owned"], true)}
 
       <Text style={styles.question}>16. Type of House:</Text>
-      {["Pucca", "Kutcha"].map((item) => (
-        <Checkbox.Item
-          key={item}
-          label={item}
-          status={form.houseType === item ? "checked" : "unchecked"}
-          onPress={() => setForm({ ...form, houseType: item })}
-        />
-      ))}
+      {renderCheckboxGroup("houseType", ["Pucca", "Kutcha"], true)}
+
       <Text style={styles.question}>17. Drinking Water Source:</Text>
-      {["Ponds", "Well & Borewells", "Trucks"].map((item) => (
-        <Checkbox.Item
-          key={item}
-          label={item}
-          status={form.drinkingWater.includes(item) ? "checked" : "unchecked"}
-          onPress={() => toggleCheckbox("drinkingWater", item)}
-        />
-      ))}
+      {renderCheckboxGroup("drinkingWater", ["Ponds", "Well & Borewells", "Trucks"])}
 
-      {/* Potability */}
       <Text style={styles.question}>18. Potability:</Text>
-      {["Ponds", "Tanks", "Well & Borewells"].map((item) => (
-        <Checkbox.Item
-          key={item}
-          label={item}
-          status={form.potability.includes(item) ? "checked" : "unchecked"}
-          onPress={() => toggleCheckbox("potability", item)}
-        />
-      ))}
+      {renderCheckboxGroup("potability", ["Ponds", "Tanks", "Well & Borewells"])}
 
-      {/* Domestic Water Source */}
       <Text style={styles.question}>19. Domestic Water Source:</Text>
-      {["Ponds", "Tanks", "Well & Borewells"].map((item) => (
-        <Checkbox.Item
-          key={item}
-          label={item}
-          status={form.domesticWater.includes(item) ? "checked" : "unchecked"}
-          onPress={() => toggleCheckbox("domesticWater", item)}
-        />
-      ))}
+      {renderCheckboxGroup("domesticWater", ["Ponds", "Tanks", "Well & Borewells"])}
 
-      {/* Toilet Availability */}
       <Text style={styles.question}>20. Toilet Availability:</Text>
-      {["Yes", "No"].map((item) => (
-        <Checkbox.Item
-          key={item}
-          label={item}
-          status={form.toiletAvailability === item ? "checked" : "unchecked"}
-          onPress={() => setForm({ ...form, toiletAvailability: item })}
-        />
-      ))}
+      {renderCheckboxGroup("toiletAvailability", ["Yes", "No"], true)}
 
-      {/* Toilet Condition */}
       <Text style={styles.question}>21. Toilet Condition:</Text>
-      {["Working", "Not Working"].map((item) => (
-        <Checkbox.Item
-          key={item}
-          label={item}
-          status={form.toiletCondition === item ? "checked" : "unchecked"}
-          onPress={() => setForm({ ...form, toiletCondition: item })}
-        />
-      ))}
+      {renderCheckboxGroup("toiletCondition", ["Working", "Not Working"], true)}
 
-      {/* Education of Householder */}
       <Text style={styles.question}>22. Education of Householder:</Text>
-      {["Illiterate", "Primary", "Secondary", "University"].map((item) => (
-        <Checkbox.Item
-          key={item}
-          label={item}
-          status={form.education === item ? "checked" : "unchecked"}
-          onPress={() => setForm({ ...form, education: item })}
-        />
-      ))}
+      {renderCheckboxGroup("education", ["Illiterate", "Primary", "Secondary", "University"], true)}
 
       <Button mode="contained" onPress={handleNext} style={styles.button}>
         Next
@@ -288,10 +216,34 @@ export default function BasicDetails() {
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 20 },
-  title: { fontSize: 24, fontWeight: "bold", textAlign: "center" },
-  subtitle: { fontSize: 18, fontWeight: "600", textAlign: "center", marginBottom: 20 },
-  question: { fontWeight: "bold", marginTop: 10 },
-  input: { borderWidth: 1, padding: 10, marginBottom: 10, borderRadius: 5 },
-  button: { marginTop: 20 },
+  container: {
+    padding: 20,
+    paddingBottom: 40,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  subtitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  question: {
+    fontWeight: "bold",
+    marginTop: 10,
+    marginBottom: 5,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 5,
+  },
+  button: {
+    marginTop: 30,
+  },
 });
