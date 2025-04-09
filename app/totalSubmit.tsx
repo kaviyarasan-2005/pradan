@@ -52,18 +52,20 @@ export default function TotalSubmit() {
                     {item.status || "Submitted"}
                   </Text>
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    <TouchableOpacity
-                      onPress={() =>
-                        router.push({
-                          pathname: "/landform/preview",
-                          params: { index: index.toString() },
-                        })
-                      }
-                    >
-                      <Text style={[styles.cell, styles.viewLink, { width: 60 }]}>
-                        Preview
-                      </Text>
-                    </TouchableOpacity>
+                  <TouchableOpacity
+  onPress={() =>
+    router.push({
+      pathname: "/landform/Preview",
+      params: {
+        formData: JSON.stringify(item), // Pass full form data
+      },
+    })
+  }
+>
+  <Text style={[styles.cell, styles.viewLink, { width: 60 }]}>Preview</Text>
+</TouchableOpacity>
+
+
 
                     <TouchableOpacity
                       onPress={() => {

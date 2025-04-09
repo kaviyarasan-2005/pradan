@@ -41,18 +41,19 @@ export const useFormStore = create<FormStore>((set, get) => ({
 
   submitForm: async () => {
     const currentData = get().data;
-
+  
     const formWithMeta: FormData = {
       ...currentData,
-      id: String(get().submittedForms.length + 1),
+      id: Date.now().toString(), // ensures unique id
       submittedAt: new Date().toISOString(),
     };
-
+  
     const newSubmittedForms = [...get().submittedForms, formWithMeta];
-
+  
     await AsyncStorage.setItem("submittedForms", JSON.stringify(newSubmittedForms));
     set({ submittedForms: newSubmittedForms, data: {} });
   },
+  
 
   loadSubmittedForms: async () => {
     set({ loading: true });
