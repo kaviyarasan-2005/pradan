@@ -13,13 +13,11 @@ export default function Preview() {
   const selectedForm = isSubmittedPreview
     ? submittedForms.find((form) => form.id === id)
     : data;
-    const { formData } = useLocalSearchParams();
-const parsedData = formData ? JSON.parse(formData) : null;
 
-  if (!parsedData) {
+  if (!selectedForm) {
     return (
       <View style={styles.container}>
-        <Text>No data available for preview.</Text>
+        <Text style={{ textAlign: "center", color: "red" }}>Form not found!</Text>
       </View>
     );
   }
