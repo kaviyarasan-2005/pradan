@@ -10,7 +10,7 @@ export default function Approved() {
 
       <TouchableOpacity style={styles.button} onPress={router.back}>
         <Text style={styles.buttonText}>Go Back</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> 
     </View>
   );
 }

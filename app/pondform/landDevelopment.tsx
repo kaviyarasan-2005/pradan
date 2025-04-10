@@ -1,114 +1,101 @@
 import { useRouter } from "expo-router";
-import { useState,useEffect } from "react";
-import { View, ScrollView, StyleSheet } from "react-native";
-import {
-  Text,
-  TextInput,
-  Button,
-  Checkbox,
-  Divider,
-  IconButton,
-} from "react-native-paper";
+import { useState, useEffect } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { Text, TextInput, Checkbox, Button, IconButton, Divider } from "react-native-paper";
 import { useFormStore } from "../../storage/useFormStore";
 
-export default function LandDevelopment() {
+export default function PondDevelopment() {
   const router = useRouter();
-  const { data, setData } =
-    useFormStore();
-    
-  const [form, setForm] = useState(() => {
-    const initial = data.landDevelopment || {};
-    return {
-      sfNumber: initial.sfNumber || "",
-      soilType: initial.soilType || [],
-      landBenefit: initial.landBenefit || "",
-      inspectionBy: initial.inspectionBy || "",
-      approvedBy: initial.approvedBy || "",
-      dateInspectionText: initial.dateInspectionText || "",
-      dateApprovalText: initial.dateApprovalText || "",
-      latitude:initial.latitude || "",
-      longitude:initial.longitude ||"",
-      length:initial.length || "",
-      breadth: initial.breadth || "",
-      depth: initial.depth || "",
-      volume: (
-        (parseFloat(initial.length) || 0) *
-        (parseFloat(initial.breadth) || 0) *
-        (parseFloat(initial.depth) || 0)
-      ).toFixed(2),
-      pradanContribution: initial.pradanContribution || "",
-      farmerContribution: initial.farmerContribution || "",
-      totalEstimate: initial.totalEstimate || "",
-    };
-  });
-  useEffect(() => {
-    const length = parseFloat(form.length);
-    const breadth = parseFloat(form.breadth);
-    const depth = parseFloat(form.depth);
+  const { data, setData } = useFormStore();
 
-    if (!isNaN(length) && !isNaN(breadth) && !isNaN(depth)) {
-      const volume = (length * breadth * depth).toFixed(2);
+  const [form, setForm] = useState(
+    data.landDevelopment || {
+      sfNumber: "",
+      soilType: [],
+      landBenefit: "",
+      inspectionBy: "",
+      approvedBy: "",
+      dateInspectionText: "",
+      dateApprovalText: "",
+      latitude: "",
+      longitude: "",
+      length: "",
+      breadth: "",
+      depth: "",
+      volume: "",
+      pradanContribution: "",
+      farmerContribution: "",
+      totalEstimate: "",
+    }
+  );
+
+  const updateField = (field: string, value: any) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const toggleCheckbox = (field: string, value: string) => {
+    setForm((prev) => ({
+      ...prev,
+      [field]: prev[field].includes(value)
+        ? prev[field].filter((item: string) => item !== value)
+        : [...prev[field], value],
+    }));
+  };
+
+  // Auto-calculate volume
+  useEffect(() => {
+    const l = parseFloat(form.length);
+    const b = parseFloat(form.breadth);
+    const d = parseFloat(form.depth);
+
+    if (!isNaN(l) && !isNaN(b) && !isNaN(d)) {
+      const volume = (l * b * d).toFixed(2);
       setForm((prev) => ({ ...prev, volume }));
     } else {
       setForm((prev) => ({ ...prev, volume: "" }));
     }
   }, [form.length, form.breadth, form.depth]);
-  const toggleCheckbox = (field: string, value: string) => {
-    const list = form[field] || [];
-    if (list.includes(value)) {
-      setForm({ ...form, [field]: list.filter((item) => item !== value) });
-    } else {
-      setForm({ ...form, [field]: [...list, value] });
-    }
-  };
 
   const handleNext = () => {
-    setData({ landDevelopment: form });
+    setData("landDevelopment", form);
     router.push("./bankDetails");
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <IconButton
-        icon="arrow-left"
-        size={24}
-        onPress={() => router.back()}
-      />
+      <IconButton icon="arrow-left" size={24} onPress={() => router.back()} />
 
       <Text style={styles.title}>Pond Form</Text>
       <Text style={styles.subtitle}>Land Development Details</Text>
 
-      {/* Question 31 */}
       <Text style={styles.label}>31. S.F. No. of the land to be developed</Text>
       <TextInput
         value={form.sfNumber}
-        onChangeText={(text) => setForm({ ...form, sfNumber: text })}
+        onChangeText={(text) => updateField("sfNumber", text)}
         style={styles.input}
         mode="outlined"
       />
- <Text style={styles.label}>31.a) Latitude and Longitude</Text>
+
+      <Text style={styles.label}>31.a) Latitude and Longitude</Text>
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <TextInput
           mode="outlined"
           style={[styles.input, { flex: 1, marginRight: 5 }]}
           placeholder="Latitude"
-          placeholderTextColor="#888"
           value={form.latitude}
-          onChangeText={(text) => setForm({ ...form, latitude: text })}
+          onChangeText={(text) => updateField("latitude", text)}
           keyboardType="numeric"
         />
         <TextInput
           mode="outlined"
           style={[styles.input, { flex: 1, marginLeft: 5 }]}
           placeholder="Longitude"
-          placeholderTextColor="#888"
           value={form.longitude}
-          onChangeText={(text) => setForm({ ...form, longitude: text })}
+          onChangeText={(text) => updateField("longitude", text)}
           keyboardType="numeric"
         />
       </View>
 
-      {/* Remaining fields... */}
       <Text style={styles.label}>32. Soil Type</Text>
       {["Red Soil", "Black Cotton", "Sandy Loam", "Laterite"].map((type) => (
         <Checkbox.Item
@@ -124,7 +111,7 @@ export default function LandDevelopment() {
       <Text style={styles.label}>33. Land to benefit (ha)</Text>
       <TextInput
         value={form.landBenefit}
-        onChangeText={(text) => setForm({ ...form, landBenefit: text })}
+        onChangeText={(text) => updateField("landBenefit", text)}
         style={styles.input}
         keyboardType="numeric"
         mode="outlined"
@@ -136,7 +123,7 @@ export default function LandDevelopment() {
           key={role}
           label={role}
           status={form.inspectionBy === role ? "checked" : "unchecked"}
-          onPress={() => setForm({ ...form, inspectionBy: role })}
+          onPress={() => updateField("inspectionBy", role)}
         />
       ))}
 
@@ -146,14 +133,14 @@ export default function LandDevelopment() {
           key={role}
           label={role}
           status={form.approvedBy === role ? "checked" : "unchecked"}
-          onPress={() => setForm({ ...form, approvedBy: role })}
+          onPress={() => updateField("approvedBy", role)}
         />
       ))}
 
       <Text style={styles.label}>36. Date of Inspection</Text>
       <TextInput
         value={form.dateInspectionText}
-        onChangeText={(text) => setForm({ ...form, dateInspectionText: text })}
+        onChangeText={(text) => updateField("dateInspectionText", text)}
         style={styles.input}
         placeholder="DD/MM/YYYY"
         mode="outlined"
@@ -162,73 +149,69 @@ export default function LandDevelopment() {
       <Text style={styles.label}>37. Date of Approval</Text>
       <TextInput
         value={form.dateApprovalText}
-        onChangeText={(text) => setForm({ ...form, dateApprovalText: text })}
+        onChangeText={(text) => updateField("dateApprovalText", text)}
         style={styles.input}
         placeholder="DD/MM/YYYY"
         mode="outlined"
       />
 
-      <Text style={styles.label}>38. Length in meter</Text>
+      <Text style={styles.label}>38. Length (m)</Text>
       <TextInput
         value={form.length}
-        onChangeText={(text) => setForm({ ...form, length: text })}
+        onChangeText={(text) => updateField("length", text)}
         style={styles.input}
         keyboardType="numeric"
         mode="outlined"
       />
-      
-      <Text style={styles.label}>
-        39.Breadth in meter
-      </Text>
+
+      <Text style={styles.label}>39. Breadth (m)</Text>
       <TextInput
         value={form.breadth}
-        onChangeText={(text) => setForm({ ...form, breadth: text })}
+        onChangeText={(text) => updateField("breadth", text)}
         style={styles.input}
         keyboardType="numeric"
         mode="outlined"
       />
 
-      <Text style={styles.label}>40. Depth in meter</Text>
+      <Text style={styles.label}>40. Depth (m)</Text>
       <TextInput
         value={form.depth}
-        onChangeText={(text) => setForm({ ...form, depth: text })}
+        onChangeText={(text) => updateField("depth", text)}
         style={styles.input}
         keyboardType="numeric"
         mode="outlined"
       />
-      <Text style={styles.label}>41. Volume of Excavation</Text>
-<TextInput
-  value={form.volume}
-  onChangeText={(text) => setForm((prev) => ({ ...prev, length: text }))}
-  style={styles.input}
-  keyboardType="numeric"
-  mode="outlined"
-  editable={false}
-/>
 
+      <Text style={styles.label}>41. Volume (m³) [Auto Calculated]</Text>
+      <TextInput
+        value={form.volume}
+        style={styles.input}
+        mode="outlined"
+        editable={false}
+      />
 
-      <Text style={styles.label}>42. PRADAN Contribution</Text>
+      <Text style={styles.label}>42. PRADAN Contribution (Rs)</Text>
       <TextInput
         value={form.pradanContribution}
-        onChangeText={(text) => setForm({ ...form, pradanContribution: text })}
+        onChangeText={(text) => updateField("pradanContribution", text)}
         style={styles.input}
         keyboardType="numeric"
         mode="outlined"
       />
 
-      <Text style={styles.label}>43. Farmer Contribution</Text>
+      <Text style={styles.label}>43. Farmer Contribution (Rs)</Text>
       <TextInput
         value={form.farmerContribution}
-        onChangeText={(text) => setForm({ ...form, farmerContribution: text })}
+        onChangeText={(text) => updateField("farmerContribution", text)}
         style={styles.input}
         keyboardType="numeric"
         mode="outlined"
       />
 
-      <Text style={styles.label}>44. Total Estimate Amount</Text>
+      <Text style={styles.label}>44. Total Estimate (Rs)</Text>
       <TextInput
         value={form.totalEstimate}
-        onChangeText={(text) => setForm({ ...form, totalEstimate: text })}
+        onChangeText={(text) => updateField("totalEstimate", text)}
         style={styles.input}
         keyboardType="numeric"
         mode="outlined"
@@ -242,15 +225,37 @@ export default function LandDevelopment() {
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 20 },
-  title: { fontSize: 24, fontWeight: "bold", textAlign: "center" },
+  container: {
+    padding: 20,
+    paddingBottom: 40,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
   subtitle: {
     fontSize: 18,
     fontWeight: "600",
     textAlign: "center",
     marginBottom: 20,
   },
-  label: { fontWeight: "bold", marginTop: 10 },
-  input: { marginBottom: 10, borderRadius: 5000 },
-  button: { marginTop: 20 },
+  label: {
+    fontWeight: "bold",
+    marginTop: 10,
+    marginBottom: 5,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 5,
+  },
+  button: {
+    marginTop: 30,
+  },
+  divider: {
+    marginVertical: 10,
+  },
 });
