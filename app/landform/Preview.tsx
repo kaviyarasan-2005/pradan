@@ -91,7 +91,7 @@ export default function Preview() {
         ))}
       </Card.Content>
       <Card.Actions>
-        <Button
+        <Button 
           mode="outlined"
           onPress={() =>
             router.push({
