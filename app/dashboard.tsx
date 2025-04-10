@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Animated,
   Modal,
 } from "react-native";
 import { useRouter } from "expo-router";
