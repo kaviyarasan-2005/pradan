@@ -1,7 +1,7 @@
 
 import React from "react";
 import { useRouter, useLocalSearchParams } from "expo-router";
-import { ScrollView, StyleSheet, Alert, View } from "react-native";
+import { ScrollView, StyleSheet, Alert, View,Image } from "react-native";
 import { Card, Text, Button, Divider, IconButton } from "react-native-paper";
 import { useFormStore } from "../../storage/useFormStore";
 export default function Preview() {
@@ -115,6 +115,17 @@ export default function Preview() {
         onPress={() => router.back()}
       />
  <Text style={styles.title}>Pond Form</Text>
+ <View style={styles.farmerPhotoContainer}>
+  {selectedForm?.bankDetails?.submittedFiles?.farmerPhoto?.uri ? (
+    <Image
+      source={{ uri: selectedForm.bankDetails.submittedFiles.farmerPhoto.uri }}
+      style={styles.farmerPhoto}
+      resizeMode="cover"
+    />
+  ) : (
+    <Text style={styles.noPhotoText}>Add a farmer photo</Text>
+  )}
+</View>
       {renderSection("Basic Details", [
         { label: "1. Name of Farmer", value: data.basicDetails?.name },
         { label: "2. Mobile Number", value: data.basicDetails?.mobile },
@@ -212,6 +223,36 @@ const styles = StyleSheet.create({
   },
   fieldContainer: {
     marginBottom: 10,
+  },
+  farmerPhoto: {
+    width: 170,
+    height: 180,
+    position: "absolute",
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    zIndex: 2,
+  },
+  farmerPhotoContainer: {
+    position: "absolute",
+    top: 80,
+    right: 30,
+    width: 170,
+    height: 180,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    backgroundColor: "#f2f2f2",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 2,
+  },
+  
+  noPhotoText: {
+    fontSize: 12,
+    color: "#888",
+    textAlign: "center",
+    paddingHorizontal: 8,
   },
   label: {
     fontWeight: "bold",
