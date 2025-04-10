@@ -87,7 +87,7 @@ export default function BankDetails() {
 
   const handlePreview = () => {
     setData("bankDetails", form);
-    router.push("/landform/Preview");
+    router.push("/plantationform/Preview");
   };
 
   return (
