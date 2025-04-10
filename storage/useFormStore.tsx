@@ -21,7 +21,7 @@ interface FormStore {
   submitForm: () => Promise<void>;
   loadSubmittedForms: () => Promise<void>;
   clearSubmittedForms: () => Promise<void>;
-  deleteFormByIndex: (index: number) => Promise<void>; // ✅ add to interface
+  deleteFormByIndex: (index: number) => Promise<void>;
 }
 
 export const useFormStore = create<FormStore>((set, get) => ({
