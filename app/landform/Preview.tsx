@@ -114,7 +114,7 @@ export default function Preview() {
         style={styles.backButton}
         onPress={() => router.back()}
       />
-
+ <Text style={styles.title}>Land Form</Text>
       {renderSection("Basic Details", [
         { label: "1. Name of Farmer", value: data.basicDetails?.name },
         { label: "2. Mobile Number", value: data.basicDetails?.mobile },
@@ -206,6 +206,11 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     paddingTop: 50,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
   },
   card: {
     marginBottom: 20,

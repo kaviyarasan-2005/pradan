@@ -53,20 +53,26 @@ export default function TotalSubmit() {
                   </Text>
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
                   <TouchableOpacity
-  onPress={() =>
-    router.push({
-      pathname: "/landform/Preview",
-      params: {
-        formData: JSON.stringify(item), // Pass full form data
-      },
-    })
-  }
->
-  <Text style={[styles.cell, styles.viewLink, { width: 60 }]}>Preview</Text>
-</TouchableOpacity>
-
-
-
+                      onPress={() => {
+                        const routeMap = {
+                          "LAND": "/landform/Preview",
+                          "POND": "/pondform/Preview",
+                          "PLANTATION": "/plantationform/Preview",
+                        };
+                      
+                        const targetRoute = routeMap[item.formType];
+                      
+                        router.push({
+                          pathname: targetRoute,
+                          params: {
+                            formData: JSON.stringify(item),
+                          },
+                        });
+                      }}
+                      
+                    >
+                    <Text style={[styles.cell, styles.viewLink, { width: 60 }]}>Preview</Text>
+                    </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() => {
                         Alert.alert(

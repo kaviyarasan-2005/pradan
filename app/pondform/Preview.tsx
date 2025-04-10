@@ -114,7 +114,7 @@ export default function Preview() {
         style={styles.backButton}
         onPress={() => router.back()}
       />
-
+ <Text style={styles.title}>Pond Form</Text>
       {renderSection("Basic Details", [
         { label: "1. Name of Farmer", value: data.basicDetails?.name },
         { label: "2. Mobile Number", value: data.basicDetails?.mobile },
@@ -230,6 +230,11 @@ const styles = StyleSheet.create({
     top: 10,
     left: 10,
     zIndex: 1,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
   },
   fileRow: {
     flexDirection: "row",
