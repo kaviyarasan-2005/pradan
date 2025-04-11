@@ -5,6 +5,7 @@ interface FormData {
   id?: string;
   submittedAt?: string;
   formType?: "LAND" | "POND" | "PLANTATION";
+  formStatus?:"Pending" | "Approved" | "Rejected";
   basicDetails?: any;
   landOwnership?: any;
   landDevelopment?: any;
@@ -45,6 +46,8 @@ export const useFormStore = create<FormStore>((set, get) => ({
       ...currentData,
       id: Date.now().toString(), // ensures unique id
       submittedAt: new Date().toISOString(),
+      formStatus: currentData.formStatus,
+
     };
   
     const newSubmittedForms = [...get().submittedForms, formWithMeta];

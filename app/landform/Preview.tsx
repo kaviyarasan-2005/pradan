@@ -26,6 +26,11 @@ const selectedForm = isSubmittedPreview
   const handleSubmit = async () => {
     try {
       setData("formType", "LAND");
+  
+      // Use status set by the user in bankDetails (default to 'Pending' if not set)
+      const userStatus = data.bankDetails?.formStatus|| "Not Filled";
+      setData("formStatus", userStatus);
+  
       await submitForm();
       Alert.alert("Success", "Form Successfully Submitted!", [
         { text: "OK", onPress: () => router.push("/dashboard") },
@@ -34,6 +39,7 @@ const selectedForm = isSubmittedPreview
       Alert.alert("Error", "Failed to submit the form. Please try again.\n" + error);
     }
   };
+  
 
   const renderSection = (title: string, fields: any[], editRoute: string) => (
     <Card style={styles.card}>
@@ -200,6 +206,7 @@ const selectedForm = isSubmittedPreview
                   }))
               : ["No files uploaded"],
         },
+        { label: "Form Status", value: selectedForm.bankDetails?.formStatus },
       ], "/landform/bankDetails")}
 
       {!isSubmittedPreview && (

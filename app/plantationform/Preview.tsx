@@ -22,9 +22,14 @@ export default function Preview() {
     );
   }
 
-  const handleSubmit = async () => {
+ const handleSubmit = async () => {
     try {
       setData("formType", "PLANTATION");
+  
+      // Use status set by the user in bankDetails (default to 'Pending' if not set)
+      const userStatus = data.bankDetails?.formStatus|| "Not Filled";
+      setData("formStatus", userStatus);
+  
       await submitForm();
       Alert.alert("Success", "Form Successfully Submitted!", [
         { text: "OK", onPress: () => router.push("/dashboard") },
@@ -204,6 +209,7 @@ export default function Preview() {
                   }))
               : ["No files uploaded"],
         },
+        { label: "Form Status", value: selectedForm.bankDetails?.formStatus },
       ], "./bankDetails")}
 
       <Button mode="contained" onPress={handleSubmit} style={styles.submitButton}>

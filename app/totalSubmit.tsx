@@ -95,7 +95,7 @@ export default function TotalSubmit() {
                   </Text>
                   <Text style={[styles.cell, { width: 90 }]}>{item.formType || "N/A"}</Text>
                   <Text style={[styles.cell, { width: 80 }]}>
-                    {item.status || "Submitted"}
+                     {item.formStatus || "Not Filled"}
                   </Text>
                   <View style={[styles.cell, { width: 150, flexDirection: "row", gap: 4 }]}>
                     <Button

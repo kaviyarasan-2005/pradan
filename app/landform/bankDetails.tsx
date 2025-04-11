@@ -1,10 +1,12 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { ScrollView, Text, TextInput, StyleSheet } from "react-native";
-import { Checkbox, Button, IconButton } from "react-native-paper";
+import { View,ScrollView, Text, TextInput, StyleSheet } from "react-native";
+import { Checkbox, Button, IconButton  } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
 import * as DocumentPicker from "expo-document-picker";
 import { useFormStore } from "../../storage/useFormStore";
+import { Picker } from "@react-native-picker/picker";
+
 
 export default function BankDetails() {
   const router = useRouter();
@@ -18,6 +20,7 @@ export default function BankDetails() {
       branch: "",
       ifscCode: "",
       farmerAgreed: "",
+      formStatus: "",
       submittedFiles: {
         patta: null,
         idCard: null,
@@ -175,6 +178,19 @@ export default function BankDetails() {
           )}
         </React.Fragment>
       ))}
+      <Text style={styles.question}>Form Status:</Text>
+   <View style={styles.pickerContainer}>
+  <Picker
+    selectedValue={form.formStatus}
+    onValueChange={(itemValue) => updateField("formStatus", itemValue)}
+  >
+    <Picker.Item label="Select status..." value="" />
+             <Picker.Item label="Approved" value="Approved" />
+             <Picker.Item label="Pending" value="Pending" />
+             <Picker.Item label="Rejected" value="Rejected" />
+  </Picker>
+</View>
+
 
       <Button
         mode="contained"
@@ -235,4 +251,11 @@ const styles = StyleSheet.create({
   buttonContent: {
     paddingVertical: 6,
   },
+  pickerContainer: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    marginBottom: 10,
+  }
+  
 });
