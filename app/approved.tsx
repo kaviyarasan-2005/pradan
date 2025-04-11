@@ -7,13 +7,17 @@ import {
   Alert,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useFormStore } from "../storage/useFormStore";
 import { Button, IconButton } from "react-native-paper";
+import { useActionSheet } from "@expo/react-native-action-sheet";
 
 export default function Approved() {
   const router = useRouter();
   const { submittedForms, loadSubmittedForms, deleteFormByIndex } = useFormStore();
+  const { showActionSheetWithOptions } = useActionSheet();
+
+  const [selectedFilter, setSelectedFilter] = useState("ALL");
 
   useEffect(() => {
     loadSubmittedForms();
@@ -32,19 +36,40 @@ export default function Approved() {
     ]);
   };
 
-  const approvedForms = submittedForms.filter(
-    (item) => item.formStatus === "Approved"
-  );
+  const openFilterSheet = () => {
+    const options = ["ALL", "LAND", "POND", "PLANTATION", "Cancel"];
+    const cancelButtonIndex = 4;
+
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+        title: "Filter by Form Type",
+      },
+      (buttonIndex) => {
+        if (buttonIndex !== cancelButtonIndex) {
+          setSelectedFilter(options[buttonIndex]);
+        }
+      }
+    );
+  };
+
+  const filteredForms = submittedForms.filter((item) => {
+    const isApproved = item.formStatus === "Approved"; // spelling from your data
+    const isMatchType = selectedFilter === "ALL" || item.formType === selectedFilter;
+    return isApproved && isMatchType;
+  });
 
   return (
     <View style={styles.container}>
       <View style={styles.headerRow}>
         <IconButton icon="arrow-left" onPress={() => router.back()} />
         <Text style={styles.title}>Approved Forms</Text>
-        <View style={{ width: 40 }} />
+        <IconButton icon="filter-variant" onPress={openFilterSheet} />
       </View>
+      <Text style={styles.filterLabel}>Showing: {selectedFilter}</Text>
 
-      {approvedForms.length === 0 ? (
+      {filteredForms.length === 0 ? (
         <Text style={styles.noDataText}>No approved forms yet.</Text>
       ) : (
         <ScrollView horizontal>
@@ -58,7 +83,7 @@ export default function Approved() {
             </View>
 
             <FlatList
-              data={approvedForms}
+              data={filteredForms}
               keyExtractor={(_, index) => `approved-form-${index}`}
               renderItem={({ item, index }) => (
                 <View style={[styles.row, index % 2 !== 0 && styles.altRow]}>
@@ -113,6 +138,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     flex: 1,
     textAlign: "center",
+  },
+  filterLabel: {
+    textAlign: "center",
+    fontStyle: "italic",
+    color: "#555",
+    marginBottom: 10,
   },
   noDataText: {
     fontSize: 16,

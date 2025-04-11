@@ -7,13 +7,17 @@ import {
   Alert,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useFormStore } from "../storage/useFormStore";
 import { Button, IconButton } from "react-native-paper";
+import { useActionSheet } from "@expo/react-native-action-sheet";
 
 export default function Approved() {
   const router = useRouter();
   const { submittedForms, loadSubmittedForms, deleteFormByIndex } = useFormStore();
+  const { showActionSheetWithOptions } = useActionSheet();
+
+  const [selectedFilter, setSelectedFilter] = useState("ALL");
 
   useEffect(() => {
     loadSubmittedForms();
@@ -32,9 +36,29 @@ export default function Approved() {
     ]);
   };
 
-  const filteredForms = submittedForms.filter(
-    (item) => item.formStatus === "Pending"
-  );
+  const openFilterSheet = () => {
+    const options = ["ALL", "LAND", "POND", "PLANTATION", "Cancel"];
+    const cancelButtonIndex = 4;
+
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+        title: "Filter by Form Type",
+      },
+      (buttonIndex) => {
+        if (buttonIndex !== cancelButtonIndex) {
+          setSelectedFilter(options[buttonIndex]);
+        }
+      }
+    );
+  };
+
+  const filteredForms = submittedForms.filter((item) => {
+    const isPending = item.formStatus === "Pending";
+    const isMatchType = selectedFilter === "ALL" || item.formType === selectedFilter;
+    return isPending && isMatchType;
+  });
 
   return (
     <View style={styles.container}>
@@ -42,8 +66,10 @@ export default function Approved() {
       <View style={styles.headerRow}>
         <IconButton icon="arrow-left" onPress={() => router.back()} />
         <Text style={styles.title}>Pending Forms</Text>
-        <View style={{ width: 40 }} /> {/* Filler for header alignment */}
+        <IconButton icon="filter-variant" onPress={openFilterSheet} />
       </View>
+
+      <Text style={styles.filterLabel}>Showing: {selectedFilter}</Text>
 
       {filteredForms.length === 0 ? (
         <Text style={styles.noDataText}>No pending forms.</Text>
@@ -114,6 +140,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     flex: 1,
     textAlign: "center",
+  },
+  filterLabel: {
+    textAlign: "center",
+    fontStyle: "italic",
+    color: "#555",
+    marginBottom: 10,
   },
   noDataText: {
     fontSize: 16,
