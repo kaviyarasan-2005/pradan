@@ -10,7 +10,7 @@ import {
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
 import { useFormStore } from "../storage/useFormStore";
-import { Button } from "react-native-paper";
+import { Appbar, Button } from "react-native-paper";
 
 export default function TotalSubmit() {
   const router = useRouter();
@@ -37,10 +37,20 @@ export default function TotalSubmit() {
     );
   };
 
+  const handleFilter = () => {
+    Alert.alert("Filter", "Filter functionality coming soon!");
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Total Submitted Forms</Text>
+      {/* Header */}
+      <Appbar.Header>
+        <Appbar.BackAction onPress={() => router.back()} />
+        <Appbar.Content title="Total Submitted Forms" />
+        <Appbar.Action icon="filter-variant" onPress={handleFilter} />
+      </Appbar.Header>
 
+      {/* Content */}
       {submittedForms.length === 0 ? (
         <Text style={styles.noDataText}>No forms submitted yet.</Text>
       ) : (
@@ -72,15 +82,16 @@ export default function TotalSubmit() {
                   <View style={[styles.cell, { width: 150, flexDirection: "row" }]}>
                     <Button
                       mode="outlined"
-                      onPress={() => router.push({ pathname: "/landform/Preview", params: { id: item.id } })}
+                      onPress={() =>
+                        router.push({
+                          pathname: "/landform/Preview",
+                          params: { id: item.id },
+                        })
+                      }
                     >
                       Preview
                     </Button>
-                    <Button
-                      mode="text"
-                      textColor="red"
-                      onPress={() => handleDelete(index)}
-                    >
+                    <Button mode="text" textColor="red" onPress={() => handleDelete(index)}>
                       Delete
                     </Button>
                   </View>
@@ -96,7 +107,6 @@ export default function TotalSubmit() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
     paddingTop: 40,
     flex: 1,
     backgroundColor: "#fff",
@@ -110,9 +120,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#777",
     textAlign: "center",
+    marginTop: 20,
   },
   table: {
     minWidth: 600,
+    paddingHorizontal: 20,
+    paddingTop: 10,
   },
   row: {
     flexDirection: "row",
