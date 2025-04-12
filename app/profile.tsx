@@ -23,7 +23,7 @@ export default function Profile() {
     }
   
     if (newPassword.length < 2) {
-      Alert.alert("Error", "New password should be at least 4 characters.");
+      Alert.alert("Error", "New password should be at least 2 characters.");
       return;
     }
   
