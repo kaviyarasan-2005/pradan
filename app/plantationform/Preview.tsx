@@ -8,7 +8,11 @@ export default function Preview() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id?: string }>();
   const { data, submittedForms, setData, submitForm } = useFormStore();
-
+  const canEdit = () => {
+    if (!isSubmittedPreview) return true; // if it's unsubmitted form
+    const status = selectedForm?.bankDetails?.formStatus;
+    return status === "Pending" || status === "Rejected";
+  };
   const isSubmittedPreview = !!id;
   const selectedForm = isSubmittedPreview
     ? submittedForms.find((form) => form.id === id)
@@ -95,6 +99,7 @@ export default function Preview() {
           </View>
         ))}
       </Card.Content>
+        {canEdit() && (
       <Card.Actions>
         <Button
           mode="outlined"
@@ -108,6 +113,7 @@ export default function Preview() {
           Edit
         </Button>
       </Card.Actions>
+    )}
     </Card>
   );
 

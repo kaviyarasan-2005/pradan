@@ -60,7 +60,7 @@ export default function PondDevelopment() {
     setData("landDevelopment", form);
     setTimeout(() => {
       router.push("./bankDetails");
-    }, 50); // 100ms delay is usually enough
+    }, 50);
   };
 
   return (
