@@ -51,7 +51,9 @@ export default function LandDevelopment() {
 
   const handleNext = () => {
     setData("landDevelopment", form);
-    router.push("./bankDetails");
+    setTimeout(() => {
+      router.push("./bankDetails");
+    }, 50); 
   };
 
   return (

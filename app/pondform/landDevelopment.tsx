@@ -58,7 +58,9 @@ export default function PondDevelopment() {
 
   const handleNext = () => {
     setData("landDevelopment", form);
-    router.push("./bankDetails");
+    setTimeout(() => {
+      router.push("./bankDetails");
+    }, 50); // 100ms delay is usually enough
   };
 
   return (

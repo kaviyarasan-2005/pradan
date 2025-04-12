@@ -66,11 +66,13 @@ export default function LandDevelopment() {
       />
     ));
 
-  const handleNext = () => {
-    setData("landDevelopment", form);
-    router.push("./bankDetails");
-  };
-
+    const handleNext = () => {
+      setData("landDevelopment", form);
+      setTimeout(() => {
+        router.push("./bankDetails");
+      }, 50); // 100ms delay is usually enough
+    };
+    
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <IconButton icon="arrow-left" size={24} onPress={() => router.back()} />
