@@ -22,7 +22,10 @@ export default function LoginScreen() {
   }, []);
 
   const handleLogin = async () => {
-    if (username.trim() === "123" && password.trim() === "123") {
+    const storedPassword = await AsyncStorage.getItem("password");
+    const defaultPassword = "123"; // default if none is set
+  
+    if (username.trim() === "123" && password.trim() === (storedPassword || defaultPassword)) {
       try {
         await AsyncStorage.setItem("user", "loggedIn");
         router.replace("/dashboard");
@@ -33,7 +36,7 @@ export default function LoginScreen() {
       Alert.alert("Invalid Credentials", "Please enter valid ID and Password");
     }
   };
-
+  
   return (
     <View style={styles.container}>
       <Image
