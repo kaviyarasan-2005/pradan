@@ -30,21 +30,16 @@ export default function Preview() {
 
   const handleSubmit = async () => {
     if (submitting) return; // prevent double taps
-  
     try {
       setSubmitting(true);
-  
       // Prepare formType and formStatus up front
       const userStatus = data.bankDetails?.formStatus || "Not Filled";
       setData("formType", "PLANTATION");
       setData("formStatus", userStatus);
-  
       // Wait a tick to ensure the state is updated in Zustand
       await new Promise((resolve) => setTimeout(resolve, 50));
-  
       // Now submit safely
       await submitForm();
-  
       Alert.alert("Success", "Form Successfully Submitted!", [
         { text: "OK", onPress: () => router.push("/dashboard") },
       ]);
