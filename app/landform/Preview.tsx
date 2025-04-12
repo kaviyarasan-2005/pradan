@@ -28,22 +28,35 @@ const selectedForm = isSubmittedPreview
     );
   }
 
-  const handleSubmit = async () => {
-    try {
-      setData("formType", "LAND");
-  
-      // Use status set by the user in bankDetails (default to 'Pending' if not set)
-      const userStatus = data.bankDetails?.formStatus|| "Not Filled";
-      setData("formStatus", userStatus);
-  
-      await submitForm();
-      Alert.alert("Success", "Form Successfully Submitted!", [
-        { text: "OK", onPress: () => router.push("/dashboard") },
-      ]);
-    } catch (error) {
-      Alert.alert("Error", "Failed to submit the form. Please try again.\n" + error);
-    }
-  };
+  const [submitting, setSubmitting] = React.useState(false);
+
+const handleSubmit = async () => {
+  if (submitting) return; // prevent double taps
+
+  try {
+    setSubmitting(true);
+
+    // Prepare formType and formStatus up front
+    const userStatus = data.bankDetails?.formStatus || "Not Filled";
+    setData("formType", "LAND");
+    setData("formStatus", userStatus);
+
+    // Wait a tick to ensure the state is updated in Zustand
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    // Now submit safely
+    await submitForm();
+
+    Alert.alert("Success", "Form Successfully Submitted!", [
+      { text: "OK", onPress: () => router.push("/dashboard") },
+    ]);
+  } catch (error) {
+    Alert.alert("Error", "Failed to submit the form. Please try again.\n" + error);
+  } finally {
+    setSubmitting(false);
+  }
+};
+
   
 
   const renderSection = (title: string, fields: any[], editRoute: string) => (
