@@ -3,9 +3,12 @@ import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from '@react-navigation/native';
+
 
 export default function Profile() {
   const router = useRouter();
+  const navigation = useNavigation();
   const [showOldPass, setShowOldPass] = useState(false);
   const [showNewPass, setShowNewPass] = useState(false);
   const [showConfirmPass, setShowConfirmPass] = useState(false);
@@ -50,7 +53,13 @@ export default function Profile() {
     <ScrollView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={router.back}>
+      <TouchableOpacity onPress={() => {
+  if (navigation.canGoBack()) {
+    router.back();
+  } else {
+    router.replace('/dashboard'); // or whatever fallback screen you prefer
+  }
+}}>
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Profile</Text>
