@@ -145,11 +145,15 @@ export default function Preview() {
    )}
  </View>
       {renderSection("Basic Details", [
-        { label: "1. Name of Farmer", value: data.basicDetails?.name },
-        { label: "2. Mobile Number", value: data.basicDetails?.mobile },
-        { label: "3. Hamlet", value: data.basicDetails?.hamlet },
-        { label: "4. Panchayat", value: data.basicDetails?.panchayat },
-        { label: "5. Block", value: data.basicDetails?.block },
+        { label: "1. Name of Farmer", value: selectedForm.basicDetails?.name },
+        { label: "1-2. Age", value: selectedForm.basicDetails?.age },
+        { label: "2. Mobile Number", value: selectedForm.basicDetails?.mobile },
+        { label: "3. District", value: selectedForm.basicDetails?.district },
+        { label: "4. Block", value: selectedForm.basicDetails?.block },
+        { label: "5. Panchayat", value: selectedForm.basicDetails?.panchayat },
+        { label: "6. Hamlet", value: selectedForm.basicDetails?.hamlet },
+        { label: "4. Panchayat", value: selectedForm.basicDetails?.panchayat },
+        { label: "5. Block", value: selectedForm.basicDetails?.block },
         { label: "6. Identity Card", value: data.basicDetails?.idCardType },
         { label: "7. ID Card Number", value: data.basicDetails?.idCardNumber },
         { label: "8. Gender", value: data.basicDetails?.gender },
@@ -169,7 +173,7 @@ export default function Preview() {
         { label: "20. Toilet Availability", value: data.basicDetails?.toiletAvailability },
         { label: "21. Toilet Condition", value: data.basicDetails?.toiletCondition },
         { label: "22. Education of Householder", value: data.basicDetails?.education },
-      ],"./basicDetails")}
+      ],"/plantationform/basicDetails")}
 
       {renderSection("Land Ownership & Livestock", [
         { label: "23. Land Ownership", value: data.landOwnership?.landOwnershipType },
@@ -178,10 +182,18 @@ export default function Preview() {
         { label: "25. Irrigated Lands (ha)", value: data.landOwnership?.irrigatedLand },
         { label: "26. Patta Number", value: data.landOwnership?.pattaNumber },
         { label: "27. Total Area (ha)", value: data.landOwnership?.totalArea },
+        { label: "27-28. Taluk", value: selectedForm.landOwnership?.taluk },
+        { label: "27-28. Firka", value: selectedForm.landOwnership?.firka},
         { label: "28. Revenue Village", value: data.landOwnership?.revenueVillage },
         { label: "29. Crop Season", value: data.landOwnership?.cropSeason },
-        { label: "30. Livestock at Home", value: data.landOwnership?.livestock },
-      ], "./landOwnership")}
+        { label: "30. LiveStocks" },
+        { label: " Goat", value: selectedForm.landOwnership?.livestock?.goat || "0" },
+        { label: "    Sheep", value: selectedForm.landOwnership?.livestock?.sheep || "0" },
+        { label: "    Milch Animals :", value: selectedForm.landOwnership?.livestock?.milchAnimals || "0" },
+        { label: "    Draught Animals :", value: selectedForm.landOwnership?.livestock?.draught_animals || "0" },
+        { label: "    Poultry :", value: selectedForm.landOwnership?.livestock?.poultry || "0" },
+        { label: "    Others :", value: selectedForm.landOwnership?.livestock?.others || "0" },
+      ], "/plantationform/landOwnership")}
 
       {renderSection("Land Development Details", [
         { label: "31. S.F. No. of the land to be developed", value: data.landDevelopment?.sfNumber },
@@ -200,7 +212,7 @@ export default function Preview() {
         { label: "41. PRADAN Contribution", value: data.landDevelopment?.pradanContribution },
         { label: "42. Farmer Contribution", value: data.landDevelopment?.farmerContribution },
         { label: "43. Total Estimate Amount", value: data.landDevelopment?.totalEstimate },
-      ], "./landDevelopment")}
+      ], "/plantationform/landDevelopment")}
 
       {renderSection("Bank Details", [
         { label: "44. Name of Account Holder", value: data.bankDetails?.accountHolderName },
@@ -223,7 +235,7 @@ export default function Preview() {
               : ["No files uploaded"],
         },
         { label: "Form Status", value: selectedForm.bankDetails?.formStatus },
-      ], "./bankDetails")}
+      ], "/plantationform/bankDetails")}
 
       <Button mode="contained" onPress={handleSubmit} style={styles.submitButton}>
         Submit

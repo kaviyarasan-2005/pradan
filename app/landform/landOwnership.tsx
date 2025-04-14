@@ -248,8 +248,6 @@ export default function LandOwnership() {
   keyboardType="numeric"
   style={styles.input}
 />
-
-
       <Button mode="contained" onPress={handleNext} style={styles.button}>
         Next
       </Button>

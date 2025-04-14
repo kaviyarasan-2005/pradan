@@ -11,7 +11,9 @@ export default function BasicDetails() {
   const [form, setForm] = useState(
     data.basicDetails || {
       name: "",
+      age: "",
       mobile: "",
+      district: "",
       hamlet: "",
       panchayat: "",
       block: "",
@@ -97,36 +99,44 @@ export default function BasicDetails() {
         onChangeText={(text) => setForm({ ...form, name: text })}
         style={styles.input}
       />
-
-      <Text style={styles.question}>2. Mobile Number:</Text>
+<Text style={styles.question}>1-2. Age:</Text>
       <TextInput
-        value={form.mobile}
-        onChangeText={(text) => setForm({ ...form, mobile: text })}
+        value={form.age}
+        onChangeText={(text) => updateField("age", text)}
         style={styles.input}
         keyboardType="numeric"
       />
-
-      <Text style={styles.question}>3. Hamlet:</Text>
+      <Text style={styles.question}>2. Mobile Number:</Text>
       <TextInput
-        value={form.hamlet}
-        onChangeText={(text) => setForm({ ...form, hamlet: text })}
+        value={form.mobile}
+        onChangeText={(text) => updateField("mobile", text)}
+        style={styles.input}
+        keyboardType="numeric"
+      />
+      <Text style={styles.question}>2-3. District:</Text>
+      <TextInput
+        value={form.district}
+        onChangeText={(text) => updateField("district", text)}
         style={styles.input}
       />
-
+       <Text style={styles.question}>3. Block:</Text>
+      <TextInput
+        value={form.block}
+        onChangeText={(text) => updateField("block", text)}
+        style={styles.input}
+      />
       <Text style={styles.question}>4. Panchayat:</Text>
       <TextInput
         value={form.panchayat}
-        onChangeText={(text) => setForm({ ...form, panchayat: text })}
+        onChangeText={(text) => updateField("panchayat", text)}
         style={styles.input}
       />
-
-      <Text style={styles.question}>5. Block:</Text>
+      <Text style={styles.question}>5. Hamlet:</Text>
       <TextInput
-        value={form.block}
-        onChangeText={(text) => setForm({ ...form, block: text })}
+        value={form.hamlet}
+        onChangeText={(text) => updateField("hamlet", text)}
         style={styles.input}
       />
-
       <Text style={styles.question}>6. Identity Card:</Text>
       {["Aadhar", "EPIC", "Driving License"].map((item) => (
         <Checkbox.Item
