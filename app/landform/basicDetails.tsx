@@ -11,7 +11,9 @@ export default function BasicDetails() {
   const [form, setForm] = useState(
     data.basicDetails || {
       name: "",
+      age: "",
       mobile: "",
+      district: "",
       hamlet: "",
       panchayat: "",
       block: "",
@@ -93,7 +95,13 @@ export default function BasicDetails() {
         onChangeText={(text) => updateField("name", text)}
         style={styles.input}
       />
-
+     <Text style={styles.question}>1-2. Age:</Text>
+      <TextInput
+        value={form.age}
+        onChangeText={(text) => updateField("age", text)}
+        style={styles.input}
+        keyboardType="numeric"
+      />
       <Text style={styles.question}>2. Mobile Number:</Text>
       <TextInput
         value={form.mobile}
@@ -101,28 +109,30 @@ export default function BasicDetails() {
         style={styles.input}
         keyboardType="numeric"
       />
-
-      <Text style={styles.question}>3. Hamlet:</Text>
+      <Text style={styles.question}>2-3. District:</Text>
       <TextInput
-        value={form.hamlet}
-        onChangeText={(text) => updateField("hamlet", text)}
+        value={form.district}
+        onChangeText={(text) => updateField("district", text)}
         style={styles.input}
       />
-
+       <Text style={styles.question}>3. Block:</Text>
+      <TextInput
+        value={form.block}
+        onChangeText={(text) => updateField("block", text)}
+        style={styles.input}
+      />
       <Text style={styles.question}>4. Panchayat:</Text>
       <TextInput
         value={form.panchayat}
         onChangeText={(text) => updateField("panchayat", text)}
         style={styles.input}
       />
-
-      <Text style={styles.question}>5. Block:</Text>
+      <Text style={styles.question}>5. Hamlet:</Text>
       <TextInput
-        value={form.block}
-        onChangeText={(text) => updateField("block", text)}
+        value={form.hamlet}
+        onChangeText={(text) => updateField("hamlet", text)}
         style={styles.input}
       />
-
       <Text style={styles.question}>6. Identity Card:</Text>
       {renderCheckboxGroup("idCardType", ["Aadhar", "EPIC", "Driving License"], true)}
 

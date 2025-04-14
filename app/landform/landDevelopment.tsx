@@ -201,26 +201,10 @@ export default function LandDevelopment() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    paddingBottom: 40,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  subtitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    textAlign: "center",
-    marginBottom: 20,
-  },
-  question: {
-    fontWeight: "bold",
-    marginTop: 10,
-    marginBottom: 5,
-  },
+  container: { padding: 20, paddingBottom: 40 },
+  title: { fontSize: 24, fontWeight: "bold", textAlign: "center" },
+  subtitle: { fontSize: 18, fontWeight: "600", textAlign: "center", marginBottom: 20 },
+  question: { fontWeight: "bold", marginTop: 10, marginBottom: 5 },
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
@@ -228,7 +212,5 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 5,
   },
-  button: {
-    marginTop: 30,
-  },
+  button: { marginTop: 20 },
 });
