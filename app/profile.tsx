@@ -77,7 +77,7 @@ export default function Profile() {
 
         <View style={styles.detailRow}>
           <Text style={styles.label}>Date of Joining</Text>
-          <Text style={styles.value}>02 Apiral 2025</Text>
+          <Text style={styles.value}>02 April 2025</Text>
         </View>
 
         <View style={styles.detailRow}>

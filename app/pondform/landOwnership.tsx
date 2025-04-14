@@ -25,12 +25,12 @@ export default function LandOwnership() {
       revenueVillage: "",
       cropSeason: [],
       livestock: {
-        goat:"0",
-        sheep:"0",
-        milchAnimals:"0",
-        draught_animals:"0",
-        poultry:"0",
-        others:"0",
+        goat:"",
+        sheep:"",
+        milchAnimals:"",
+        draught_animals:"",
+        poultry:"",
+        others:"",
       },
     }
   );
