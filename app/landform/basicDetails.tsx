@@ -20,6 +20,7 @@ export default function BasicDetails() {
       block: "",
       idCardType: "",
       idCardNumber: "",
+      othercard:"",
       gender: "",
       fatherSpouse: "",
       householdType: "",
@@ -146,8 +147,8 @@ export default function BasicDetails() {
 </RadioButton.Group>
 {form.idCardType === "Other" && (
   <TextInput
-    value={form.idCardNumber}
-    onChangeText={(text) => updateField("idCardNumber", text)}
+    value={form.othercard}
+    onChangeText={(text) => updateField("othercard", text)}
     style={styles.input}
     placeholder="Specify Identity Card"
   />
@@ -187,7 +188,21 @@ export default function BasicDetails() {
   <RadioButton.Item label="Nuclear" value="Nuclear" />
   <RadioButton.Item label="Joint" value="Joint" />
 </RadioButton.Group>
-
+<Text style={styles.question}>11. Household Members:</Text>
+      <TextInput
+        value={form.adults}
+        onChangeText={(text) => updateField("adults", text)}
+        style={styles.input}
+        placeholder="Adults"
+        keyboardType="numeric"
+      />
+      <TextInput
+        value={form.children}
+        onChangeText={(text) => updateField("children", text)}
+        style={styles.input}
+        placeholder="Children"
+        keyboardType="numeric"
+      />
 
 <Text style={styles.question}>12. Occupation of Household Members (No. of persons):</Text>
 <TextInput
@@ -267,7 +282,7 @@ export default function BasicDetails() {
 <Text style={styles.question}>16. Type of House:</Text>
 <RadioButton.Group
   onValueChange={(value) => updateField("houseType", value)}
-  value={form.householdType}
+  value={form.houseType}
 >
   <RadioButton.Item label="Pucca" value="pucca" />
   <RadioButton.Item label="Kutcha" value="kutcha" />
