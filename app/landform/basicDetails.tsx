@@ -1,7 +1,8 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { View, Text, TextInput, ScrollView, StyleSheet } from "react-native";
-import { Checkbox, Button, IconButton } from "react-native-paper";
+import { Checkbox, Button, IconButton,RadioButton} from "react-native-paper";
+
 import { useFormStore } from "../../storage/useFormStore";
 
 export default function BasicDetails() {
@@ -133,8 +134,25 @@ export default function BasicDetails() {
         onChangeText={(text) => updateField("hamlet", text)}
         style={styles.input}
       />
-      <Text style={styles.question}>6. Identity Card:</Text>
-      {renderCheckboxGroup("idCardType", ["Aadhar", "EPIC", "Driving License"], true)}
+     <Text style={styles.question}>6. Identity Card:</Text>
+<RadioButton.Group
+  onValueChange={(value) => updateField("idCardType", value)}
+  value={form.idCardType}
+>
+  <RadioButton.Item label="Aadhar" value="Aadhar" />
+  <RadioButton.Item label="EPIC" value="EPIC" />
+  <RadioButton.Item label="Driving License" value="Driving License" />
+  <RadioButton.Item label="Other" value="Other" />
+</RadioButton.Group>
+{form.idCardType === "Other" && (
+  <TextInput
+    value={form.idCardNumber}
+    onChangeText={(text) => updateField("idCardNumber", text)}
+    style={styles.input}
+    placeholder="Specify Identity Card"
+  />
+)}
+
 
       <Text style={styles.question}>7. ID Card Number:</Text>
       <TextInput
@@ -153,8 +171,15 @@ export default function BasicDetails() {
         style={styles.input}
       />
 
-      <Text style={styles.question}>10. Type of Household:</Text>
-      {renderCheckboxGroup("householdType", ["Nuclear", "Joint"], true)}
+<Text style={styles.question}>10. Type of Household:</Text>
+<RadioButton.Group
+  onValueChange={(value) => updateField("householdType", value)}
+  value={form.householdType}
+>
+  <RadioButton.Item label="Nuclear" value="Nuclear" />
+  <RadioButton.Item label="Joint" value="Joint" />
+</RadioButton.Group>
+
 
       <Text style={styles.question}>11. Household Members:</Text>
       <TextInput
