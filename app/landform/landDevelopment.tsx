@@ -137,21 +137,24 @@ export default function LandDevelopment() {
         style={styles.input}
         placeholder="DD/MM/YYYY"
       />
+<Text style={styles.question}>38. Type of work proposed:</Text>
+{renderCheckboxGroup("workType", [
+  "Prosopis removal",
+  "Redevelopment of eroded lands",
+  "Silt application",
+  "Other",
+])}
 
-      <Text style={styles.question}>38. Type of work proposed:</Text>
-      {renderCheckboxGroup("workType", [
-        "Prosopis removal",
-        "Redevelopment of eroded lands",
-        "Silt application",
-        "Other",
-      ])}
+{/* Show text input only if 'Other' is selected */}
+{form.workType.includes("Other") && (
+  <TextInput
+    value={form.workTypeText}
+    onChangeText={(text) => updateField("workTypeText", text)}
+    style={styles.input}
+    placeholder="Specify other work types"
+  />
+)}
 
-      <TextInput
-        value={form.workTypeText}
-        onChangeText={(text) => updateField("workTypeText", text)}
-        style={styles.input}
-        placeholder="Details about work types"
-      />
 
       <Text style={styles.question}>39. Area benefited by proposal works (ha):</Text>
       <TextInput
