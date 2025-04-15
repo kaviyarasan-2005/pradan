@@ -25,7 +25,7 @@ export default function BasicDetails() {
       householdType: "",
       adults: "",
       children: "",
-      occupation: [],
+      occupation: { agriculture: "", business: "", other: "" },
       specialCategory: false,
       specialCategoryNumber: "",
       caste: "",
@@ -161,8 +161,16 @@ export default function BasicDetails() {
         style={styles.input}
       />
 
-      <Text style={styles.question}>8. Gender:</Text>
-      {renderCheckboxGroup("gender", ["Male", "Female", "Transgender"], true)}
+<Text style={styles.question}>8. Gender:</Text>
+<RadioButton.Group
+  onValueChange={(value) => updateField("gender", value)}
+  value={form.gender}
+>
+  <RadioButton.Item label="Male" value="Male" />
+  <RadioButton.Item label="Female" value="Female" />
+  <RadioButton.Item label="Transgender" value="Transgender" />
+</RadioButton.Group>
+
 
       <Text style={styles.question}>9. Father / Spouse Name:</Text>
       <TextInput
@@ -181,24 +189,43 @@ export default function BasicDetails() {
 </RadioButton.Group>
 
 
-      <Text style={styles.question}>11. Household Members:</Text>
-      <TextInput
-        value={form.adults}
-        onChangeText={(text) => updateField("adults", text)}
-        style={styles.input}
-        placeholder="Adults"
-        keyboardType="numeric"
-      />
-      <TextInput
-        value={form.children}
-        onChangeText={(text) => updateField("children", text)}
-        style={styles.input}
-        placeholder="Children"
-        keyboardType="numeric"
-      />
-
-      <Text style={styles.question}>12. Occupation of Household Members:</Text>
-      {renderCheckboxGroup("occupation", ["Agriculture", "Business", "Other"])}
+<Text style={styles.question}>12. Occupation of Household Members (No. of persons):</Text>
+<TextInput
+  value={form.occupation.agriculture}
+  onChangeText={(text) =>
+    setForm((prev) => ({
+      ...prev,
+      occupation: { ...prev.occupation, agriculture: text },
+    }))
+  }
+  style={styles.input}
+  placeholder="Agriculture"
+  keyboardType="numeric"
+/>
+<TextInput
+  value={form.occupation.business}
+  onChangeText={(text) =>
+    setForm((prev) => ({
+      ...prev,
+      occupation: { ...prev.occupation, business: text },
+    }))
+  }
+  style={styles.input}
+  placeholder="Business"
+  keyboardType="numeric"
+/>
+<TextInput
+  value={form.occupation.other}
+  onChangeText={(text) =>
+    setForm((prev) => ({
+      ...prev,
+      occupation: { ...prev.occupation, other: text },
+    }))
+  }
+  style={styles.input}
+  placeholder="Other"
+  keyboardType="numeric"
+/>
 
       <Text style={styles.question}>13. Special Category:</Text>
       <Checkbox.Item
@@ -216,14 +243,35 @@ export default function BasicDetails() {
         />
       )}
 
-      <Text style={styles.question}>14. Caste:</Text>
-      {renderCheckboxGroup("caste", ["OC", "OBC", "SC", "ST"], true)}
+<Text style={styles.question}>14. Caste:</Text>
+<RadioButton.Group
+  onValueChange={(value) => updateField("caste", value)}
+  value={form.caste}
+>
+  <RadioButton.Item label="OC" value="OC" />
+  <RadioButton.Item label="OBC" value="OBC" />
+  <RadioButton.Item label="SC" value="SC" />
+  <RadioButton.Item label="ST" value="ST" />
+</RadioButton.Group>
 
-      <Text style={styles.question}>15. House Ownership:</Text>
-      {renderCheckboxGroup("houseOwnership", ["Rented", "Owned"], true)}
 
-      <Text style={styles.question}>16. Type of House:</Text>
-      {renderCheckboxGroup("houseType", ["Pucca", "Kutcha"], true)}
+<Text style={styles.question}>15. House Ownership:</Text>
+<RadioButton.Group
+  onValueChange={(value) => updateField("houseOwnership", value)}
+  value={form.houseOwnership}
+>
+  <RadioButton.Item label="Rented" value="Rented" />
+  <RadioButton.Item label="Owned" value="Owned" />
+</RadioButton.Group>
+
+<Text style={styles.question}>16. Type of House:</Text>
+<RadioButton.Group
+  onValueChange={(value) => updateField("houseType", value)}
+  value={form.householdType}
+>
+  <RadioButton.Item label="Pucca" value="pucca" />
+  <RadioButton.Item label="Kutcha" value="kutcha" />
+</RadioButton.Group>
 
       <Text style={styles.question}>17. Drinking Water Source:</Text>
       {renderCheckboxGroup("drinkingWater", ["Ponds", "Well & Borewells", "Trucks"])}
@@ -235,13 +283,34 @@ export default function BasicDetails() {
       {renderCheckboxGroup("domesticWater", ["Ponds", "Tanks", "Well & Borewells"])}
 
       <Text style={styles.question}>20. Toilet Availability:</Text>
-      {renderCheckboxGroup("toiletAvailability", ["Yes", "No"], true)}
-
-      <Text style={styles.question}>21. Toilet Condition:</Text>
-      {renderCheckboxGroup("toiletCondition", ["Working", "Not Working"], true)}
+<RadioButton.Group
+  onValueChange={(value) => updateField("toiletAvailability", value)}
+  value={form.toiletAvailability}
+>
+  <RadioButton.Item label="Yes" value="Yes" />
+  <RadioButton.Item label="No" value="No" />
+</RadioButton.Group>
+      
+<Text style={styles.question}>21. Toilet Condition:</Text>
+<RadioButton.Group
+  onValueChange={(value) => updateField("toiletCondition", value)}
+  value={form.toiletCondition}
+>
+  <RadioButton.Item label="Yes" value="yes" />
+  <RadioButton.Item label="No" value="no" />
+</RadioButton.Group>
 
       <Text style={styles.question}>22. Education of Householder:</Text>
-      {renderCheckboxGroup("education", ["Illiterate", "Primary", "Secondary", "University"], true)}
+<RadioButton.Group
+  onValueChange={(value) => updateField("education", value)}
+  value={form.education}
+>
+  <RadioButton.Item label="Illiterate" value="Illiterate" />
+  <RadioButton.Item label="Primary" value="Primary" />
+  <RadioButton.Item label="Secondary" value="Secondary" />
+  <RadioButton.Item label="University" value="University" />
+</RadioButton.Group>
+
 
       <Button mode="contained" onPress={handleNext} style={styles.button}>
         Next
