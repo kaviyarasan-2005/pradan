@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { View, Text, TextInput, ScrollView, StyleSheet } from "react-native";
-import { Checkbox, Button, IconButton } from "react-native-paper";
+import { Checkbox, Button, IconButton,RadioButton  } from "react-native-paper";
 import { useFormStore } from "../../storage/useFormStore";
 
 export default function LandOwnership() {
@@ -23,7 +23,8 @@ export default function LandOwnership() {
       taluk:"",
       firka:"",
       revenueVillage: "",
-      cropSeason: [],
+      cropSeason: "",
+      cropSeasonOther: "",
       livestock: {
         goat:"",
         sheep:"",
@@ -95,10 +96,24 @@ export default function LandOwnership() {
       <Text style={styles.subtitle}>Land Ownership & Livestock</Text>
 
       <Text style={styles.question}>23. Land Ownership:</Text>
-      {renderCheckboxGroup("landOwnershipType", ["Owner Cultivator", "Lease Holder"], true)}
+<RadioButton.Group
+  onValueChange={(value) => updateField("landOwnershipType", value)}
+  value={form.landOwnershipType}
+>
+  <RadioButton.Item label="Owner Cultivator" value="Owner Cultivator" />
+  <RadioButton.Item label="Lease Holder" value="Lease Holder" />
+</RadioButton.Group>
 
-      <Text style={styles.question}>24. Well for Irrigation:</Text>
-      {renderCheckboxGroup("hasWell", ["Yes", "No"], true)}
+
+<Text style={styles.question}>24. Well for Irrigation:</Text>
+<RadioButton.Group
+  onValueChange={(value) => updateField("hasWell", value)}
+  value={form.hasWell}
+>
+  <RadioButton.Item label="Yes" value="Yes" />
+  <RadioButton.Item label="No" value="No" />
+</RadioButton.Group>
+
 
       {form.hasWell === "Yes" && (
         <>
@@ -169,8 +184,24 @@ export default function LandOwnership() {
         style={styles.input}
       />
 
-      <Text style={styles.question}>29. Crop Season:</Text>
-      {renderCheckboxGroup("cropSeason", ["Kharif", "Rabi", "Other"])}
+<Text style={styles.question}>29. Crop Season:</Text>
+<RadioButton.Group
+  onValueChange={(value) => updateField("cropSeason", value)}
+  value={form.cropSeason}
+>
+  <RadioButton.Item label="Kharif" value="Kharif" />
+  <RadioButton.Item label="Rabi" value="Rabi" />
+  <RadioButton.Item label="Other" value="Other" />
+</RadioButton.Group>
+
+{form.cropSeason === "Other" && (
+  <TextInput
+    placeholder="Enter Crop Season"
+    value={form.cropSeasonOther}
+    onChangeText={(text) => updateField("cropSeasonOther", text)}
+    style={styles.input}
+  />
+)}
 
       <Text style={styles.question}>30. Livestock at Home:</Text>
 
