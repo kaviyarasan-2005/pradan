@@ -35,6 +35,7 @@ export default function LandOwnership() {
         poultry:"",
         others:"",
       },
+      livestockCombinedField:"",
     }
   );
       useEffect(() => {
@@ -49,6 +50,34 @@ export default function LandOwnership() {
           }
         }
       }, [id]);
+
+      const handleLivestockChange = (field, value) => {
+        let filteredText = value.replace(/[^0-9]/g, '');
+      
+        const updatedLivestock = {
+          ...form.livestock,
+          [field]: filteredText,
+        };
+      
+        // Default any empty fields to 0 for the combined string
+        const goat = updatedLivestock.goat || '0';
+        const sheep = updatedLivestock.sheep || '0';
+        const milchAnimals = updatedLivestock.milchAnimals || '0';
+        const draught_animals = updatedLivestock.draught_animals || '0';
+        const poultry = updatedLivestock.poultry || '0';
+        const others = updatedLivestock.others || '0';
+      
+        const livestockCombinedField = `${goat},${sheep},${milchAnimals},${draught_animals},${poultry},${others}`;
+      
+        setForm((prev) => ({
+          ...prev,
+          livestock: {
+            ...updatedLivestock,
+            livestockCombinedField: livestockCombinedField,
+          },
+        }));
+      };
+      
 
   const updateField = (field: string, value: any) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -216,42 +245,31 @@ export default function LandOwnership() {
     style={styles.input}
   />
 )}
-
-      <Text style={styles.question}>30. Livestock at Home:</Text>
+<Text style={styles.question}>30. Livestock at Home:</Text>
 
 <TextInput
   placeholder="Goat"
   value={form.livestock.goat}
-  onChangeText={(text) => updateNestedField("livestock","goat", text)}
-  onBlur={() => {
-    if (form.livestock.goat === "") {
-      updateNestedField("livestock", "goat", "0");
-    }
-  }}
+  onChangeText={(text) => handleLivestockChange("goat", text)}
+  onBlur={() => handleLivestockChange("goat", form.livestock.goat || "0")}
   keyboardType="numeric"
   style={styles.input}
 />
+
 <TextInput
   placeholder="Sheep"
   value={form.livestock.sheep}
-  onChangeText={(text) => updateNestedField("livestock","sheep", text)}
-  onBlur={() => {
-    if (form.livestock.sheep === "") {
-      updateNestedField("livestock", "sheep", "0");
-    }
-  }}
+  onChangeText={(text) => handleLivestockChange("sheep", text)}
+  onBlur={() => handleLivestockChange("sheep", form.livestock.sheep || "0")}
   keyboardType="numeric"
   style={styles.input}
 />
+
 <TextInput
   placeholder="Milch animals"
   value={form.livestock.milchAnimals}
-  onChangeText={(text) => updateNestedField("livestock","milchAnimals", text)}
-  onBlur={() => {
-    if (form.livestock.milchAnimals === "") {
-      updateNestedField("livestock", "milchAnimals", "0");
-    }
-  }}
+  onChangeText={(text) => handleLivestockChange("milchAnimals", text)}
+  onBlur={() => handleLivestockChange("milchAnimals", form.livestock.milchAnimals || "0")}
   keyboardType="numeric"
   style={styles.input}
 />
@@ -259,12 +277,8 @@ export default function LandOwnership() {
 <TextInput
   placeholder="Draught Animals"
   value={form.livestock.draught_animals}
-  onChangeText={(text) => updateNestedField("livestock","draught_animals", text)}
-  onBlur={() => {
-    if (form.livestock.draught_animals === "") {
-      updateNestedField("livestock", "draught_animals", "0");
-    }
-  }}
+  onChangeText={(text) => handleLivestockChange("draught_animals", text)}
+  onBlur={() => handleLivestockChange("draught_animals", form.livestock.draught_animals || "0")}
   keyboardType="numeric"
   style={styles.input}
 />
@@ -272,24 +286,17 @@ export default function LandOwnership() {
 <TextInput
   placeholder="Poultry"
   value={form.livestock.poultry}
-  onChangeText={(text) => updateNestedField("livestock","poultry", text)}
-  onBlur={() => {
-    if (form.livestock.poultry === "") {
-      updateNestedField("livestock", "poultry", "0");
-    }
-  }}
+  onChangeText={(text) => handleLivestockChange("poultry", text)}
+  onBlur={() => handleLivestockChange("poultry", form.livestock.poultry || "0")}
   keyboardType="numeric"
   style={styles.input}
 />
+
 <TextInput
   placeholder="Others"
   value={form.livestock.others}
-  onChangeText={(text) => updateNestedField("livestock","others", text)}
-  onBlur={() => {
-    if (form.livestock.others === "") {
-      updateNestedField("livestock", "others", "0");
-    }
-  }}
+  onChangeText={(text) => handleLivestockChange("others", text)}
+  onBlur={() => handleLivestockChange("others", form.livestock.others || "0")}
   keyboardType="numeric"
   style={styles.input}
 />

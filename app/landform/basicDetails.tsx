@@ -28,6 +28,7 @@ export default function BasicDetails() {
       adults: "",
       children: "",
       occupation: { agriculture: "", business: "", other: "" },
+      occupationCombinedField: "",
       specialCategory: false,
       specialCategoryNumber: "",
       caste: "",
@@ -306,16 +307,27 @@ export default function BasicDetails() {
 />
 
 
-
 <Text style={styles.question}>14. Occupation of Household Members (No. of persons):</Text>
 
 <TextInput
   value={form.occupation.agriculture}
   onChangeText={(text) => {
     let filteredText = text.replace(/[^0-9]/g, '');
+    if (parseInt(filteredText) > 50) filteredText = '50';
+
+    const updatedAgriculture = filteredText;
+    const updatedBusiness = form.occupation.business;
+    const updatedOther = form.occupation.other;
+
+    const occupationCombinedField = `${updatedAgriculture},${updatedBusiness},${updatedOther}`;
+
     setForm((prev) => ({
       ...prev,
-      occupation: { ...prev.occupation, agriculture: filteredText },
+      occupation: {
+        ...prev.occupation,
+        agriculture: updatedAgriculture,
+        occupationCombinedField: occupationCombinedField,
+      },
     }));
   }}
   style={[
@@ -336,9 +348,21 @@ export default function BasicDetails() {
   value={form.occupation.business}
   onChangeText={(text) => {
     let filteredText = text.replace(/[^0-9]/g, '');
+    if (parseInt(filteredText) > 50) filteredText = '50';
+
+    const updatedBusiness = filteredText;
+    const updatedAgriculture = form.occupation.agriculture;
+    const updatedOther = form.occupation.other;
+
+    const occupationCombinedField = `${updatedAgriculture},${updatedBusiness},${updatedOther}`;
+
     setForm((prev) => ({
       ...prev,
-      occupation: { ...prev.occupation, business: filteredText },
+      occupation: {
+        ...prev.occupation,
+        business: updatedBusiness,
+        occupationCombinedField: occupationCombinedField,
+      },
     }));
   }}
   style={[
@@ -359,9 +383,21 @@ export default function BasicDetails() {
   value={form.occupation.other}
   onChangeText={(text) => {
     let filteredText = text.replace(/[^0-9]/g, '');
+    if (parseInt(filteredText) > 50) filteredText = '50';
+
+    const updatedOther = filteredText;
+    const updatedAgriculture = form.occupation.agriculture;
+    const updatedBusiness = form.occupation.business;
+
+    const occupationCombinedField = `${updatedAgriculture},${updatedBusiness},${updatedOther}`;
+
     setForm((prev) => ({
       ...prev,
-      occupation: { ...prev.occupation, other: filteredText },
+      occupation: {
+        ...prev.occupation,
+        other: updatedOther,
+        occupationCombinedField: occupationCombinedField,
+      },
     }));
   }}
   style={[
@@ -377,6 +413,7 @@ export default function BasicDetails() {
 {form.occupation.other !== '' && parseInt(form.occupation.other) > 50 && (
   <Text style={{ color: 'red', fontSize: 12 }}>Cannot exceed 50</Text>
 )}
+
 
 
 <Text style={styles.question}>15. Special Category:</Text>

@@ -25,6 +25,7 @@ export default function BasicDetails() {
       gender: "",
       fatherSpouse: "",
       householdType: "",
+      hhcombinedfiled:"",
       adults: "",
       children: "",
       occupation: { agriculture: "", business: "", other: "" },
@@ -33,6 +34,7 @@ export default function BasicDetails() {
       caste: "",
       houseOwnership: "",
       houseType: "",
+      occupationCombinedField:"",
       drinkingWater: [],
       potability: [],
       domesticWater: [],
@@ -217,60 +219,157 @@ export default function BasicDetails() {
         placeholder="Children"
         keyboardType="numeric"
       />
+<Text style={styles.question}>13. Household Members:</Text>
 
-<Text style={styles.question}>12. Occupation of Household Members (No. of persons):</Text>
+<TextInput
+  value={form.adults}
+  onChangeText={(text) => {
+    // Allow only numbers, less than 50
+    let filteredText = text.replace(/[^0-9]/g, '');
+    if (parseInt(filteredText) > 50) filteredText = '50';
+    
+    // Update both fields and store them in a single variable
+    const updatedAdults = filteredText;
+    const updatedChildren = form.children; // or get children value here
+    
+    // Combine both values and update a single field
+    const hhcombinedfiled = `${updatedAdults},${updatedChildren}`;
+    updateField("hhcombinedfiled", hhcombinedfiled); // Save combined value in a single field
+    updateField("adults", updatedAdults); // Optionally, keep adults separate
+  }}
+  style={styles.input}
+  placeholder="Adults"
+  keyboardType="numeric"
+/>
+
+<TextInput
+  value={form.children}
+  onChangeText={(text) => {
+    let filteredText = text.replace(/[^0-9]/g, '');
+    if (parseInt(filteredText) > 50) filteredText = '50';
+    
+    // Update both fields and store them in a single variable
+    const updatedChildren = filteredText;
+    const updatedAdults = form.adults; // or get adults value here
+    
+    // Combine both values and update a single field
+    const hhcombinedfiled = `${updatedAdults},${updatedChildren}`;
+    updateField("hhcombinedfiled", hhcombinedfiled); // Save combined value in a single field
+    updateField("children", updatedChildren); // Optionally, keep children separate
+  }}
+  style={styles.input}
+  placeholder="Children"
+  keyboardType="numeric"
+/>
+
+
+<Text style={styles.question}>14. Occupation of Household Members (No. of persons):</Text>
+
 <TextInput
   value={form.occupation.agriculture}
-  onChangeText={(text) =>
+  onChangeText={(text) => {
+    let filteredText = text.replace(/[^0-9]/g, '');
+    if (parseInt(filteredText) > 50) filteredText = '50';
+
+    const updatedAgriculture = filteredText;
+    const updatedBusiness = form.occupation.business;
+    const updatedOther = form.occupation.other;
+
+    const occupationCombinedField = `${updatedAgriculture},${updatedBusiness},${updatedOther}`;
+
     setForm((prev) => ({
       ...prev,
-      occupation: { ...prev.occupation, agriculture: text },
-    }))
-  }
-  style={styles.input}
+      occupation: {
+        ...prev.occupation,
+        agriculture: updatedAgriculture,
+        occupationCombinedField: occupationCombinedField,
+      },
+    }));
+  }}
+  style={[
+    styles.input,
+    form.occupation.agriculture !== '' && parseInt(form.occupation.agriculture) > 50 && {
+      borderColor: 'red',
+      borderWidth: 1,
+    },
+  ]}
   placeholder="Agriculture"
   keyboardType="numeric"
 />
+{form.occupation.agriculture !== '' && parseInt(form.occupation.agriculture) > 50 && (
+  <Text style={{ color: 'red', fontSize: 12 }}>Cannot exceed 50</Text>
+)}
+
 <TextInput
   value={form.occupation.business}
-  onChangeText={(text) =>
+  onChangeText={(text) => {
+    let filteredText = text.replace(/[^0-9]/g, '');
+    if (parseInt(filteredText) > 50) filteredText = '50';
+
+    const updatedBusiness = filteredText;
+    const updatedAgriculture = form.occupation.agriculture;
+    const updatedOther = form.occupation.other;
+
+    const occupationCombinedField = `${updatedAgriculture},${updatedBusiness},${updatedOther}`;
+
     setForm((prev) => ({
       ...prev,
-      occupation: { ...prev.occupation, business: text },
-    }))
-  }
-  style={styles.input}
+      occupation: {
+        ...prev.occupation,
+        business: updatedBusiness,
+        occupationCombinedField: occupationCombinedField,
+      },
+    }));
+  }}
+  style={[
+    styles.input,
+    form.occupation.business !== '' && parseInt(form.occupation.business) > 50 && {
+      borderColor: 'red',
+      borderWidth: 1,
+    },
+  ]}
   placeholder="Business"
   keyboardType="numeric"
 />
+{form.occupation.business !== '' && parseInt(form.occupation.business) > 50 && (
+  <Text style={{ color: 'red', fontSize: 12 }}>Cannot exceed 50</Text>
+)}
+
 <TextInput
   value={form.occupation.other}
-  onChangeText={(text) =>
+  onChangeText={(text) => {
+    let filteredText = text.replace(/[^0-9]/g, '');
+    if (parseInt(filteredText) > 50) filteredText = '50';
+
+    const updatedOther = filteredText;
+    const updatedAgriculture = form.occupation.agriculture;
+    const updatedBusiness = form.occupation.business;
+
+    const occupationCombinedField = `${updatedAgriculture},${updatedBusiness},${updatedOther}`;
+
     setForm((prev) => ({
       ...prev,
-      occupation: { ...prev.occupation, other: text },
-    }))
-  }
-  style={styles.input}
+      occupation: {
+        ...prev.occupation,
+        other: updatedOther,
+        occupationCombinedField: occupationCombinedField,
+      },
+    }));
+  }}
+  style={[
+    styles.input,
+    form.occupation.other !== '' && parseInt(form.occupation.other) > 50 && {
+      borderColor: 'red',
+      borderWidth: 1,
+    },
+  ]}
   placeholder="Other"
   keyboardType="numeric"
 />
+{form.occupation.other !== '' && parseInt(form.occupation.other) > 50 && (
+  <Text style={{ color: 'red', fontSize: 12 }}>Cannot exceed 50</Text>
+)}
 
-      <Text style={styles.question}>13. Special Category:</Text>
-      <Checkbox.Item
-        label="Disabled"
-        status={form.specialCategory ? "checked" : "unchecked"}
-        onPress={() => updateField("specialCategory", !form.specialCategory)}
-      />
-      {form.specialCategory && (
-        <TextInput
-          value={form.specialCategoryNumber}
-          onChangeText={(text) => updateField("specialCategoryNumber", text)}
-          style={styles.input}
-          placeholder="Number of Disabled Persons"
-          keyboardType="numeric"
-        />
-      )}
 
 <Text style={styles.question}>14. Caste:</Text>
 <RadioButton.Group
