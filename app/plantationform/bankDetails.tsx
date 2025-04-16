@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { View,ScrollView, Text, TextInput, StyleSheet } from "react-native";
-import { Checkbox, Button, IconButton } from "react-native-paper";
+import { RadioButton, Button, IconButton } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
 import * as DocumentPicker from "expo-document-picker";
 import { useFormStore } from "../../storage/useFormStore";
@@ -149,17 +149,17 @@ export default function BankDetails() {
         autoCapitalize="characters"
       />
 
-      <Text style={styles.question}>
-        49. Farmer has agreed for the work and his contribution:
-      </Text>
-      {["Yes", "No"].map((option) => (
-        <Checkbox.Item
-          key={option}
-          label={option}
-          status={form.farmerAgreed === option ? "checked" : "unchecked"}
-          onPress={() => setForm({ ...form, farmerAgreed: option })}
-        />
-      ))}
+<Text style={styles.question}>
+  49. Farmer has agreed for the work and his contribution:
+</Text>
+<RadioButton.Group
+  onValueChange={(value) => updateField("farmerAgreed", value)}
+  value={form.farmerAgreed}
+>
+  <RadioButton.Item label="Yes" value="Yes" />
+  <RadioButton.Item label="No" value="No" />
+</RadioButton.Group>
+
 
       <Text style={styles.question}>50. Upload Documents:</Text>
 

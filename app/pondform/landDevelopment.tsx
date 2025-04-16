@@ -56,6 +56,31 @@ export default function PondDevelopment() {
     }
   }, [form.length, form.breadth, form.depth]);
 
+  const renderCheckboxGroup = (
+    field: string,
+    options: string[],
+    isSingle: boolean = false
+  ) =>
+    options.map((item) => (
+      <Checkbox.Item
+        key={item}
+        label={item}
+        status={
+          isSingle
+            ? form[field] === item
+              ? "checked"
+              : "unchecked"
+            : form[field].includes(item)
+            ? "checked"
+            : "unchecked"
+        }
+        onPress={() =>
+          isSingle ? updateField(field, item) : toggleCheckbox(field, item)
+        }
+      />
+    ));
+
+
   const handleNext = () => {
     setData("landDevelopment", form);
     setTimeout(() => {

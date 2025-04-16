@@ -35,6 +35,30 @@ export default function LandDevelopment() {
       workTypeText: "",
     }
   );
+  const renderCheckboxGroup = (
+    field: string,
+    options: string[],
+    isSingle: boolean = false
+  ) =>
+    options.map((item) => (
+      <Checkbox.Item
+        key={item}
+        label={item}
+        status={
+          isSingle
+            ? form[field] === item
+              ? "checked"
+              : "unchecked"
+            : form[field].includes(item)
+            ? "checked"
+            : "unchecked"
+        }
+        onPress={() =>
+          isSingle ? updateField(field, item) : toggleCheckbox(field, item)
+        }
+      />
+    ));
+
 
   const updateField = (field: string, value: any) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -63,7 +87,7 @@ export default function LandDevelopment() {
       <Text style={styles.title}>Plantation Form</Text>
       <Text style={styles.subtitle}>Land Development Details</Text>
 
-      <Text style={styles.label}>31. S.F. No. of the land to be developed</Text>
+      <Text style={styles.question}>31. S.F. No. of the land to be developed</Text>
       <TextInput
         value={form.sfNumber}
         onChangeText={(text) => updateField("sfNumber", text)}
@@ -71,7 +95,7 @@ export default function LandDevelopment() {
         mode="outlined"
       />
 
-      <Text style={styles.label}>31.a) Latitude and Longitude</Text>
+      <Text style={styles.question}>31.a) Latitude and Longitude</Text>
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <TextInput
           mode="outlined"
@@ -91,7 +115,7 @@ export default function LandDevelopment() {
         />
       </View>
 
-      <Text style={styles.label}>32. Soil Type</Text>
+      <Text style={styles.question}>32. Soil Type</Text>
       {["Red Soil", "Black Cotton", "Sandy Loam", "Laterite"].map((type) => (
         <Checkbox.Item
           key={type}
@@ -103,7 +127,7 @@ export default function LandDevelopment() {
 
       <Divider style={styles.divider} />
 
-      <Text style={styles.label}>33. Land to benefit (ha)</Text>
+      <Text style={styles.question}>33. Land to benefit (ha)</Text>
       <TextInput
         value={form.landBenefit}
         onChangeText={(text) => updateField("landBenefit", text)}
@@ -112,7 +136,7 @@ export default function LandDevelopment() {
         mode="outlined"
       />
 
-      <Text style={styles.label}>34. Field Inspection done by</Text>
+      <Text style={styles.question}>34. Field Inspection done by</Text>
       {["Associate", "Professional"].map((role) => (
         <Checkbox.Item
           key={role}
@@ -122,7 +146,7 @@ export default function LandDevelopment() {
         />
       ))}
 
-      <Text style={styles.label}>35. Site Approved by</Text>
+      <Text style={styles.question}>35. Site Approved by</Text>
       {["Coordinator", "Team Leader"].map((role) => (
         <Checkbox.Item
           key={role}
@@ -132,7 +156,7 @@ export default function LandDevelopment() {
         />
       ))}
 
-      <Text style={styles.label}>36. Date of Inspection</Text>
+      <Text style={styles.question}>36. Date of Inspection</Text>
       <TextInput
         value={form.dateInspectionText}
         onChangeText={(text) => updateField("dateInspectionText", text)}
@@ -141,7 +165,7 @@ export default function LandDevelopment() {
         mode="outlined"
       />
 
-      <Text style={styles.label}>37. Date of Approval</Text>
+      <Text style={styles.question}>37. Date of Approval</Text>
       <TextInput
         value={form.dateApprovalText}
         onChangeText={(text) => updateField("dateApprovalText", text)}
@@ -150,27 +174,25 @@ export default function LandDevelopment() {
         mode="outlined"
       />
 
-      <Text style={styles.label}>38. Type of Plantation Proposed</Text>
-      {["Mango", "Guava", "Lemon", "Moringa", "other"].map((work) => (
-        <Checkbox.Item
-          key={work}
-          label={work}
-          status={form.workType.includes(work) ? "checked" : "unchecked"}
-          onPress={() => toggleCheckbox("workType", work)}
-        />
-      ))}
+     <Text style={styles.question}>38. Type of Plantation proposed:</Text>
+     {renderCheckboxGroup("workType", [
+       "Mango",
+       "Guava",
+       "Lemon",
+       "Other",
+     ])}
+     
+     {/* Show text input only if 'Other' is selected */}
+     {form.workType.includes("Other") && (
+       <TextInput
+         value={form.workTypeText}
+         onChangeText={(text) => updateField("workTypeText", text)}
+         style={styles.input}
+         placeholder="Specify other work types"
+       />
+     )}
 
-      {form.workType.includes("other") && (
-        <TextInput
-          value={form.workTypeText}
-          onChangeText={(text) => updateField("workTypeText", text)}
-          style={styles.input}
-          placeholder="Specify the type of Plantation"
-          mode="outlined"
-        />
-      )}
-
-      <Text style={styles.label}>39. Area benefited by proposal works (ha)</Text>
+      <Text style={styles.question}>39. Area benefited by proposal works (ha)</Text>
       <TextInput
         value={form.proposalArea}
         onChangeText={(text) => updateField("proposalArea", text)}
@@ -179,7 +201,7 @@ export default function LandDevelopment() {
         mode="outlined"
       />
 
-      <Text style={styles.label}>40. Any other works proposed</Text>
+      <Text style={styles.question}>40. Any other works proposed</Text>
       <TextInput
         value={form.otherWorks}
         onChangeText={(text) => updateField("otherWorks", text)}
@@ -187,7 +209,7 @@ export default function LandDevelopment() {
         mode="outlined"
       />
 
-      <Text style={styles.label}>41. PRADAN Contribution (Rs)</Text>
+      <Text style={styles.question}>41. PRADAN Contribution (Rs)</Text>
       <TextInput
         value={form.pradanContribution}
         onChangeText={(text) => updateField("pradanContribution", text)}
@@ -196,7 +218,7 @@ export default function LandDevelopment() {
         mode="outlined"
       />
 
-      <Text style={styles.label}>42. Farmer Contribution (Rs)</Text>
+      <Text style={styles.question}>42. Farmer Contribution (Rs)</Text>
       <TextInput
         value={form.farmerContribution}
         onChangeText={(text) => updateField("farmerContribution", text)}
@@ -205,7 +227,7 @@ export default function LandDevelopment() {
         mode="outlined"
       />
 
-      <Text style={styles.label}>43. Total Estimate (Rs)</Text>
+      <Text style={styles.question}>43. Total Estimate (Rs)</Text>
       <TextInput
         value={form.totalEstimate}
         onChangeText={(text) => updateField("totalEstimate", text)}
@@ -237,7 +259,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 20,
   },
-  label: {
+  question: {
     fontWeight: "bold",
     marginTop: 10,
     marginBottom: 5,
