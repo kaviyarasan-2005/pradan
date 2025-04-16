@@ -1,12 +1,12 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { View,ScrollView, Text, TextInput, StyleSheet } from "react-native";
-import {  Button, IconButton,RadioButton } from "react-native-paper";
+import { View, ScrollView, Text, TextInput, StyleSheet } from "react-native";
+import { Button, IconButton, RadioButton } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
 import * as DocumentPicker from "expo-document-picker";
 import { useFormStore } from "../../storage/useFormStore";
+import * as FileSystem from "expo-file-system"; // Import FileSystem
 import { Picker } from "@react-native-picker/picker";
-
 
 export default function BankDetails() {
   const router = useRouter();
@@ -35,6 +35,7 @@ export default function BankDetails() {
   const updateField = (field: string, value: any) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
+
   const handleUpload = async (field: string, fileType = "pdf") => {
     try {
       if (field === "farmerPhoto") {
@@ -44,22 +45,31 @@ export default function BankDetails() {
           alert("Camera permission is required to take a photo.");
           return;
         }
-  
+
         const result = await ImagePicker.launchCameraAsync({
           mediaTypes: ImagePicker.MediaTypeOptions.Images,
           allowsEditing: true,
           quality: 0.7,
         });
-  
+
         if (!result.canceled && result.assets?.[0]) {
           const file = result.assets[0];
+          const localUri = file.uri;
+          const localFileName = `${FileSystem.documentDirectory}${file.fileName || `${field}.jpg`}`;
+
+          // Move the file to the local storage directory
+          await FileSystem.copyAsync({
+            from: localUri,
+            to: localFileName,
+          });
+
           setForm((prev) => ({
             ...prev,
             submittedFiles: {
               ...prev.submittedFiles,
               [field]: {
                 name: file.fileName || `${field}.jpg`,
-                uri: file.uri,
+                uri: localFileName,
               },
             },
           }));
@@ -69,16 +79,25 @@ export default function BankDetails() {
         const result = await DocumentPicker.getDocumentAsync({
           type: fileType === "image" ? "image/*" : "application/pdf",
         });
-  
+
         if (!result.canceled && result.assets?.[0]) {
           const file = result.assets[0];
+          const localUri = file.uri;
+          const localFileName = `${FileSystem.documentDirectory}${file.name}`;
+
+          // Move the file to the local storage directory
+          await FileSystem.copyAsync({
+            from: localUri,
+            to: localFileName,
+          });
+
           setForm((prev) => ({
             ...prev,
             submittedFiles: {
               ...prev.submittedFiles,
               [field]: {
                 name: file.name,
-                uri: file.uri,
+                uri: localFileName,
               },
             },
           }));
@@ -88,7 +107,7 @@ export default function BankDetails() {
       console.log(`Upload error for ${field}:`, err);
     }
   };
-  
+
   const handlePreview = () => {
     setData("bankDetails", form);
     router.push("/landform/Preview");
@@ -143,17 +162,14 @@ export default function BankDetails() {
         autoCapitalize="characters"
       />
 
-<Text style={styles.question}>
-  49. Farmer has agreed for the work and his contribution:
-</Text>
-<RadioButton.Group
-  onValueChange={(value) => updateField("farmerAgreed", value)}
-  value={form.farmerAgreed}
->
-  <RadioButton.Item label="Yes" value="Yes" />
-  <RadioButton.Item label="No" value="No" />
-</RadioButton.Group>
-
+      <Text style={styles.question}>49. Farmer has agreed for the work and his contribution:</Text>
+      <RadioButton.Group
+        onValueChange={(value) => updateField("farmerAgreed", value)}
+        value={form.farmerAgreed}
+      >
+        <RadioButton.Item label="Yes" value="Yes" />
+        <RadioButton.Item label="No" value="No" />
+      </RadioButton.Group>
 
       <Text style={styles.question}>50. Upload Documents:</Text>
       {[
@@ -179,19 +195,19 @@ export default function BankDetails() {
           )}
         </React.Fragment>
       ))}
+      
       <Text style={styles.question}>Form Status:</Text>
-   <View style={styles.pickerContainer}>
-  <Picker
-    selectedValue={form.formStatus}
-    onValueChange={(itemValue) => updateField("formStatus", itemValue)}
-  >
-    <Picker.Item label="Select status..." value="" />
-             <Picker.Item label="Approved" value="Approved" />
-             <Picker.Item label="Pending" value="Pending" />
-             <Picker.Item label="Rejected" value="Rejected" />
-  </Picker>
-</View>
-
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={form.formStatus}
+          onValueChange={(itemValue) => updateField("formStatus", itemValue)}
+        >
+          <Picker.Item label="Select status..." value="" />
+          <Picker.Item label="Approved" value="Approved" />
+          <Picker.Item label="Pending" value="Pending" />
+          <Picker.Item label="Rejected" value="Rejected" />
+        </Picker>
+      </View>
 
       <Button
         mode="contained"
@@ -258,5 +274,4 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
   }
-  
 });

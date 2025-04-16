@@ -76,7 +76,7 @@ const handleSubmit = async () => {
                         mode="text"
                         onPress={() =>
                           router.push({
-                            pathname: "/../storage/pdfViewer",
+                            pathname: "/pdfViewer",
                             params: { uri: item.uri },
                           })
                         }
