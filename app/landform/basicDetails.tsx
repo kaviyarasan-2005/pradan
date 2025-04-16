@@ -94,48 +94,87 @@ export default function BasicDetails() {
       <Text style={styles.question}>1. Name of Farmer:</Text>
       <TextInput
         value={form.name}
-        onChangeText={(text) => updateField("name", text)}
+        onChangeText={(text) => {
+          const filteredText = text.replace(/[^A-Za-z\s]/g, '');
+          updateField("name", filteredText);
+        }}
         style={styles.input}
       />
-     <Text style={styles.question}>1-2. Age:</Text>
-      <TextInput
-        value={form.age}
-        onChangeText={(text) => updateField("age", text)}
-        style={styles.input}
-        keyboardType="numeric"
-      />
-      <Text style={styles.question}>2. Mobile Number:</Text>
-      <TextInput
-        value={form.mobile}
-        onChangeText={(text) => updateField("mobile", text)}
-        style={styles.input}
-        keyboardType="numeric"
-      />
-      <Text style={styles.question}>2-3. District:</Text>
+    <Text style={styles.question}>2. Age:</Text>
+<TextInput
+  value={form.age}
+  onChangeText={(text) => {
+    const filteredText = text.replace(/[^0-9]/g, '');
+    updateField("age", filteredText);
+  }}
+  style={[
+    styles.input,
+    form.age !== '' && parseInt(form.age) > 150 && {
+      borderColor: 'red',
+      borderWidth: 1,
+    },
+  ]}
+  keyboardType="numeric"
+/>
+{form.age !== '' && parseInt(form.age) > 150 && (
+  <Text style={{ color: 'red', fontSize: 12 }}>Age cannot exceed 150</Text>
+)}
+
+     <Text style={styles.question}>3. Mobile Number:</Text>
+     <TextInput
+      value={form.mobile}
+      onChangeText={(text) => {
+      const filteredText = text.replace(/[^0-9]/g, '').slice(0, 10);
+      updateField("mobile", filteredText);
+      }}
+      style={[
+      styles.input,
+      form.mobile.length > 0 && form.mobile.length !== 10 && { borderColor: 'red', borderWidth: 1 }
+      ]}
+      keyboardType="numeric"
+/>
+
+{form.mobile.length > 0 && form.mobile.length !== 10 && (
+  <Text style={{ color: 'red', fontSize: 12 }}>Mobile number must be exactly 10 digits</Text>
+)}
+
+      <Text style={styles.question}>4. District:</Text>
       <TextInput
         value={form.district}
-        onChangeText={(text) => updateField("district", text)}
+        onChangeText={(text) => {
+          const filteredText = text.replace(/[^A-Za-z\s]/g, '');
+          updateField("district", filteredText);
+        }}
         style={styles.input}
       />
-       <Text style={styles.question}>3. Block:</Text>
+       <Text style={styles.question}>5. Block:</Text>
       <TextInput
         value={form.block}
-        onChangeText={(text) => updateField("block", text)}
+        onChangeText={(text) => {
+          const filteredText = text.replace(/[^A-Za-z\s]/g, '');
+          updateField("block", filteredText);
+        }}
         style={styles.input}
       />
-      <Text style={styles.question}>4. Panchayat:</Text>
+      <Text style={styles.question}>6. Panchayat:</Text>
       <TextInput
         value={form.panchayat}
-        onChangeText={(text) => updateField("panchayat", text)}
+        onChangeText={(text) => {
+          const filteredText = text.replace(/[^A-Za-z\s]/g, '');
+          updateField("panchayat", filteredText);
+        }}
         style={styles.input}
       />
-      <Text style={styles.question}>5. Hamlet:</Text>
+      <Text style={styles.question}>7. Hamlet:</Text>
       <TextInput
         value={form.hamlet}
-        onChangeText={(text) => updateField("hamlet", text)}
+        onChangeText={(text) => {
+          const filteredText = text.replace(/[^A-Za-z\s]/g, '');
+          updateField("hamlet", filteredText);
+        }}
         style={styles.input}
       />
-     <Text style={styles.question}>6. Identity Card:</Text>
+<Text style={styles.question}>8. Identity Card:</Text>
 <RadioButton.Group
   onValueChange={(value) => updateField("idCardType", value)}
   value={form.idCardType}
@@ -145,6 +184,7 @@ export default function BasicDetails() {
   <RadioButton.Item label="Driving License" value="Driving License" />
   <RadioButton.Item label="Other" value="Other" />
 </RadioButton.Group>
+
 {form.idCardType === "Other" && (
   <TextInput
     value={form.othercard}
@@ -154,15 +194,31 @@ export default function BasicDetails() {
   />
 )}
 
+<Text style={styles.question}>9. ID Card Number:</Text>
+<TextInput
+  value={form.idCardNumber}
+  onChangeText={(text) => {
+    let filteredText = text;
 
-      <Text style={styles.question}>7. ID Card Number:</Text>
-      <TextInput
-        value={form.idCardNumber}
-        onChangeText={(text) => updateField("idCardNumber", text)}
-        style={styles.input}
-      />
+    if (form.idCardType === "Aadhar") {
+      filteredText = text.replace(/[^0-9]/g, '').slice(0, 12);
+    } else if (form.idCardType === "EPIC" || form.idCardType === "Driving License") {
+      filteredText = text.replace(/[^a-zA-Z0-9]/g, '');
+    } 
+    updateField("idCardNumber", filteredText);
+  }}
+  style={styles.input}
+  placeholder={
+    form.idCardType === "Aadhar"
+      ? "Enter 12-digit Aadhar number"
+      : form.idCardType === "EPIC" || form.idCardType === "Driving License"
+      ? "Enter ID card number"
+      : "Enter ID card number"
+  }
+/>
 
-<Text style={styles.question}>8. Gender:</Text>
+
+<Text style={styles.question}>10. Gender:</Text>
 <RadioButton.Group
   onValueChange={(value) => updateField("gender", value)}
   value={form.gender}
@@ -173,14 +229,15 @@ export default function BasicDetails() {
 </RadioButton.Group>
 
 
-      <Text style={styles.question}>9. Father / Spouse Name:</Text>
+      <Text style={styles.question}>11. Father / Spouse Name:</Text>
       <TextInput
         value={form.fatherSpouse}
         onChangeText={(text) => updateField("fatherSpouse", text)}
+         placeholder="Enter Name"
         style={styles.input}
       />
 
-<Text style={styles.question}>10. Type of Household:</Text>
+<Text style={styles.question}>12. Type of Household:</Text>
 <RadioButton.Group
   onValueChange={(value) => updateField("householdType", value)}
   value={form.householdType}
@@ -188,77 +245,143 @@ export default function BasicDetails() {
   <RadioButton.Item label="Nuclear" value="Nuclear" />
   <RadioButton.Item label="Joint" value="Joint" />
 </RadioButton.Group>
-<Text style={styles.question}>11. Household Members:</Text>
-      <TextInput
-        value={form.adults}
-        onChangeText={(text) => updateField("adults", text)}
-        style={styles.input}
-        placeholder="Adults"
-        keyboardType="numeric"
-      />
-      <TextInput
-        value={form.children}
-        onChangeText={(text) => updateField("children", text)}
-        style={styles.input}
-        placeholder="Children"
-        keyboardType="numeric"
-      />
+<Text style={styles.question}>13. Household Members:</Text>
 
-<Text style={styles.question}>12. Occupation of Household Members (No. of persons):</Text>
+<TextInput
+  value={form.adults}
+  onChangeText={(text) => {
+    // Allow only numbers, less than 50
+    let filteredText = text.replace(/[^0-9]/g, '');
+    if (parseInt(filteredText) > 50) filteredText = '50';
+    updateField("adults", filteredText);
+  }}
+  style={styles.input}
+  placeholder="Adults"
+  keyboardType="numeric"
+/>
+
+<TextInput
+  value={form.children}
+  onChangeText={(text) => {
+    let filteredText = text.replace(/[^0-9]/g, '');
+    if (parseInt(filteredText) > 50) filteredText = '50';
+    updateField("children", filteredText);
+  }}
+  style={styles.input}
+  placeholder="Children"
+  keyboardType="numeric"
+/>
+
+
+<Text style={styles.question}>14. Occupation of Household Members (No. of persons):</Text>
+
 <TextInput
   value={form.occupation.agriculture}
-  onChangeText={(text) =>
+  onChangeText={(text) => {
+    let filteredText = text.replace(/[^0-9]/g, '');
     setForm((prev) => ({
       ...prev,
-      occupation: { ...prev.occupation, agriculture: text },
-    }))
-  }
-  style={styles.input}
+      occupation: { ...prev.occupation, agriculture: filteredText },
+    }));
+  }}
+  style={[
+    styles.input,
+    form.occupation.agriculture !== '' && parseInt(form.occupation.agriculture) > 50 && {
+      borderColor: 'red',
+      borderWidth: 1,
+    },
+  ]}
   placeholder="Agriculture"
   keyboardType="numeric"
 />
+{form.occupation.agriculture !== '' && parseInt(form.occupation.agriculture) > 50 && (
+  <Text style={{ color: 'red', fontSize: 12 }}>Cannot exceed 50</Text>
+)}
+
 <TextInput
   value={form.occupation.business}
-  onChangeText={(text) =>
+  onChangeText={(text) => {
+    let filteredText = text.replace(/[^0-9]/g, '');
     setForm((prev) => ({
       ...prev,
-      occupation: { ...prev.occupation, business: text },
-    }))
-  }
-  style={styles.input}
+      occupation: { ...prev.occupation, business: filteredText },
+    }));
+  }}
+  style={[
+    styles.input,
+    form.occupation.business !== '' && parseInt(form.occupation.business) > 50 && {
+      borderColor: 'red',
+      borderWidth: 1,
+    },
+  ]}
   placeholder="Business"
   keyboardType="numeric"
 />
+{form.occupation.business !== '' && parseInt(form.occupation.business) > 50 && (
+  <Text style={{ color: 'red', fontSize: 12 }}>Cannot exceed 50</Text>
+)}
+
 <TextInput
   value={form.occupation.other}
-  onChangeText={(text) =>
+  onChangeText={(text) => {
+    let filteredText = text.replace(/[^0-9]/g, '');
     setForm((prev) => ({
       ...prev,
-      occupation: { ...prev.occupation, other: text },
-    }))
-  }
-  style={styles.input}
+      occupation: { ...prev.occupation, other: filteredText },
+    }));
+  }}
+  style={[
+    styles.input,
+    form.occupation.other !== '' && parseInt(form.occupation.other) > 50 && {
+      borderColor: 'red',
+      borderWidth: 1,
+    },
+  ]}
   placeholder="Other"
   keyboardType="numeric"
 />
+{form.occupation.other !== '' && parseInt(form.occupation.other) > 50 && (
+  <Text style={{ color: 'red', fontSize: 12 }}>Cannot exceed 50</Text>
+)}
 
-      <Text style={styles.question}>13. Special Category:</Text>
-      <Checkbox.Item
-        label="Disabled"
-        status={form.specialCategory ? "checked" : "unchecked"}
-        onPress={() => updateField("specialCategory", !form.specialCategory)}
-      />
-      {form.specialCategory && (
-        <TextInput
-          value={form.specialCategoryNumber}
-          onChangeText={(text) => updateField("specialCategoryNumber", text)}
-          style={styles.input}
-          placeholder="Number of Disabled Persons"
-          keyboardType="numeric"
-        />
-      )}
 
-<Text style={styles.question}>14. Caste:</Text>
+<Text style={styles.question}>15. Special Category:</Text>
+
+<Checkbox.Item
+  label="Disabled"
+  status={form.specialCategory ? "checked" : "unchecked"}
+  onPress={() => updateField("specialCategory", !form.specialCategory)}
+/>
+
+{form.specialCategory && (
+  <>
+    <TextInput
+      value={form.specialCategoryNumber}
+      onChangeText={(text) => {
+        let filteredText = text.replace(/[^0-9]/g, '');
+        updateField("specialCategoryNumber", filteredText);
+      }}
+      style={[
+        styles.input,
+        form.specialCategoryNumber !== '' && parseInt(form.specialCategoryNumber) > 50 && {
+          borderColor: 'red',
+          borderWidth: 1,
+        },
+      ]}
+      placeholder="Number of Disabled Persons"
+      keyboardType="numeric"
+    />
+    
+    {form.specialCategoryNumber !== '' && parseInt(form.specialCategoryNumber) > 50 && (
+      <Text style={{ color: 'red', fontSize: 12 }}>
+        Number of disabled persons cannot exceed 50
+      </Text>
+    )}
+  </>
+)}
+
+
+<Text style={styles.question}>16. Caste:</Text>
 <RadioButton.Group
   onValueChange={(value) => updateField("caste", value)}
   value={form.caste}
@@ -270,7 +393,7 @@ export default function BasicDetails() {
 </RadioButton.Group>
 
 
-<Text style={styles.question}>15. House Ownership:</Text>
+<Text style={styles.question}>17. House Ownership:</Text>
 <RadioButton.Group
   onValueChange={(value) => updateField("houseOwnership", value)}
   value={form.houseOwnership}
@@ -279,7 +402,7 @@ export default function BasicDetails() {
   <RadioButton.Item label="Owned" value="Owned" />
 </RadioButton.Group>
 
-<Text style={styles.question}>16. Type of House:</Text>
+<Text style={styles.question}>18. Type of House:</Text>
 <RadioButton.Group
   onValueChange={(value) => updateField("houseType", value)}
   value={form.houseType}
@@ -288,16 +411,16 @@ export default function BasicDetails() {
   <RadioButton.Item label="Kutcha" value="kutcha" />
 </RadioButton.Group>
 
-      <Text style={styles.question}>17. Drinking Water Source:</Text>
+      <Text style={styles.question}>19. Drinking Water Source:</Text>
       {renderCheckboxGroup("drinkingWater", ["Ponds", "Well & Borewells", "Trucks"])}
 
-      <Text style={styles.question}>18. Potability:</Text>
+      <Text style={styles.question}>20. Potability:</Text>
       {renderCheckboxGroup("potability", ["Ponds", "Tanks", "Well & Borewells"])}
 
-      <Text style={styles.question}>19. Domestic Water Source:</Text>
+      <Text style={styles.question}>21. Domestic Water Source:</Text>
       {renderCheckboxGroup("domesticWater", ["Ponds", "Tanks", "Well & Borewells"])}
 
-      <Text style={styles.question}>20. Toilet Availability:</Text>
+      <Text style={styles.question}>22. Toilet Availability:</Text>
 <RadioButton.Group
   onValueChange={(value) => updateField("toiletAvailability", value)}
   value={form.toiletAvailability}
@@ -306,7 +429,7 @@ export default function BasicDetails() {
   <RadioButton.Item label="No" value="No" />
 </RadioButton.Group>
       
-<Text style={styles.question}>21. Toilet Condition:</Text>
+<Text style={styles.question}>23. Toilet Condition:</Text>
 <RadioButton.Group
   onValueChange={(value) => updateField("toiletCondition", value)}
   value={form.toiletCondition}
@@ -315,7 +438,7 @@ export default function BasicDetails() {
   <RadioButton.Item label="No" value="no" />
 </RadioButton.Group>
 
-      <Text style={styles.question}>22. Education of Householder:</Text>
+      <Text style={styles.question}>24. Education of Householder:</Text>
 <RadioButton.Group
   onValueChange={(value) => updateField("education", value)}
   value={form.education}
