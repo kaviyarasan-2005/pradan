@@ -30,6 +30,7 @@ export default function BasicDetails() {
       specialCategory: false,
       specialCategoryNumber: "",
       caste: "",
+      hhcombinedfiled:"",
       houseOwnership: "",
       houseType: "",
       drinkingWater: [],
@@ -253,7 +254,15 @@ export default function BasicDetails() {
     // Allow only numbers, less than 50
     let filteredText = text.replace(/[^0-9]/g, '');
     if (parseInt(filteredText) > 50) filteredText = '50';
-    updateField("adults", filteredText);
+    
+    // Update both fields and store them in a single variable
+    const updatedAdults = filteredText;
+    const updatedChildren = form.children; // or get children value here
+    
+    // Combine both values and update a single field
+    const hhcombinedfiled = `${updatedAdults},${updatedChildren}`;
+    updateField("hhcombinedfiled", hhcombinedfiled); // Save combined value in a single field
+    updateField("adults", updatedAdults); // Optionally, keep adults separate
   }}
   style={styles.input}
   placeholder="Adults"
@@ -265,12 +274,21 @@ export default function BasicDetails() {
   onChangeText={(text) => {
     let filteredText = text.replace(/[^0-9]/g, '');
     if (parseInt(filteredText) > 50) filteredText = '50';
-    updateField("children", filteredText);
+    
+    // Update both fields and store them in a single variable
+    const updatedChildren = filteredText;
+    const updatedAdults = form.adults; // or get adults value here
+    
+    // Combine both values and update a single field
+    const hhcombinedfiled = `${updatedAdults},${updatedChildren}`;
+    updateField("hhcombinedfiled", hhcombinedfiled); // Save combined value in a single field
+    updateField("children", updatedChildren); // Optionally, keep children separate
   }}
   style={styles.input}
   placeholder="Children"
   keyboardType="numeric"
 />
+
 
 
 <Text style={styles.question}>14. Occupation of Household Members (No. of persons):</Text>
