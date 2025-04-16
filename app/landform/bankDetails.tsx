@@ -1,5 +1,5 @@
-import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import { useRouter ,useLocalSearchParams} from "expo-router";
+import React, { useState,useEffect } from "react";
 import { View, ScrollView, Text, TextInput, StyleSheet } from "react-native";
 import { Button, IconButton, RadioButton } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
@@ -10,7 +10,8 @@ import { Picker } from "@react-native-picker/picker";
 
 export default function BankDetails() {
   const router = useRouter();
-  const { data, setData } = useFormStore();
+   const { id, fromPreview } = useLocalSearchParams<{ id?: string; fromPreview?: string }>();
+    const { data, submittedForms, setData } = useFormStore();
 
   const [form, setForm] = useState(
     data.bankDetails || {
@@ -31,6 +32,18 @@ export default function BankDetails() {
       },
     }
   );
+     useEffect(() => {
+        if (id && fromPreview === "true") {
+          // Load the form by ID and update current working data
+          const selected = submittedForms.find((form) => form.id === id);
+          if (selected) {
+            // Set every key in the form data
+            Object.entries(selected).forEach(([key, value]) => {
+              setData(key as keyof typeof data, value);
+            });
+          }
+        }
+      }, [id]);
 
   const updateField = (field: string, value: any) => {
     setForm((prev) => ({ ...prev, [field]: value }));

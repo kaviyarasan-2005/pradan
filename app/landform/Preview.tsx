@@ -30,35 +30,31 @@ const selectedForm = isSubmittedPreview
 
   const [submitting, setSubmitting] = React.useState(false);
 
-const handleSubmit = async () => {
-  if (submitting) return; // prevent double taps
-
-  try {
-    setSubmitting(true);
-
-    // Prepare formType and formStatus up front
-    const userStatus = data.bankDetails?.formStatus || "Not Filled";
-    setData("formType", "LAND");
-    setData("formStatus", userStatus);
-
-    // Wait a tick to ensure the state is updated in Zustand
-    await new Promise((resolve) => setTimeout(resolve, 50));
-
-    // Now submit safely
-    await submitForm();
-
-    Alert.alert("Success", "Form Successfully Submitted!", [
-      { text: "OK", onPress: () => router.push("/dashboard") },
-    ]);
-  } catch (error) {
-    Alert.alert("Error", "Failed to submit the form. Please try again.\n" + error);
-  } finally {
-    setSubmitting(false);
-  }
-};
-
+  const handleSubmit = async () => {
+    if (submitting) return; 
   
-
+    try {
+      setSubmitting(true);
+  
+      // Prepare formType and formStatus
+      const userStatus = data.bankDetails?.formStatus || "Not Filled";
+      setData("formType", "LAND");
+      setData("formStatus", userStatus);
+  
+      await new Promise((resolve) => setTimeout(resolve, 50));
+  
+      await submitForm();
+  
+      Alert.alert("Success", "Form Successfully Submitted!", [
+        { text: "OK", onPress: () => router.push("/dashboard") },
+      ]);
+    } catch (error) {
+      Alert.alert("Error", "Failed to submit the form. Please try again.\n" + error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+  
   const renderSection = (title: string, fields: any[], editRoute: string) => (
     <Card style={styles.card}>
       <Card.Title title={title} />
@@ -118,7 +114,11 @@ const handleSubmit = async () => {
       onPress={() =>
         router.push({
           pathname: editRoute,
-          params: { returnTo: "/landform/Preview" },
+          params: {
+            id: id, // <-- pass the form ID here
+            fromPreview: "true", // <-- optional: to know it's from preview
+            returnTo: "/landform/Preview", // keep your existing param
+          },
         })
       }
     >
@@ -154,8 +154,6 @@ const handleSubmit = async () => {
         { label: "4. Block", value: selectedForm.basicDetails?.block },
         { label: "5. Panchayat", value: selectedForm.basicDetails?.panchayat },
         { label: "6. Hamlet", value: selectedForm.basicDetails?.hamlet },
-        { label: "4. Panchayat", value: selectedForm.basicDetails?.panchayat },
-        { label: "5. Block", value: selectedForm.basicDetails?.block },
         { label: "6. Identity Card", value: selectedForm.basicDetails?.idCardType },
         { label: "7. ID Card Number", value: selectedForm.basicDetails?.idCardNumber },
         { label: "8. Gender", value: selectedForm.basicDetails?.gender },

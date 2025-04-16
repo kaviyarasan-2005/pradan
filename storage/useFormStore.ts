@@ -41,20 +41,30 @@ export const useFormStore = create<FormStore>((set, get) => ({
 
   submitForm: async () => {
     const currentData = get().data;
+    const allForms = get().submittedForms;
   
-    const formWithMeta: FormData = {
-      ...currentData,
-      id: Date.now().toString(), // ensures unique id
-      submittedAt: new Date().toISOString(),
-      formStatus: currentData.formStatus,
-
-    };
+    let updatedForms;
   
-    const newSubmittedForms = [...get().submittedForms, formWithMeta];
+    if (currentData.id) {
+      // Update existing form
+      updatedForms = allForms.map((form) =>
+        form.id === currentData.id ? { ...form, ...currentData } : form
+      );
+    } else {
+      // New submission
+      const formWithMeta: FormData = {
+        ...currentData,
+        id: Date.now().toString(),
+        submittedAt: new Date().toISOString(),
+        formStatus: "Pending", // or however you want to default it
+      };
+      updatedForms = [...allForms, formWithMeta];
+    }
   
-    await AsyncStorage.setItem("submittedForms", JSON.stringify(newSubmittedForms));
-    set({ submittedForms: newSubmittedForms, data: {} });
+    await AsyncStorage.setItem("submittedForms", JSON.stringify(updatedForms));
+    set({ submittedForms: updatedForms, data: {} });
   },
+  
   
 
   loadSubmittedForms: async () => {

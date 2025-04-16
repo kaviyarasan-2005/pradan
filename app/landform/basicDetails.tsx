@@ -1,5 +1,5 @@
-import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useRouter,useLocalSearchParams } from "expo-router";
+import { useState,useEffect } from "react";
 import { View, Text, TextInput, ScrollView, StyleSheet } from "react-native";
 import { Checkbox, Button, IconButton,RadioButton} from "react-native-paper";
 
@@ -7,7 +7,8 @@ import { useFormStore } from "../../storage/useFormStore";
 
 export default function BasicDetails() {
   const router = useRouter();
-  const { data, setData } = useFormStore();
+  const { id, fromPreview } = useLocalSearchParams<{ id?: string; fromPreview?: string }>();
+  const { data, submittedForms, setData } = useFormStore();
 
   const [form, setForm] = useState(
     data.basicDetails || {
@@ -41,6 +42,21 @@ export default function BasicDetails() {
       education: "",
     }
   );
+    
+  
+
+  useEffect(() => {
+    if (id && fromPreview === "true") {
+      // Load the form by ID and update current working data
+      const selected = submittedForms.find((form) => form.id === id);
+      if (selected) {
+        // Set every key in the form data
+        Object.entries(selected).forEach(([key, value]) => {
+          setData(key as keyof typeof data, value);
+        });
+      }
+    }
+  }, [id]);
 
   const updateField = (field: string, value: any) => {
     setForm((prev) => ({ ...prev, [field]: value }));

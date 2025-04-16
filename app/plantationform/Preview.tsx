@@ -28,18 +28,21 @@ export default function Preview() {
 
   const [submitting, setSubmitting] = React.useState(false);
 
-  const handleSubmit = async () => {
-    if (submitting) return; // prevent double taps
+const handleSubmit = async () => {
+    if (submitting) return; 
+  
     try {
       setSubmitting(true);
-      // Prepare formType and formStatus up front
+  
+      // Prepare formType and formStatus
       const userStatus = data.bankDetails?.formStatus || "Not Filled";
-      setData("formType", "PLANTATION");
+      setData("formType", "LAND");
       setData("formStatus", userStatus);
-      // Wait a tick to ensure the state is updated in Zustand
+  
       await new Promise((resolve) => setTimeout(resolve, 50));
-      // Now submit safely
+  
       await submitForm();
+  
       Alert.alert("Success", "Form Successfully Submitted!", [
         { text: "OK", onPress: () => router.push("/dashboard") },
       ]);
@@ -51,7 +54,6 @@ export default function Preview() {
   };
   
 
-  
 
   const renderSection = (title: string, fields: any[], editRoute: "/plantationform/basicDetails" | "/plantationform/landOwnership" | "/plantationform/landDevelopment" | "/plantationform/bankDetails") => (
     <Card style={styles.card}>
@@ -107,14 +109,18 @@ export default function Preview() {
           </View>
         ))}
       </Card.Content>
-        {canEdit() && (
+      {canEdit() && (
       <Card.Actions>
         <Button
           mode="outlined"
           onPress={() =>
             router.push({
               pathname: editRoute,
-              params: { returnTo: "/plantationform/Preview" },
+              params: {
+                id: id, // <-- pass the form ID here
+                fromPreview: "true", // <-- optional: to know it's from preview
+                returnTo: "/landform/Preview", // keep your existing param
+              },
             })
           }
         >

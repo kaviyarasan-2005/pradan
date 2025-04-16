@@ -28,21 +28,19 @@ export default function Preview() {
 
   const [submitting, setSubmitting] = React.useState(false);
 
-  const handleSubmit = async () => {
-    if (submitting) return; // prevent double taps
+const handleSubmit = async () => {
+    if (submitting) return; 
   
     try {
       setSubmitting(true);
   
-      // Prepare formType and formStatus up front
+      // Prepare formType and formStatus
       const userStatus = data.bankDetails?.formStatus || "Not Filled";
-      setData("formType", "POND");
+      setData("formType", "LAND");
       setData("formStatus", userStatus);
   
-      // Wait a tick to ensure the state is updated in Zustand
       await new Promise((resolve) => setTimeout(resolve, 50));
   
-      // Now submit safely
       await submitForm();
   
       Alert.alert("Success", "Form Successfully Submitted!", [
@@ -54,6 +52,8 @@ export default function Preview() {
       setSubmitting(false);
     }
   };
+  
+
   
 
   
@@ -112,21 +112,25 @@ export default function Preview() {
           </View>
         ))}
       </Card.Content>
-          {canEdit() && (
-        <Card.Actions>
-          <Button
-            mode="outlined"
-            onPress={() =>
-              router.push({
-                pathname: editRoute,
-                params: { returnTo: "/pondform/Preview" },
-              })
-            }
-          >
-            Edit
-          </Button>
-        </Card.Actions>
-      )}
+           {canEdit() && (
+           <Card.Actions>
+             <Button
+               mode="outlined"
+               onPress={() =>
+                 router.push({
+                   pathname: editRoute,
+                   params: {
+                     id: id, // <-- pass the form ID here
+                     fromPreview: "true", // <-- optional: to know it's from preview
+                     returnTo: "/landform/Preview", // keep your existing param
+                   },
+                 })
+               }
+             >
+               Edit
+             </Button>
+           </Card.Actions>
+         )}
     </Card>
   );
 
