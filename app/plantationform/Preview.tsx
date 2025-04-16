@@ -36,7 +36,7 @@ const handleSubmit = async () => {
   
       // Prepare formType and formStatus
       const userStatus = data.bankDetails?.formStatus || "Not Filled";
-      setData("formType", "LAND");
+      setData("formType", "PLANTATION");
       setData("formStatus", userStatus);
   
       await new Promise((resolve) => setTimeout(resolve, 50));
@@ -119,7 +119,7 @@ const handleSubmit = async () => {
               params: {
                 id: id, // <-- pass the form ID here
                 fromPreview: "true", // <-- optional: to know it's from preview
-                returnTo: "/landform/Preview", // keep your existing param
+                returnTo: "/plantation/Preview", // keep your existing param
               },
             })
           }

@@ -98,15 +98,29 @@ export default function TotalSubmit() {
                      {item.formStatus || "Not Filled"}
                   </Text>
                   <View style={[styles.cell, { width: 150, flexDirection: "row", gap: 4 }]}>
-                    <Button
-                      mode="outlined"
-                      compact
-                      onPress={() =>
-                        router.push({ pathname: "/landform/Preview", params: { id: item.id } })
-                      }
-                    >
-                      Preview
-                    </Button>
+                  <Button
+  mode="outlined"
+  compact
+  onPress={() => {
+    const formType = item.formType?.toLowerCase(); // e.g. "LAND" -> "land"
+    let previewPath = "";
+    if (formType === "land") {
+      previewPath = "/landform/Preview";
+    } else if (formType === "pond") {
+      previewPath = "/pondform/Preview";
+    } else if (formType === "plantation") {
+      previewPath = "/plantationform/Preview";
+    } else {
+      Alert.alert("Error", "Unknown form type.");
+      return;
+    }
+
+    router.push({ pathname: previewPath, params: { id: item.id } });
+  }}
+>
+  Preview
+</Button>
+
                     <Button
                       mode="text"
                       textColor="red"

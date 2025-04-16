@@ -36,7 +36,7 @@ const handleSubmit = async () => {
   
       // Prepare formType and formStatus
       const userStatus = data.bankDetails?.formStatus || "Not Filled";
-      setData("formType", "LAND");
+      setData("formType", "POND");
       setData("formStatus", userStatus);
   
       await new Promise((resolve) => setTimeout(resolve, 50));
@@ -122,7 +122,7 @@ const handleSubmit = async () => {
                    params: {
                      id: id, // <-- pass the form ID here
                      fromPreview: "true", // <-- optional: to know it's from preview
-                     returnTo: "/landform/Preview", // keep your existing param
+                     returnTo: "/pondform/Preview", // keep your existing param
                    },
                  })
                }
@@ -183,7 +183,7 @@ const handleSubmit = async () => {
         { label: "20. Toilet Availability", value: data.basicDetails?.toiletAvailability },
         { label: "21. Toilet Condition", value: data.basicDetails?.toiletCondition },
         { label: "22. Education of Householder", value: data.basicDetails?.education },
-      ],"/pondform/bankDetails")}
+      ],"/pondform/basicDetails")}
 
       {renderSection("Land Ownership & Livestock", [
         { label: "23. Land Ownership", value: data.landOwnership?.landOwnershipType },
