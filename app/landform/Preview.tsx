@@ -6,7 +6,7 @@ import { useFormStore } from "../../storage/useFormStore";
 
 export default function Preview() {
   const router = useRouter();
-  const { id } = useLocalSearchParams<{ id?: string }>();
+  const { id,fromsubmit,returnsubmit} = useLocalSearchParams<{ id?: string }>();
   const { data, submittedForms, setData, submitForm } = useFormStore();
   const canEdit = () => {
     if (!isSubmittedPreview) return true; // if it's unsubmitted form
@@ -116,6 +116,8 @@ const selectedForm = isSubmittedPreview
             id: id, // <-- pass the form ID here
             fromPreview: "true", // <-- optional: to know it's from preview
             returnTo: "/landform/Preview", // keep your existing param
+            fromsubmit:fromsubmit,
+            returnsubmit:returnsubmit
           },
         })
       }
@@ -129,7 +131,18 @@ const selectedForm = isSubmittedPreview
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <IconButton icon="arrow-left" size={24} style={styles.backButton} onPress={() => router.back()} />
+      <IconButton
+  icon="arrow-left"
+  size={24}
+  style={styles.backButton}
+  onPress={() => {
+    if (fromsubmit) {
+      router.push(returnsubmit); // Go back to total submitted page
+    } else {
+      router.back(); // Go back normally
+    }
+  }}
+/>
       <Text style={styles.title}>Land Form</Text>
 
       <View style={styles.farmerPhotoContainer}>

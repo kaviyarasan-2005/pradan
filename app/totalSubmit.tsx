@@ -79,7 +79,9 @@ const TotalSubmit = () => {
       return;
     }
 
-    router.push({ pathname: previewPath, params: { id: item.id } });
+    router.push({ pathname: previewPath, params: { id: item.id, 
+      fromsubmit: "true", 
+      returnsubmit: "/totalSubmit", } });
   };
 
   const handleDelete = (index) => {

@@ -7,7 +7,7 @@ import { useFormStore } from "../../storage/useFormStore";
 
 export default function BasicDetails() {
   const router = useRouter();
-  const { id, fromPreview,returnTo } = useLocalSearchParams<{ id?: string; fromPreview?: string }>();
+  const { id, fromPreview,returnTo,returnsubmit,fromsubmit } = useLocalSearchParams<{ id?: string; fromPreview?: string }>();
   const { data, submittedForms, setData } = useFormStore();
 
   const [form, setForm] = useState(
@@ -75,9 +75,9 @@ export default function BasicDetails() {
 
   const handleNext = () => {
     setData("basicDetails", form);
+
     if (fromPreview && returnTo) {
-     
-      router.push({ pathname: returnTo, params: { id } });
+      router.push({ pathname: returnTo, params: { id ,returnsubmit:returnsubmit,fromsubmit:fromsubmit} });
     } else {
       router.push("/landform/landOwnership");
     }
