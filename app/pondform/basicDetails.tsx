@@ -12,6 +12,7 @@ export default function BasicDetails() {
 
   const [form, setForm] = useState(
     data.basicDetails || {
+      date:"",
       name: "",
       age: "",
       mobile: "",
@@ -104,6 +105,28 @@ export default function BasicDetails() {
 
       <Text style={styles.title}>Pond Form</Text>
       <Text style={styles.subtitle}>Basic Details</Text>
+
+      <Text style={styles.question}>Date:</Text>
+<TextInput
+  value={form.date}
+  onChangeText={(text) => {
+    // Remove anything that's not a number
+    let filteredText = text.replace(/[^0-9]/g, '');
+
+    // Format as DD/MM/YYYY
+    if (filteredText.length > 2 && filteredText.length <= 4) {
+      filteredText = filteredText.slice(0, 2) + '/' + filteredText.slice(2);
+    } else if (filteredText.length > 4) {
+      filteredText = filteredText.slice(0, 2) + '/' + filteredText.slice(2, 4) + '/' + filteredText.slice(4, 8);
+    }
+
+    updateField("date", filteredText);
+  }}
+  style={styles.input}
+  placeholder="DD/MM/YYYY"
+  keyboardType="numeric"
+/>
+
 
       {/* Inputs */}
       <Text style={styles.question}>1. Name of Farmer:</Text>

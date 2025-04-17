@@ -147,6 +147,7 @@ const selectedForm = isSubmittedPreview
       </View>
 
       {renderSection("Basic Details", [
+        {label : "Date",value: selectedForm.basicDetails?.date},
         { label: "1. Name of Farmer", value: selectedForm.basicDetails?.name },
         { label: "1-2. Age", value: selectedForm.basicDetails?.age },
         { label: "2. Mobile Number", value: selectedForm.basicDetails?.mobile },
