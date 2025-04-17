@@ -2,6 +2,7 @@ import {
   View,
   Text,
   StyleSheet,
+  TextInput,
   FlatList,
   ScrollView,
   Alert,
@@ -16,6 +17,7 @@ export default function Approved() {
   const router = useRouter();
   const { submittedForms, loadSubmittedForms, deleteFormByIndex } = useFormStore();
   const { showActionSheetWithOptions } = useActionSheet();
+  const [searchText, setSearchText] = useState("");
 
   const [selectedFilter, setSelectedFilter] = useState("ALL");
 
@@ -55,10 +57,11 @@ export default function Approved() {
   };
 
   const filteredForms = submittedForms.filter((item) => {
-    const isPending = item.formStatus === "Pending";
-    const isMatchType = selectedFilter === "ALL" || item.formType === selectedFilter;
-    return isPending && isMatchType;
+    const matchesType = selectedFilter === "ALL" || item.formType === selectedFilter;
+    const matchesSearch = item.basicDetails?.name?.toLowerCase().includes(searchText.toLowerCase());
+    return matchesType && matchesSearch;
   });
+
 
   return (
     <View style={styles.container}>
@@ -70,6 +73,13 @@ export default function Approved() {
       </View>
 
       <Text style={styles.filterLabel}>Showing: {selectedFilter}</Text>
+      <TextInput
+  style={styles.searchInput}
+  placeholder="Search by farmer name"
+  value={searchText}
+  onChangeText={setSearchText}
+/>
+
 
       {filteredForms.length === 0 ? (
         <Text style={styles.noDataText}>No pending forms.</Text>
@@ -135,6 +145,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: 10,
   },
+  searchInput: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    marginBottom: 10,
+  },
+  
   title: {
     fontSize: 18,
     fontWeight: "bold",

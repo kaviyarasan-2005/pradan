@@ -4,6 +4,7 @@ import {
   StyleSheet,
   FlatList,
   ScrollView,
+  TextInput,
   Alert,
 } from "react-native";
 import { useRouter } from "expo-router";
@@ -16,6 +17,7 @@ export default function Rejected() {
   const router = useRouter();
   const { submittedForms, loadSubmittedForms, deleteFormByIndex } = useFormStore();
   const { showActionSheetWithOptions } = useActionSheet();
+  const [searchText, setSearchText] = useState("");
 
   const [selectedFilter, setSelectedFilter] = useState("ALL");
 
@@ -55,10 +57,11 @@ export default function Rejected() {
   };
 
   const filteredForms = submittedForms.filter((item) => {
-    const isRejected = item.formStatus === "Rejected";
-    const isMatchType = selectedFilter === "ALL" || item.formType === selectedFilter;
-    return isRejected && isMatchType;
-  });
+    const matchesType = selectedFilter === "ALL" || item.formType === selectedFilter;
+    const matchesSearch = item.basicDetails?.name?.toLowerCase().includes(searchText.toLowerCase());
+    return matchesType && matchesSearch;
+  
+});
 
   return (
     <View style={styles.container}>
@@ -69,6 +72,13 @@ export default function Rejected() {
       </View>
 
       <Text style={styles.filterLabel}>Showing: {selectedFilter}</Text>
+      <TextInput
+  style={styles.searchInput}
+  placeholder="Search by farmer name"
+  value={searchText}
+  onChangeText={setSearchText}
+/>
+
 
       {filteredForms.length === 0 ? (
         <Text style={styles.noDataText}>No rejected forms yet.</Text>
@@ -76,7 +86,8 @@ export default function Rejected() {
         <ScrollView horizontal>
           <View style={styles.table}>
             <View style={[styles.row, styles.headerTableRow]}>
-              <Text style={[styles.cell, styles.headerCell, { width: 30 }]}>#</Text>
+       
+         <Text style={[styles.cell, styles.headerCell, { width: 30 }]}>#</Text>
               <Text style={[styles.cell, styles.headerCell, { width: 90 }]}>Farmer Name</Text>
               <Text style={[styles.cell, styles.headerCell, { width: 90 }]}>Form Type</Text>
               <Text style={[styles.cell, styles.headerCell, { width: 80 }]}>Status</Text>
@@ -175,4 +186,12 @@ const styles = StyleSheet.create({
   headerCell: {
     fontWeight: "bold",
   },
+  searchInput: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    marginBottom: 10,
+  },  
 });

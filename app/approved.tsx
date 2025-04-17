@@ -5,6 +5,7 @@ import {
   FlatList,
   ScrollView,
   Alert,
+  TextInput,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -16,6 +17,7 @@ export default function Approved() {
   const router = useRouter();
   const { submittedForms, loadSubmittedForms, deleteFormByIndex } = useFormStore();
   const { showActionSheetWithOptions } = useActionSheet();
+  const [searchText, setSearchText] = useState("");
 
   const [selectedFilter, setSelectedFilter] = useState("ALL");
 
@@ -55,10 +57,11 @@ export default function Approved() {
   };
 
   const filteredForms = submittedForms.filter((item) => {
-    const isApproved = item.formStatus === "Approved"; // spelling from your data
-    const isMatchType = selectedFilter === "ALL" || item.formType === selectedFilter;
-    return isApproved && isMatchType;
+    const matchesType = selectedFilter === "ALL" || item.formType === selectedFilter;
+    const matchesSearch = item.basicDetails?.name?.toLowerCase().includes(searchText.toLowerCase());
+    return matchesType && matchesSearch;
   });
+
 
   return (
     <View style={styles.container}>
@@ -68,6 +71,13 @@ export default function Approved() {
         <IconButton icon="filter-variant" onPress={openFilterSheet} />
       </View>
       <Text style={styles.filterLabel}>Showing: {selectedFilter}</Text>
+      <TextInput
+  style={styles.searchInput}
+  placeholder="Search by farmer name"
+  value={searchText}
+  onChangeText={setSearchText}
+/>
+
 
       {filteredForms.length === 0 ? (
         <Text style={styles.noDataText}>No approved forms yet.</Text>
@@ -139,6 +149,14 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: "center",
   },
+  searchInput: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    marginBottom: 10,
+  },  
   filterLabel: {
     textAlign: "center",
     fontStyle: "italic",

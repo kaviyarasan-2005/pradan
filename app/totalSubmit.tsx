@@ -1,9 +1,9 @@
 import {
   View,
   Text,
-  TouchableOpacity,
   StyleSheet,
   FlatList,
+  TextInput,
   ScrollView,
   Alert,
 } from "react-native";
@@ -17,8 +17,8 @@ export default function TotalSubmit() {
   const router = useRouter();
   const { submittedForms, loadSubmittedForms, deleteFormByIndex } = useFormStore();
   const { showActionSheetWithOptions } = useActionSheet();
-
   const [selectedFilter, setSelectedFilter] = useState("ALL");
+  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
     loadSubmittedForms();
@@ -54,11 +54,13 @@ export default function TotalSubmit() {
       }
     );
   };
+ 
+  const filteredForms = submittedForms.filter((item) => {
+    const matchesType = selectedFilter === "ALL" || item.formType === selectedFilter;
+    const matchesSearch = item.basicDetails?.name?.toLowerCase().includes(searchText.toLowerCase());
+    return matchesType && matchesSearch;
+  });
 
-  const filteredForms =
-    selectedFilter === "ALL"
-      ? submittedForms
-      : submittedForms.filter((item) => item.formType === selectedFilter);
 
   return (
     <View style={styles.container}>
@@ -68,8 +70,13 @@ export default function TotalSubmit() {
         <Text style={styles.title}>Total Submitted Forms</Text>
         <IconButton icon="filter-variant" onPress={openFilterSheet} />
       </View>
-
       <Text style={styles.filterLabel}>Showing: {selectedFilter}</Text>
+      <TextInput
+  style={styles.searchInput}
+  placeholder="Search by farmer name"
+  value={searchText}
+  onChangeText={setSearchText}
+/>
 
       {filteredForms.length === 0 ? (
         <Text style={styles.noDataText}>No forms submitted yet.</Text>
@@ -165,6 +172,15 @@ const styles = StyleSheet.create({
     color: "#555",
     marginBottom: 10,
   },
+  searchInput: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    marginBottom: 10,
+  },
+  
   noDataText: {
     fontSize: 16,
     color: "#777",
