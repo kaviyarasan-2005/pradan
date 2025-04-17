@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { useFormStore } from "../storage/useFormStore";
 import { Button, IconButton } from "react-native-paper";
 import { useActionSheet } from "@expo/react-native-action-sheet";
+import BankDetails from "./landform/bankDetails";
 
 export default function TotalSubmit() {
   const router = useRouter();
@@ -23,7 +24,6 @@ export default function TotalSubmit() {
   useEffect(() => {
     loadSubmittedForms();
   }, []);
-
   const handleDelete = (index: number) => {
     Alert.alert("Delete Form", "Are you sure you want to delete this form?", [
       { text: "Cancel", style: "cancel" },
@@ -101,9 +101,8 @@ export default function TotalSubmit() {
                     {item.basicDetails?.name || "N/A"}
                   </Text>
                   <Text style={[styles.cell, { width: 90 }]}>{item.formType || "N/A"}</Text>
-                  <Text style={[styles.cell, { width: 80 }]}>
-                     {item.formStatus || "Not Filled"}
-                  </Text>
+                  <Text style={[styles.cell, { width: 80 }]}>{item.formStatus}</Text>
+                  
                   <View style={[styles.cell, { width: 150, flexDirection: "row", gap: 4 }]}>
                   <Button
   mode="outlined"

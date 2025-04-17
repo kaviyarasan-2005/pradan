@@ -57,11 +57,12 @@ export default function Approved() {
   };
 
   const filteredForms = submittedForms.filter((item) => {
+    const isPending = item.formStatus === "Pending"; // ✅ Only pending forms
     const matchesType = selectedFilter === "ALL" || item.formType === selectedFilter;
     const matchesSearch = item.basicDetails?.name?.toLowerCase().includes(searchText.toLowerCase());
-    return matchesType && matchesSearch;
+    return isPending && matchesType && matchesSearch;
   });
-
+  
 
   return (
     <View style={styles.container}>

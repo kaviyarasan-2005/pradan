@@ -215,7 +215,7 @@ export default function BankDetails() {
           selectedValue={form.formStatus}
           onValueChange={(itemValue) => updateField("formStatus", itemValue)}
         >
-          <Picker.Item label="Select status..." value="" />
+          <Picker.Item label="Select status..." value="Not Filled" />
           <Picker.Item label="Approved" value="Approved" />
           <Picker.Item label="Pending" value="Pending" />
           <Picker.Item label="Rejected" value="Rejected" />

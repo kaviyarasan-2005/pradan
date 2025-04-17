@@ -57,11 +57,12 @@ export default function Rejected() {
   };
 
   const filteredForms = submittedForms.filter((item) => {
+    const isRejected = item.formStatus === "Rejected";
     const matchesType = selectedFilter === "ALL" || item.formType === selectedFilter;
     const matchesSearch = item.basicDetails?.name?.toLowerCase().includes(searchText.toLowerCase());
-    return matchesType && matchesSearch;
-  
-});
+    return isRejected && matchesType && matchesSearch;
+  });
+
 
   return (
     <View style={styles.container}>
