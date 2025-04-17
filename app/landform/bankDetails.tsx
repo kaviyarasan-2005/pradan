@@ -1,4 +1,4 @@
-import { useRouter ,useLocalSearchParams} from "expo-router";
+import { useRouter ,useLocalSearchParams, usePathname} from "expo-router";
 import React, { useState,useEffect } from "react";
 import { View, ScrollView, Text, TextInput, StyleSheet } from "react-native";
 import { Button, IconButton, RadioButton } from "react-native-paper";
@@ -10,7 +10,7 @@ import { Picker } from "@react-native-picker/picker";
 
 export default function BankDetails() {
   const router = useRouter();
-   const { id, fromPreview } = useLocalSearchParams<{ id?: string; fromPreview?: string }>();
+   const { id, fromPreview,fromsubmit,returnsubmit } = useLocalSearchParams<{ id?: string; fromPreview?: string }>();
     const { data, submittedForms, setData } = useFormStore();
 
   const [form, setForm] = useState(
@@ -123,7 +123,7 @@ export default function BankDetails() {
 
   const handlePreview = () => {
     setData("bankDetails", form);
-    router.push("/landform/Preview");
+    router.push({pathname:"/landform/Preview",params:{id,returnsubmit:returnsubmit,fromsubmit:fromsubmit}});
   };
 
   return (

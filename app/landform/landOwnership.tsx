@@ -6,7 +6,7 @@ import { useFormStore } from "../../storage/useFormStore";
 
 export default function LandOwnership() {
   const router = useRouter();
- const { id, fromPreview,returnTo } = useLocalSearchParams<{ id?: string; fromPreview?: string }>();
+ const { id, fromPreview,returnTo,fromsubmit,returnsubmit } = useLocalSearchParams<{ id?: string; fromPreview?: string }>();
    const { data, submittedForms, setData } = useFormStore();
  
 
@@ -130,7 +130,7 @@ export default function LandOwnership() {
     setData("landOwnership", form);
     if (fromPreview && returnTo) {
      
-      router.push({ pathname: returnTo, params: { id } });
+      router.push({ pathname: returnTo, params: { id,returnsubmit:returnsubmit,fromsubmit:fromsubmit} });
     } else {
       router.push("/landform/landDevelopment");
     }

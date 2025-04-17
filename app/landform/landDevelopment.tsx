@@ -87,7 +87,7 @@ export default function LandDevelopment() {
         } else {
           router.push("/landform/bankDetails");
         }
-      }, 50); // 100ms delay is usually enough
+      }, 50); 
     };
     
   return (
