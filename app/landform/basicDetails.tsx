@@ -7,7 +7,7 @@ import { useFormStore } from "../../storage/useFormStore";
 
 export default function BasicDetails() {
   const router = useRouter();
-  const { id, fromPreview } = useLocalSearchParams<{ id?: string; fromPreview?: string }>();
+  const { id, fromPreview,returnTo } = useLocalSearchParams<{ id?: string; fromPreview?: string }>();
   const { data, submittedForms, setData } = useFormStore();
 
   const [form, setForm] = useState(
@@ -75,7 +75,12 @@ export default function BasicDetails() {
 
   const handleNext = () => {
     setData("basicDetails", form);
-    router.push("./landOwnership");
+    if (fromPreview && returnTo) {
+     
+      router.push({ pathname: returnTo, params: { id } });
+    } else {
+      router.push("/landform/landOwnership");
+    }
   };
 
   const renderCheckboxGroup = (
@@ -104,7 +109,9 @@ export default function BasicDetails() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <IconButton icon="arrow-left" size={24} onPress={() => router.back()} />
+      {!fromPreview && (
+    <IconButton icon="arrow-left" size={24} onPress={() => router.back()} />
+  )}
 
       <Text style={styles.title}>Land Form</Text>
       <Text style={styles.subtitle}>Basic Details</Text>
@@ -543,9 +550,9 @@ export default function BasicDetails() {
 </RadioButton.Group>
 
 
-      <Button mode="contained" onPress={handleNext} style={styles.button}>
-        Next
-      </Button>
+<Button mode="contained" onPress={handleNext} style={styles.button}>
+  {fromPreview ? "SUBMIT" : "NEXT"}
+</Button>
     </ScrollView>
   );
 }

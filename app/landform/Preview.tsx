@@ -43,7 +43,6 @@ const selectedForm = isSubmittedPreview
       await new Promise((resolve) => setTimeout(resolve, 50));
   
       await submitForm();
-  
       Alert.alert("Success", "Form Successfully Submitted!", [
         { text: "OK", onPress: () => router.push("/dashboard") },
       ]);

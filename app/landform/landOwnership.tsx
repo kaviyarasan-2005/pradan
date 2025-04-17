@@ -6,7 +6,7 @@ import { useFormStore } from "../../storage/useFormStore";
 
 export default function LandOwnership() {
   const router = useRouter();
- const { id, fromPreview } = useLocalSearchParams<{ id?: string; fromPreview?: string }>();
+ const { id, fromPreview,returnTo } = useLocalSearchParams<{ id?: string; fromPreview?: string }>();
    const { data, submittedForms, setData } = useFormStore();
  
 
@@ -128,7 +128,12 @@ export default function LandOwnership() {
 
   const handleNext = () => {
     setData("landOwnership", form);
-    router.push("./landDevelopment");
+    if (fromPreview && returnTo) {
+     
+      router.push({ pathname: returnTo, params: { id } });
+    } else {
+      router.push("/landform/landDevelopment");
+    }
   };
 
   return (
@@ -300,11 +305,11 @@ export default function LandOwnership() {
   keyboardType="numeric"
   style={styles.input}
 />
-      <Button mode="contained" onPress={handleNext} style={styles.button}>
-        Next
-      </Button>
+     <Button mode="contained" onPress={handleNext} style={styles.button}>
+       {fromPreview ? "SUBMIT" : "NEXT"}
+     </Button>
     </ScrollView>
-  );
+  ); 
 }
 
 const styles = StyleSheet.create({
