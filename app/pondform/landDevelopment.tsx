@@ -97,7 +97,12 @@ export default function PondDevelopment() {
   const handleNext = () => {
     setData("landDevelopment", form);
     setTimeout(() => {
-      router.push("./bankDetails");
+      if (fromPreview && returnTo) {
+     
+        router.push({ pathname: returnTo, params: { id } });
+      } else {
+        router.push("/plantationform/bankDetails");
+      }
     }, 50);
   };
 
@@ -258,7 +263,7 @@ export default function PondDevelopment() {
       />
 
       <Button mode="contained" onPress={handleNext} style={styles.button}>
-        Next
+      {fromPreview ? "Preview" : "Next"}
       </Button>
     </ScrollView>
   );

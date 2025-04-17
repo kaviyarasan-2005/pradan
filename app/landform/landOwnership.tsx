@@ -306,7 +306,7 @@ export default function LandOwnership() {
   style={styles.input}
 />
      <Button mode="contained" onPress={handleNext} style={styles.button}>
-       {fromPreview ? "SUBMIT" : "NEXT"}
+     {fromPreview ? "Preview" : "Next"}
      </Button>
     </ScrollView>
   ); 

@@ -551,7 +551,7 @@ export default function BasicDetails() {
 
 
 <Button mode="contained" onPress={handleNext} style={styles.button}>
-  {fromPreview ? "SUBMIT" : "NEXT"}
+  {fromPreview ? "Preview" : "Next"}
 </Button>
     </ScrollView>
   );

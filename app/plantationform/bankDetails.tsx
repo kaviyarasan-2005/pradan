@@ -217,7 +217,7 @@ export default function BankDetails() {
         style={styles.button}
         contentStyle={styles.buttonContent}
       >
-        Preview
+         Preview
       </Button>
     </ScrollView>
   );

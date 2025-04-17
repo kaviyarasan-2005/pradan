@@ -7,7 +7,7 @@ import { useFormStore } from "../../storage/useFormStore";
 
 export default function BasicDetails() {
   const router = useRouter();
-  const { id, fromPreview } = useLocalSearchParams<{ id?: string; fromPreview?: string }>();
+  const { id, fromPreview,returnTo } = useLocalSearchParams<{ id?: string; fromPreview?: string }>();
   const { data, submittedForms, setData } = useFormStore();
 
   const [form, setForm] = useState(
@@ -73,7 +73,12 @@ export default function BasicDetails() {
 
   const handleNext = () => {
     setData("basicDetails", form);
-    router.push("./landOwnership");
+    if (fromPreview && returnTo) {
+     
+      router.push({ pathname: returnTo, params: { id } });
+    } else {
+      router.push("/landform/landOwnership");
+    }
   };
 
   const renderCheckboxGroup = (
@@ -463,7 +468,7 @@ export default function BasicDetails() {
 
 
       <Button mode="contained" onPress={handleNext} style={styles.button}>
-        Next
+      {fromPreview ? "Preview" : "Next"}
       </Button>
     </ScrollView>
   );

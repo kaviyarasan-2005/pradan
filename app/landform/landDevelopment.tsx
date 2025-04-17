@@ -85,7 +85,7 @@ export default function LandDevelopment() {
      
           router.push({ pathname: returnTo, params: { id } });
         } else {
-          router.push("/landform/landDevelopment");
+          router.push("/landform/bankDetails");
         }
       }, 50); // 100ms delay is usually enough
     };
@@ -214,7 +214,7 @@ export default function LandDevelopment() {
       />
 
       <Button mode="contained" onPress={handleNext} style={styles.button}>
-        {fromPreview ? "SUBMIT" : "NEXT"}
+      {fromPreview ? "Preview" : "Next"}
       </Button>
     </ScrollView>
   );

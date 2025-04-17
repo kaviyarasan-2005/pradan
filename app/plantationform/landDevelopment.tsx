@@ -13,7 +13,7 @@ import { useFormStore } from "../../storage/useFormStore";
 
 export default function LandDevelopment() {
   const router = useRouter();
-  const { id, fromPreview } = useLocalSearchParams<{ id?: string; fromPreview?: string }>();
+  const { id, fromPreview,returnTo } = useLocalSearchParams<{ id?: string; fromPreview?: string }>();
    const { data, submittedForms, setData } = useFormStore();
 
   const [form, setForm] = useState(
@@ -89,7 +89,12 @@ export default function LandDevelopment() {
   const handleNext = () => {
     setData("landDevelopment", form);
     setTimeout(() => {
-      router.push("./bankDetails");
+      if (fromPreview && returnTo) {
+     
+        router.push({ pathname: returnTo, params: { id } });
+      } else {
+        router.push("/plantationform/bankDetails");
+      }
     }, 50); 
   };
 
@@ -250,7 +255,7 @@ export default function LandDevelopment() {
       />
 
       <Button mode="contained" onPress={handleNext} style={styles.button}>
-        Next
+      {fromPreview ? "SUBMIT" : "NEXT"}
       </Button>
     </ScrollView>
   );

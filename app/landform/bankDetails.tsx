@@ -228,7 +228,7 @@ export default function BankDetails() {
         style={styles.button}
         contentStyle={styles.buttonContent}
       >
-        {fromPreview ? "SUBMIT" : "NEXT"}
+        {fromPreview ? "Preview" : "Next"}
       </Button>
     </ScrollView>
   );
