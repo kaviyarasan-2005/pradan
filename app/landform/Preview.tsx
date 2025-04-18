@@ -113,9 +113,9 @@ const selectedForm = isSubmittedPreview
         router.push({
           pathname: editRoute,
           params: {
-            id: id, // <-- pass the form ID here
-            fromPreview: "true", // <-- optional: to know it's from preview
-            returnTo: "/landform/Preview", // keep your existing param
+            id: id,
+            fromPreview: "true",
+            returnTo: "/landform/Preview",
             fromsubmit:fromsubmit,
             returnsubmit:returnsubmit
           },
