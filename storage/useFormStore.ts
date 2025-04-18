@@ -80,7 +80,6 @@ export const useFormStore = create<FormStore>((set, get) => ({
       set({ loading: false });
     }
   },
-
   clearSubmittedForms: async () => {
     await AsyncStorage.removeItem("submittedForms");
     set({ submittedForms: [] });

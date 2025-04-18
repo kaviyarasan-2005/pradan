@@ -1,6 +1,6 @@
 import { useRouter,useLocalSearchParams } from "expo-router";
 import { useState,useEffect } from "react";
-import { View, Text, TextInput, ScrollView, StyleSheet } from "react-native";
+import {  Text, TextInput, ScrollView, StyleSheet } from "react-native";
 import { Checkbox, Button, IconButton,RadioButton} from "react-native-paper";
 
 import { useFormStore } from "../../storage/useFormStore";
@@ -44,22 +44,24 @@ export default function BasicDetails() {
       education: "",
     }
   );
-    
   
-
   useEffect(() => {
     if (id && fromPreview === "true") {
-      // Load the form by ID and update current working data
       const selected = submittedForms.find((form) => form.id === id);
       if (selected) {
-        // Set every key in the form data
         Object.entries(selected).forEach(([key, value]) => {
           setData(key as keyof typeof data, value);
         });
       }
     }
+    const today = new Date();
+    const formattedDate = 
+      ("0" + today.getDate()).slice(-2) + '/' + 
+      ("0" + (today.getMonth() + 1)).slice(-2) + '/' + 
+      today.getFullYear();
+      updateField("date", formattedDate);
   }, [id]);
-
+3
   const updateField = (field: string, value: any) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
@@ -116,24 +118,10 @@ export default function BasicDetails() {
       <Text style={styles.title}>Land Form</Text>
       <Text style={styles.subtitle}>Basic Details</Text>
       <Text style={styles.question}>Date:</Text>
-<TextInput
+      <TextInput
   value={form.date}
-  onChangeText={(text) => {
-    // Remove anything that's not a number
-    let filteredText = text.replace(/[^0-9]/g, '');
-
-    // Format as DD/MM/YYYY
-    if (filteredText.length > 2 && filteredText.length <= 4) {
-      filteredText = filteredText.slice(0, 2) + '/' + filteredText.slice(2);
-    } else if (filteredText.length > 4) {
-      filteredText = filteredText.slice(0, 2) + '/' + filteredText.slice(2, 4) + '/' + filteredText.slice(4, 8);
-    }
-
-    updateField("date", filteredText);
-  }}
   style={styles.input}
-  placeholder="DD/MM/YYYY"
-  keyboardType="numeric"
+  editable={false}
 />
 
 

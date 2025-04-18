@@ -19,7 +19,7 @@ const selectedForm = isSubmittedPreview
   ? submittedForms.find((form) => form.id === id)
   : data;
   // console.log("Selected Form:", selectedForm);
-
+  // console.log(id);
   if (!selectedForm) {
     return (
       <View style={styles.container}>
@@ -34,8 +34,6 @@ const selectedForm = isSubmittedPreview
     if (submitting) return; 
     try {
       setSubmitting(true);
-  
-      // Prepare formType and formStatus
       const userStatus = data.bankDetails?.formStatus || "Not Filled";
       setData("formType", "LAND");
       setData("formStatus", userStatus);
@@ -130,6 +128,7 @@ const selectedForm = isSubmittedPreview
   );
 
   return (
+    
     <ScrollView contentContainerStyle={styles.container}>
       <IconButton
   icon="arrow-left"
