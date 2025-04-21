@@ -61,7 +61,6 @@ export default function BasicDetails() {
       today.getFullYear();
       updateField("date", formattedDate);
   }, [id]);
-3
   const updateField = (field: string, value: any) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
