@@ -6,7 +6,7 @@ import { useFormStore } from "../../storage/useFormStore";
 
 export default function Preview() {
   const router = useRouter();
-  const { id,fromsubmit,returnsubmit} = useLocalSearchParams<{ id?: string }>();
+  const { id,fromsubmit,returnsubmit} = useLocalSearchParams<{ id?: string , returnsubmit?: string,fromsubmit?: string;}>();
   const { data, submittedForms, setData, submitForm } = useFormStore();
   const canEdit = () => {
     if (!isSubmittedPreview) return true; // if it's unsubmitted form
@@ -15,9 +15,14 @@ export default function Preview() {
   };
 
 const isSubmittedPreview = !!id;
-const selectedForm = isSubmittedPreview
-  ? submittedForms.find((form) => form.id === id)
-  : data;
+const selectedForm = React.useMemo(() => {
+  if (isSubmittedPreview) {
+    const submittedForm = submittedForms.find((form) => form.id === id);
+    return fromsubmit ? data : submittedForm;
+  }
+  return data;
+}, [id, fromsubmit, submittedForms, data]);
+
   // console.log("Selected Form:", selectedForm);
   // console.log(id);
   if (!selectedForm) {
@@ -67,10 +72,7 @@ const selectedForm = isSubmittedPreview
                       <Button
                         mode="text"
                         onPress={() =>
-                          router.push({
-                            pathname: "/pdfViewer",
-                            params: { uri: item.uri },
-                          })
+                          router.push({pathname: "/pdfViewer",params: { uri: item.uri },})
                         }
                         compact
                       >
@@ -157,6 +159,7 @@ const selectedForm = isSubmittedPreview
       </View>
 
       {renderSection("Basic Details", [
+        
         {label : "Date",value: selectedForm.basicDetails?.date},
         { label: "1. Name of Farmer", value: selectedForm.basicDetails?.name },
         { label: "1-2. Age", value: selectedForm.basicDetails?.age },

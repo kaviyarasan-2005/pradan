@@ -1,4 +1,4 @@
-import { useRouter,useLocalSearchParams } from "expo-router";
+import { Route,useRouter,useLocalSearchParams } from "expo-router";
 import { useState,useEffect } from "react";
 import {  Text, TextInput, ScrollView, StyleSheet } from "react-native";
 import { Checkbox, Button, IconButton,RadioButton} from "react-native-paper";
@@ -7,7 +7,14 @@ import { useFormStore } from "../../storage/useFormStore";
 
 export default function BasicDetails() {
   const router = useRouter();
-  const { id, fromPreview,returnTo,returnsubmit,fromsubmit } = useLocalSearchParams<{ id?: string; fromPreview?: string }>();
+  // tpe specified 
+  const { id, fromPreview, returnTo, returnsubmit, fromsubmit } = useLocalSearchParams<{
+    id?: string;
+    fromPreview?: string;
+    returnTo?: string;
+    returnsubmit?: string;
+    fromsubmit?: string;
+  }>();
   const { data, submittedForms, setData } = useFormStore();
 
   const [form, setForm] = useState(
@@ -46,7 +53,7 @@ export default function BasicDetails() {
   );
   
   useEffect(() => {
-    if (id && fromPreview === "true") {
+    if (id && fromPreview === "true" || id && fromsubmit == "true") {// added from submit here
       const selected = submittedForms.find((form) => form.id === id);
       if (selected) {
         Object.entries(selected).forEach(([key, value]) => {
@@ -74,12 +81,19 @@ export default function BasicDetails() {
     }));
   };
 
+  // in which id the basics updated while from submitted text
   const handleNext = () => {
+
     setData("basicDetails", form);
 
-    if (fromPreview && returnTo) {
+    if (fromPreview && returnTo ){
       router.push({ pathname: returnTo, params: { id ,returnsubmit:returnsubmit,fromsubmit:fromsubmit} });
-    } else {
+    } 
+    // for  from submit check here
+    else if (fromsubmit && returnsubmit){
+      router.push({ pathname: returnTo, params: { id ,returnsubmit:returnsubmit,fromsubmit:fromsubmit} });
+    }
+    else {
       router.push("/landform/landOwnership");
     }
   };

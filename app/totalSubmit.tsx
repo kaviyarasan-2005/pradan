@@ -65,14 +65,13 @@ const TotalSubmit = () => {
   });
 
   const handleCardPress = (item) => {
-    const formType = item.formType?.toLowerCase();
     let previewPath = "";
 
-    if (formType === "land") {
+    if (item.formType === "LAND"){
       previewPath = "/landform/Preview";
-    } else if (formType === "pond") {
+    } else if (item.formType === "POND") {
       previewPath = "/pondform/Preview";
-    } else if (formType === "plantation") {
+    } else if (item.formType === "PLANDATION") {
       previewPath = "/plantationform/Preview";
     } else {
       alert("Unknown form type.");
@@ -145,9 +144,6 @@ const TotalSubmit = () => {
 
               <Text style={styles.label}>
                 Form: <Text style={styles.value}>{item.formType}</Text>
-              </Text>
-              <Text style={styles.label}>
-                Submission ID: <Text style={styles.value}>{item.id}</Text>
               </Text>
               <Text style={styles.label}>
                 Date: <Text style={styles.value}>{item.date || "N/A"}</Text>

@@ -4,6 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 interface FormData {
   id?: string;
   submittedAt?: string;
+  date?:string;
   formType?: "LAND" | "POND" | "PLANTATION";
   formStatus?: "Approved" | "Pending" | "Rejected";
   basicDetails?: any;
