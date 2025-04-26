@@ -8,21 +8,23 @@ export default function Preview() {
   const router = useRouter();
   const { id,fromsubmit,returnsubmit} = useLocalSearchParams<{ id?: string , returnsubmit?: string,fromsubmit?: string;}>();
   const { data, submittedForms, setData, submitForm } = useFormStore();
-  const canEdit = () => {
-    if (!isSubmittedPreview) return true; // if it's unsubmitted form
-    const status = selectedForm?.bankDetails?.formStatus;
-    return status === "Pending" || status === "Rejected";
-  };
-
+  
 const isSubmittedPreview = !!id;
 const selectedForm = React.useMemo(() => {
+  if (fromsubmit) {
+  
+    return data; // Always use updated data when fromsubmit
+  }
   if (isSubmittedPreview) {
-    const submittedForm = submittedForms.find((form) => form.id === id);
-    return fromsubmit ? data : submittedForm;
+    return submittedForms.find((form) => form.id === id);
   }
   return data;
 }, [id, fromsubmit, submittedForms, data]);
-
+const canEdit = () => {
+  if (!isSubmittedPreview) return true; // if it's unsubmitted form
+  const status = selectedForm?.bankDetails?.formStatus;
+  return status === "Pending" || status === "Rejected";
+};
   // console.log("Selected Form:", selectedForm);
   // console.log(id);
   if (!selectedForm) {
