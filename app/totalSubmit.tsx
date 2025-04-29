@@ -100,7 +100,7 @@ const TotalSubmit = () => {
     <ScrollView contentContainerStyle={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.icon}>
+        <TouchableOpacity onPress={() => router.push("/dashboard")} style={styles.icon}>
           <Ionicons name="arrow-back" size={24} color="#1B5E20" />
         </TouchableOpacity>
         <Text style={styles.title}>Form Submissions</Text>
