@@ -11,17 +11,18 @@ export default function Preview() {
   
 const isSubmittedPreview = !!id;
 const selectedForm = React.useMemo(() => {
-  if (fromsubmit) {
-  
-    return data; // Always use updated data when fromsubmit
-  }
-  if (isSubmittedPreview) {
-    return submittedForms.find((form) => form.id === id);
+  // itho ivar tha eallathukkum karanom
+  // if (fromsubmit) {
+  //   return data; // Always use updated data when fromsubmit
+  // }
+  if (isSubmittedPreview && id) {
+    return submittedForms.find((form) => String(form.id) === id);
   }
   return data;
 }, [id, fromsubmit, submittedForms, data]);
+
 const canEdit = () => {
-  if (!isSubmittedPreview) return true; // if it's unsubmitted form
+  if (!isSubmittedPreview) return true; // it's a draft
   const status = selectedForm?.bankDetails?.formStatus;
   return status === "Pending" || status === "Rejected";
 };
@@ -34,6 +35,7 @@ const canEdit = () => {
       </View>
     );
   }
+
 
   const [submitting, setSubmitting] = React.useState(false);
 
@@ -108,26 +110,29 @@ const canEdit = () => {
         ))}
       </Card.Content>
       {canEdit() && (
-  <Card.Actions>
-    <Button
-      mode="outlined"
-      onPress={() =>
-        router.push({
-          pathname: editRoute,
-          params: {
-            id: id,
-            fromPreview: "true",
-            returnTo: "/landform/Preview",
-            fromsubmit:fromsubmit,
-            returnsubmit:returnsubmit
-          },
-        })
-      }
-    >
-      Edit
-    </Button>
-  </Card.Actions>
+  <Card style={styles.card}>
+    <Card.Actions>
+      <Button
+        mode="outlined"
+        onPress={() =>
+          router.push({
+            pathname: editRoute,
+            params: {
+              id: id,
+              fromPreview: "true",
+              returnTo: "/landform/Preview",
+              fromsubmit: fromsubmit,
+              returnsubmit: returnsubmit
+            },
+          })
+        }
+      >
+        Edit
+      </Button>
+    </Card.Actions>
+  </Card>
 )}
+
     </Card>
   );
 

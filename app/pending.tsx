@@ -1,3 +1,4 @@
+// Pending.tsx
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -14,13 +15,13 @@ import { Ionicons, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 
 const statusStyles = {
-  Approved: {
-    backgroundColor: "#C8E6C9",
-    textColor: "#2E7D32",
+  Pending: {
+    backgroundColor: "#FFF9C4",
+    textColor: "#F57F17",
   },
 };
 
-const Approved = () => {
+const Pending = () => {
   const router = useRouter();
   const { submittedForms, loadSubmittedForms, deleteFormByIndex } = useFormStore();
   const { showActionSheetWithOptions } = useActionSheet();
@@ -82,10 +83,10 @@ const Approved = () => {
   };
 
   const filteredForms = submittedForms.filter((item) => {
-    const isApproved = item.formStatus === "Pending";
+    const isPending = item.formStatus === "Pending";
     const matchesType = selectedFilter === "ALL" || item.formType === selectedFilter;
     const matchesSearch = item.basicDetails?.name?.toLowerCase().includes(searchText.toLowerCase());
-    return isApproved && matchesType && matchesSearch;
+    return isPending && matchesType && matchesSearch;
   });
 
   return (
@@ -115,7 +116,7 @@ const Approved = () => {
 
       {/* No data */}
       {filteredForms.length === 0 ? (
-        <Text style={styles.noDataText}>No approved forms yet.</Text>
+        <Text style={styles.noDataText}>No pending forms yet.</Text>
       ) : (
         filteredForms.map((item, index) => (
           <TouchableOpacity
@@ -128,10 +129,10 @@ const Approved = () => {
               <View
                 style={[
                   styles.statusBadge,
-                  { backgroundColor: statusStyles.Approved.backgroundColor },
+                  { backgroundColor: statusStyles.Pending.backgroundColor },
                 ]}
               >
-                <Text style={[styles.statusText, { color: statusStyles.Approved.textColor }]}>
+                <Text style={[styles.statusText, { color: statusStyles.Pending.textColor }]}>
                   {item.formStatus}
                 </Text>
               </View>
@@ -165,7 +166,8 @@ const Approved = () => {
   );
 };
 
-export default Approved;
+export default Pending;
+
 
 const styles = StyleSheet.create({
   container: {

@@ -66,7 +66,7 @@ const TotalSubmit = () => {
 
   const handleCardPress = (item) => {
     let previewPath = "";
-
+    
     if (item.formType === "LAND"){
       previewPath = "/landform/Preview";
     } else if (item.formType === "POND") {
