@@ -39,7 +39,6 @@ const TotalSubmit = () => {
   const [isEndDatePickerVisible, setEndDatePickerVisible] = useState(false);
 
   useEffect(() => {
-    
     loadSubmittedForms();
   }, []);
 
@@ -50,12 +49,21 @@ const TotalSubmit = () => {
     const matchesBlock = item.basicDetails?.block?.toLowerCase().includes(block.toLowerCase());
     const matchesHamlet = item.basicDetails?.hamlet?.toLowerCase().includes(hamlet.toLowerCase());
     const matchesGender = gender === "ALL" || item.basicDetails?.gender === gender;
-    const matchesStart = !startDate || new Date(item.date) >= new Date(startDate);
-    const matchesEnd = !endDate || new Date(item.date) <= new Date(endDate);
-
+  
+    // Date range filtering logic
+    const formatDate = (dateString) => {
+      const [day, month, year] = dateString.split('/');
+      return new Date(year, month - 1, day); // Create a Date object with year, month (0-indexed), and day
+    };
+  
+    const itemDate = formatDate(item.basicDetails.date); // Convert the item's date to Date object
+    const matchesStart = !startDate || itemDate >= new Date(startDate);
+    const matchesEnd = !endDate || itemDate <= new Date(endDate);
+  
     return matchesType && matchesName && matchesPanchayat && matchesBlock &&
       matchesHamlet && matchesGender && matchesStart && matchesEnd;
   });
+  
 
   const handleCardPress = (item) => {
     let previewPath = "";
@@ -208,14 +216,11 @@ const TotalSubmit = () => {
               <Text style={styles.label}>Form: <Text style={styles.value}>{item.formType}</Text></Text>
               <Text style={styles.label}>Date: <Text style={styles.value}>{item.basicDetails.date}</Text></Text>
 
-              <View style={styles.bioContainer}>
-                <Text style={styles.bioTitle}>Remarks</Text>
-                <Text style={styles.bioContent}>{item.basicDetails?.remarks || "No remarks"}</Text>
+              <View style={styles.actions}>
+                <TouchableOpacity onPress={() => handleDelete(index)} style={styles.deleteButton}>
+                  <Text>Delete</Text>
+                </TouchableOpacity>
               </View>
-
-              <TouchableOpacity onPress={() => handleDelete(index)} style={styles.deleteButton}>
-                <Text style={styles.deleteButtonText}>Delete</Text>
-              </TouchableOpacity>
             </TouchableOpacity>
           );
         })
@@ -223,7 +228,6 @@ const TotalSubmit = () => {
     </ScrollView>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     padding: 16,
