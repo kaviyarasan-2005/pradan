@@ -13,6 +13,7 @@ import { useRouter } from "expo-router";
 import { useFormStore } from "../storage/useFormStore";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import { Ionicons, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
+import DateTimePickerModal from "react-native-modal-datetime-picker"; // For date picker
 
 const statusStyles = {
   Approved: { backgroundColor: '#C8E6C9', textColor: '#2E7D32' },
@@ -34,6 +35,8 @@ const TotalSubmit = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
+  const [isStartDatePickerVisible, setStartDatePickerVisible] = useState(false);
+  const [isEndDatePickerVisible, setEndDatePickerVisible] = useState(false);
 
   useEffect(() => {
     loadSubmittedForms();
@@ -72,6 +75,28 @@ const TotalSubmit = () => {
         style: "destructive",
       },
     ]);
+  };
+
+  // Function to handle the date selection
+  const handleConfirmStartDate = (date) => {
+    setStartDate(date);
+    setStartDatePickerVisible(false);
+  };
+
+  const handleConfirmEndDate = (date) => {
+    setEndDate(date);
+    setEndDatePickerVisible(false);
+  };
+
+  const resetFilters = () => {
+    setSearchText("");
+    setFormType("ALL");
+    setPanchayat("");
+    setBlock("");
+    setHamlet("");
+    setGender("ALL");
+    setStartDate(null);
+    setEndDate(null);
   };
 
   return (
@@ -122,20 +147,34 @@ const TotalSubmit = () => {
             <Picker.Item label="TRANSGENDER" value="TRANSGENDER" />
           </Picker>
 
-          <TextInput
-            placeholder="Start Date (YYYY-MM-DD)"
-            value={startDate || ""}
-            onChangeText={setStartDate}
-            style={styles.searchInput}
-          />
-          <TextInput
-            placeholder="End Date (YYYY-MM-DD)"
-            value={endDate || ""}
-            onChangeText={setEndDate}
-            style={styles.searchInput}
-          />
+          <TouchableOpacity onPress={() => setStartDatePickerVisible(true)} style={styles.dateButton}>
+            <Text>{startDate ? `Start Date: ${startDate.toLocaleDateString()}` : "Start Date"}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setEndDatePickerVisible(true)} style={styles.dateButton}>
+            <Text>{endDate ? `End Date: ${endDate.toLocaleDateString()}` : "End Date"}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={resetFilters} style={styles.resetButton}>
+            <Text>Reset Filters</Text>
+          </TouchableOpacity>
         </View>
       )}
+
+      {/* Date Time Picker Modal for Start Date */}
+      <DateTimePickerModal
+        isVisible={isStartDatePickerVisible}
+        mode="date"
+        onConfirm={handleConfirmStartDate}
+        onCancel={() => setStartDatePickerVisible(false)}
+      />
+
+      {/* Date Time Picker Modal for End Date */}
+      <DateTimePickerModal
+        isVisible={isEndDatePickerVisible}
+        mode="date"
+        onConfirm={handleConfirmEndDate}
+        onCancel={() => setEndDatePickerVisible(false)}
+      />
 
       {/* No Data */}
       {filteredForms.length === 0 ? (
@@ -177,7 +216,8 @@ const TotalSubmit = () => {
   );
 };
 
-export default TotalSubmit;
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -296,4 +336,19 @@ const styles = StyleSheet.create({
     color: "#C62828",
     fontWeight: "bold",
   },
+  dateButton: {
+    padding: 10,
+    backgroundColor: "#ddd",
+    borderRadius: 8,
+    marginVertical: 10,
+    alignItems: "center",
+  },
+  resetButton: {
+    padding: 10,
+    backgroundColor: "#f1f1f1",
+    borderRadius: 8,
+    marginVertical: 10,
+    alignItems: "center",
+  },
 });
+export default TotalSubmit;
