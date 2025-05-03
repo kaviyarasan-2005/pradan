@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Picker } from '@react-native-picker/picker';
 import {
   View,
   Text,
@@ -14,18 +15,9 @@ import { useActionSheet } from "@expo/react-native-action-sheet";
 import { Ionicons, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 
 const statusStyles = {
-  Approved: {
-    backgroundColor: '#C8E6C9',
-    textColor: '#2E7D32',
-  },
-  Pending: {
-    backgroundColor: '#FFF9C4',
-    textColor: '#F9A825',
-  },
-  Rejected: {
-    backgroundColor: '#FFCDD2',
-    textColor: '#C62828',
-  },
+  Approved: { backgroundColor: '#C8E6C9', textColor: '#2E7D32' },
+  Pending: { backgroundColor: '#FFF9C4', textColor: '#F9A825' },
+  Rejected: { backgroundColor: '#FFCDD2', textColor: '#C62828' },
 };
 
 const TotalSubmit = () => {
@@ -34,53 +26,41 @@ const TotalSubmit = () => {
   const { showActionSheetWithOptions } = useActionSheet();
 
   const [searchText, setSearchText] = useState("");
-  const [selectedFilter, setSelectedFilter] = useState("ALL");
+  const [formType, setFormType] = useState("ALL");
+  const [panchayat, setPanchayat] = useState("");
+  const [block, setBlock] = useState("");
+  const [hamlet, setHamlet] = useState("");
+  const [gender, setGender] = useState("ALL");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
     loadSubmittedForms();
   }, []);
 
-  const openFilterSheet = () => {
-    const options = ["ALL", "LAND", "POND", "PLANTATION", "Cancel"];
-    const cancelButtonIndex = 4;
-
-    showActionSheetWithOptions(
-      {
-        options,
-        cancelButtonIndex,
-        title: "Filter by Form Type",
-      },
-      (buttonIndex) => {
-        if (buttonIndex !== cancelButtonIndex) {
-          setSelectedFilter(options[buttonIndex]);
-        }
-      }
-    );
-  };
-
   const filteredForms = submittedForms.filter((item) => {
-    const matchesType = selectedFilter === "ALL" || item.formType === selectedFilter;
-    const matchesSearch = item.basicDetails?.name?.toLowerCase().includes(searchText.toLowerCase());
-    return matchesType && matchesSearch;
+    const matchesType = formType === "ALL" || item.formType === formType;
+    const matchesName = item.basicDetails?.name?.toLowerCase().includes(searchText.toLowerCase());
+    const matchesPanchayat = item.basicDetails?.panchayat?.toLowerCase().includes(panchayat.toLowerCase());
+    const matchesBlock = item.basicDetails?.block?.toLowerCase().includes(block.toLowerCase());
+    const matchesHamlet = item.basicDetails?.hamlet?.toLowerCase().includes(hamlet.toLowerCase());
+    const matchesGender = gender === "ALL" || item.basicDetails?.gender === gender;
+    const matchesStart = !startDate || new Date(item.date) >= new Date(startDate);
+    const matchesEnd = !endDate || new Date(item.date) <= new Date(endDate);
+
+    return matchesType && matchesName && matchesPanchayat && matchesBlock &&
+      matchesHamlet && matchesGender && matchesStart && matchesEnd;
   });
 
   const handleCardPress = (item) => {
     let previewPath = "";
-    
-    if (item.formType === "LAND"){
-      previewPath = "/landform/Preview";
-    } else if (item.formType === "POND") {
-      previewPath = "/pondform/Preview";
-    } else if (item.formType === "PLANDATION") {
-      previewPath = "/plantationform/Preview";
-    } else {
-      alert("Unknown form type.");
-      return;
-    }
+    if (item.formType === "LAND") previewPath = "/landform/Preview";
+    else if (item.formType === "POND") previewPath = "/pondform/Preview";
+    else if (item.formType === "PLANTATION") previewPath = "/plantationform/Preview";
+    else return alert("Unknown form type.");
 
-    router.push({ pathname: previewPath, params: { id: item.id, 
-      fromsubmit: "true", 
-      returnsubmit: "/totalSubmit", } });
+    router.push({ pathname: previewPath, params: { id: item.id, fromsubmit: "true", returnsubmit: "/totalSubmit" } });
   };
 
   const handleDelete = (index) => {
@@ -88,9 +68,7 @@ const TotalSubmit = () => {
       { text: "Cancel", style: "cancel" },
       {
         text: "Delete",
-        onPress: () => {
-          deleteFormByIndex(index);
-        },
+        onPress: () => deleteFormByIndex(index),
         style: "destructive",
       },
     ]);
@@ -104,7 +82,7 @@ const TotalSubmit = () => {
           <Ionicons name="arrow-back" size={24} color="#1B5E20" />
         </TouchableOpacity>
         <Text style={styles.title}>Form Submissions</Text>
-        <TouchableOpacity onPress={openFilterSheet} style={styles.icon}>
+        <TouchableOpacity onPress={() => setShowFilters(!showFilters)} style={styles.icon}>
           <MaterialIcons name="filter-list" size={24} color="#1B5E20" />
         </TouchableOpacity>
       </View>
@@ -121,7 +99,45 @@ const TotalSubmit = () => {
         />
       </View>
 
-      {/* No data */}
+      {/* Filter Options (Toggleable) */}
+      {showFilters && (
+        <View style={styles.filtersBox}>
+          <TextInput placeholder="Panchayat" value={panchayat} onChangeText={setPanchayat} style={styles.searchInput} />
+          <TextInput placeholder="Block" value={block} onChangeText={setBlock} style={styles.searchInput} />
+          <TextInput placeholder="Hamlet" value={hamlet} onChangeText={setHamlet} style={styles.searchInput} />
+
+          <Text style={styles.filterLabel}>Form Type</Text>
+          <Picker selectedValue={formType} onValueChange={setFormType}>
+            <Picker.Item label="ALL" value="ALL" />
+            <Picker.Item label="LAND" value="LAND" />
+            <Picker.Item label="POND" value="POND" />
+            <Picker.Item label="PLANTATION" value="PLANTATION" />
+          </Picker>
+
+          <Text style={styles.filterLabel}>Gender</Text>
+          <Picker selectedValue={gender} onValueChange={setGender}>
+            <Picker.Item label="ALL" value="ALL" />
+            <Picker.Item label="MALE" value="MALE" />
+            <Picker.Item label="FEMALE" value="FEMALE" />
+            <Picker.Item label="TRANSGENDER" value="TRANSGENDER" />
+          </Picker>
+
+          <TextInput
+            placeholder="Start Date (YYYY-MM-DD)"
+            value={startDate || ""}
+            onChangeText={setStartDate}
+            style={styles.searchInput}
+          />
+          <TextInput
+            placeholder="End Date (YYYY-MM-DD)"
+            value={endDate || ""}
+            onChangeText={setEndDate}
+            style={styles.searchInput}
+          />
+        </View>
+      )}
+
+      {/* No Data */}
       {filteredForms.length === 0 ? (
         <Text style={styles.noDataText}>No forms submitted yet.</Text>
       ) : (
@@ -142,22 +158,15 @@ const TotalSubmit = () => {
                 </View>
               </View>
 
-              <Text style={styles.label}>
-                Form: <Text style={styles.value}>{item.formType}</Text>
-              </Text>
-              <Text style={styles.label}>
-                Date: <Text style={styles.value}>{item.date || "N/A"}</Text>
-              </Text>
+              <Text style={styles.label}>Form: <Text style={styles.value}>{item.formType}</Text></Text>
+              <Text style={styles.label}>Date: <Text style={styles.value}>{item.date || "N/A"}</Text></Text>
 
               <View style={styles.bioContainer}>
                 <Text style={styles.bioTitle}>Remarks</Text>
                 <Text style={styles.bioContent}>{item.basicDetails?.remarks || "No remarks"}</Text>
               </View>
 
-              <TouchableOpacity
-                onPress={() => handleDelete(index)}
-                style={styles.deleteButton}
-              >
+              <TouchableOpacity onPress={() => handleDelete(index)} style={styles.deleteButton}>
                 <Text style={styles.deleteButtonText}>Delete</Text>
               </TouchableOpacity>
             </TouchableOpacity>
@@ -206,6 +215,20 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 8,
     color: "#333",
+    marginBottom: 10,
+    borderBottomWidth: 0.5,
+    borderColor: "#ccc",
+  },
+  filtersBox: {
+    padding: 10,
+    borderRadius: 8,
+    backgroundColor: "#F0F4C3",
+    marginBottom: 14,
+  },
+  filterLabel: {
+    fontWeight: "bold",
+    marginTop: 6,
+    color: "#1B5E20",
   },
   noDataText: {
     fontSize: 16,
