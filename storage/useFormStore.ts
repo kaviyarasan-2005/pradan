@@ -3,7 +3,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface FormData {
   id?: string;
-  name?: string;
   submittedAt?: string;
   date?: string;
   formType?: "LAND" | "POND" | "PLANTATION";
