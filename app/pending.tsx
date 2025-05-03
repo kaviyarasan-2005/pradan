@@ -66,7 +66,8 @@ const Pending = () => {
       return;
     }
 
-    router.push({ pathname: previewPath, params: { id: item.id } });
+    router.push({ pathname: previewPath, params: { id: item.id, fromsubmit: "true", 
+      returnsubmit: "/pending", } });
   };
 
   const handleDelete = (index) => {

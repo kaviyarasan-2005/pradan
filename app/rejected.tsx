@@ -65,7 +65,8 @@ const Rejected = () => {
       return;
     }
 
-    router.push({ pathname: previewPath, params: { id: item.id } });
+    router.push({ pathname: previewPath, params: { id: item.id ,fromsubmit: "true", 
+      returnsubmit: "/rejected", } });
   };
 
   const handleDelete = (index) => {
