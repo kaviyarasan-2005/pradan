@@ -184,9 +184,6 @@ return (
     <Button mode="contained" onPress={handleSearch} style={styles.searchButton}>
       Search
     </Button>
-    <Text style={{ textAlign: 'center', marginVertical: 10 }}>
-      {mockData.length > 0 ? ${mockData.length} forms found : 'No forms found'}
-    </Text>
 
     {/* Filters */}
     {filterVisible && (

@@ -6,7 +6,7 @@ interface FormData {
   submittedAt?: string;
   date?: string;
   formType?: "LAND" | "POND" | "PLANTATION";
-  formStatus?: "Approved" | "Pending" | "Rejected" | "Draft";
+  formStatus?: "Approved" | "Pending" | "Rejected";
   basicDetails?: any;
   landOwnership?: any;
   landDevelopment?: any;
