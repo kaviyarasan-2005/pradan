@@ -39,6 +39,7 @@ const TotalSubmit = () => {
   const [isEndDatePickerVisible, setEndDatePickerVisible] = useState(false);
 
   useEffect(() => {
+    
     loadSubmittedForms();
   }, []);
 
@@ -154,6 +155,13 @@ const TotalSubmit = () => {
             <Text>{endDate ? `End Date: ${endDate.toLocaleDateString()}` : "End Date"}</Text>
           </TouchableOpacity>
 
+          {/* Display the selected date range */}
+          {startDate && endDate && (
+            <Text style={styles.dateRangeText}>
+              Showing data from {startDate.toLocaleDateString()} to {endDate.toLocaleDateString()}
+            </Text>
+          )}
+
           <TouchableOpacity onPress={resetFilters} style={styles.resetButton}>
             <Text>Reset Filters</Text>
           </TouchableOpacity>
@@ -198,7 +206,7 @@ const TotalSubmit = () => {
               </View>
 
               <Text style={styles.label}>Form: <Text style={styles.value}>{item.formType}</Text></Text>
-              <Text style={styles.label}>Date: <Text style={styles.value}>{item.date || "N/A"}</Text></Text>
+              <Text style={styles.label}>Date: <Text style={styles.value}>{item.basicDetails.date}</Text></Text>
 
               <View style={styles.bioContainer}>
                 <Text style={styles.bioTitle}>Remarks</Text>
@@ -215,9 +223,6 @@ const TotalSubmit = () => {
     </ScrollView>
   );
 };
-
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -291,64 +296,68 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#333",
+    color: "#1B5E20",
   },
   statusBadge: {
-    paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 12,
+    paddingHorizontal: 8,
+    borderRadius: 4,
   },
   statusText: {
+    fontSize: 12,
     fontWeight: "bold",
   },
   label: {
     fontSize: 14,
-    color: "#666",
+    color: "#555",
+    marginTop: 4,
   },
   value: {
-    fontWeight: "600",
+    fontSize: 14,
     color: "#333",
   },
   bioContainer: {
-    backgroundColor: "#fff",
-    padding: 10,
-    borderRadius: 8,
-    marginTop: 8,
+    marginTop: 12,
   },
   bioTitle: {
-    fontWeight: "bold",
-    marginBottom: 4,
-    color: "#444",
+    fontSize: 14,
+    color: "#555",
   },
   bioContent: {
-    fontSize: 13,
-    color: "#666",
+    fontSize: 14,
+    color: "#333",
   },
   deleteButton: {
-    marginTop: 10,
-    alignSelf: "flex-end",
-    backgroundColor: "#FFCDD2",
-    paddingVertical: 6,
-    paddingHorizontal: 12,
+    marginTop: 12,
+    padding: 10,
+    backgroundColor: "#E57373",
     borderRadius: 6,
+    alignItems: "center",
   },
   deleteButtonText: {
-    color: "#C62828",
+    color: "#fff",
     fontWeight: "bold",
   },
-  dateButton: {
+  resetButton: {
+    marginTop: 12,
     padding: 10,
-    backgroundColor: "#ddd",
-    borderRadius: 8,
-    marginVertical: 10,
+    backgroundColor: "#81C784",
+    borderRadius: 6,
     alignItems: "center",
   },
-  resetButton: {
-    padding: 10,
-    backgroundColor: "#f1f1f1",
-    borderRadius: 8,
-    marginVertical: 10,
+  dateButton: {
+    padding: 12,
+    marginVertical: 8,
+    backgroundColor: "#E8F5E9",
+    borderRadius: 6,
+    justifyContent: "center",
     alignItems: "center",
+  },
+  dateRangeText: {
+    fontSize: 14,
+    color: "#388E3C",
+    marginTop: 8,
   },
 });
+
 export default TotalSubmit;

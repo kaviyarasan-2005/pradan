@@ -62,10 +62,8 @@ export default function BasicDetails() {
       }
     }
     const today = new Date();
-    const formattedDate = 
-      ("0" + today.getDate()).slice(-2) + '/' + 
-      ("0" + (today.getMonth() + 1)).slice(-2) + '/' + 
-      today.getFullYear();
+    const formattedDate = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear();
+    
       updateField("date", formattedDate);
   }, [id]);
   const updateField = (field: string, value: any) => {
