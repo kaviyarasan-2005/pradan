@@ -3,10 +3,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface FormData {
   id?: string;
+  name?: string;
   submittedAt?: string;
-  date?:string;
+  date?: string;
   formType?: "LAND" | "POND" | "PLANTATION";
-  formStatus?: "Approved" | "Pending" | "Rejected";
+  formStatus?: "Approved" | "Pending" | "Rejected" | "Draft";
   basicDetails?: any;
   landOwnership?: any;
   landDevelopment?: any;
@@ -16,10 +17,14 @@ interface FormData {
 interface FormStore {
   data: FormData;
   submittedForms: FormData[];
+  draftForms: FormData[];
   loading: boolean;
+
   setData: (section: keyof FormData, value: any) => void;
   resetData: () => void;
   submitForm: () => Promise<void>;
+  saveDraft: () => Promise<void>;
+  loadDrafts: () => Promise<void>;
   loadSubmittedForms: () => Promise<void>;
   clearSubmittedForms: () => Promise<void>;
   deleteFormByIndex: (index: number) => Promise<void>;
@@ -28,6 +33,7 @@ interface FormStore {
 export const useFormStore = create<FormStore>((set, get) => ({
   data: {},
   submittedForms: [],
+  draftForms: [],
   loading: false,
 
   setData: (section, value) =>
@@ -43,30 +49,66 @@ export const useFormStore = create<FormStore>((set, get) => ({
   submitForm: async () => {
     const currentData = get().data;
     const allForms = get().submittedForms;
-  
+
     let updatedForms;
-  
+
     if (currentData.id) {
-      // Update existing form
       updatedForms = allForms.map((form) =>
         form.id === currentData.id ? { ...form, ...currentData } : form
       );
     } else {
-      // New submission
       const formWithMeta: FormData = {
         ...currentData,
         id: Date.now().toString(),
         submittedAt: new Date().toISOString(),
-        formStatus: currentData.formStatus,  // or however you want to default it
+        formStatus: currentData.formStatus ?? "Pending",
       };
       updatedForms = [...allForms, formWithMeta];
     }
-  
+
     await AsyncStorage.setItem("submittedForms", JSON.stringify(updatedForms));
     set({ submittedForms: updatedForms, data: {} });
   },
-  
-  
+
+  saveDraft: async () => {
+    const currentData = get().data;
+    const allDrafts = get().draftForms ?? [];
+
+    if (!currentData || Object.keys(currentData).length === 0) {
+      console.warn("No data to save as draft.");
+      return;
+    }
+
+    let updatedDrafts;
+
+    if (currentData.id) {
+      updatedDrafts = allDrafts.map((form) =>
+        form.id === currentData.id ? { ...form, ...currentData } : form
+      );
+    } else {
+      const draftWithMeta = {
+        ...currentData,
+        id: Date.now().toString(),
+        savedAt: new Date().toISOString(),
+        formStatus: "Draft",
+      };
+      updatedDrafts = [...allDrafts, draftWithMeta];
+    }
+
+    await AsyncStorage.setItem("draftForms", JSON.stringify(updatedDrafts));
+    set({ draftForms: updatedDrafts, data: {} });
+  },
+
+  loadDrafts: async () => {
+    try {
+      const stored = await AsyncStorage.getItem("draftForms");
+      if (stored) {
+        set({ draftForms: JSON.parse(stored) });
+      }
+    } catch (error) {
+      console.error("Failed to load draft forms", error);
+    }
+  },
 
   loadSubmittedForms: async () => {
     set({ loading: true });
@@ -81,6 +123,7 @@ export const useFormStore = create<FormStore>((set, get) => ({
       set({ loading: false });
     }
   },
+
   clearSubmittedForms: async () => {
     await AsyncStorage.removeItem("submittedForms");
     set({ submittedForms: [] });

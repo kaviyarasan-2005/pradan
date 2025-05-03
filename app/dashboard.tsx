@@ -15,6 +15,7 @@ import { useRouter } from "expo-router";
 import PagerView from 'react-native-pager-view';
 import React from "react";
 import { MaterialIcons } from "@expo/vector-icons";
+import { Button } from "react-native-paper";
 const DashboardScreen: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [activeTab, setActiveTab] = useState('Today');
@@ -195,7 +196,6 @@ const renderCard2 = ({ item }: any) => {
           contentContainerStyle={{ paddingBottom: 10 }}
         />
         </PagerView>
-  
         <Pressable
           style={styles.newFormButton}
           onPress={() => setModalVisible(true)}
@@ -203,6 +203,16 @@ const renderCard2 = ({ item }: any) => {
           <MaterialIcons name="add-circle-outline" size={22} color="#fff" />
           <Text style={styles.newFormText}>Submit New Form</Text>
         </Pressable>
+        <TouchableOpacity
+        style={styles.draftButton}
+        onPress={() => {
+          router.push("/draft");
+        }}
+      >
+        <MaterialIcons name="insert-drive-file" size={35} color="#fff" />
+        <Text style={styles.newFormText}>Draft</Text>
+      </TouchableOpacity>
+        
   
         <Modal visible={modalVisible} transparent animationType="slide">
   <Pressable
@@ -327,6 +337,20 @@ const renderCard2 = ({ item }: any) => {
       fontWeight: 'bold',
       color: '#134e13',
     },
+    draftButton: {
+      backgroundColor: '#FFA500',
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+      justifyContent: 'center',
+      paddingVertical: 14,
+      paddingHorizontal: 34,
+      borderRadius: 10,
+      position: 'absolute',
+      bottom:30,
+      right: 20,
+      zIndex: 10,
+    },
     slideToggleContainer: {
       flexDirection: 'row',
       backgroundColor: '#e6f0e6',
@@ -399,7 +423,7 @@ const renderCard2 = ({ item }: any) => {
       justifyContent: 'center',
       paddingVertical: 14,
       borderRadius: 10,
-      marginBottom: 50,
+      marginBottom: 80,
       alignSelf: 'center',
       paddingHorizontal: 25,
     },

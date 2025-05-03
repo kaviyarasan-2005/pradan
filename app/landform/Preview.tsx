@@ -7,14 +7,14 @@ import { useFormStore } from "../../storage/useFormStore";
 export default function Preview() {
   const router = useRouter();
   const { id,fromsubmit,returnsubmit} = useLocalSearchParams<{ id?: string , returnsubmit?: string,fromsubmit?: string;}>();
-  const { data, submittedForms, setData, submitForm } = useFormStore();
+  const { data, submittedForms,draftForms, setData, submitForm } = useFormStore();
   
 const isSubmittedPreview = !!id;
 const selectedForm = React.useMemo(() => {
   // if (fromsubmit) {
   //   return data; // Always use updated data when fromsubmit
   // }
-  if (isSubmittedPreview && id) {
+  if (isSubmittedPreview && id || draftForms && id) {
     return submittedForms.find((form) => String(form.id) === id);
   }
   return data;
@@ -259,11 +259,37 @@ const canEdit = () => {
         { label: "Form Status", value: selectedForm.bankDetails?.formStatus },
       ], "/landform/bankDetails")}
 
-      {!isSubmittedPreview && (
-        <Button mode="contained" onPress={handleSubmit} style={styles.submitButton}>
-          Submit
-        </Button>
-      )}
+{!isSubmittedPreview && (
+  <>
+    <Button
+      mode="outlined"
+      onPress={async () => {
+        try {
+          setData("formType", "LAND");
+          setData("formStatus", "Draft");
+          await new Promise((res) => setTimeout(res, 50));
+          useFormStore.getState().saveDraft(data);
+          Alert.alert("Saved", "Form saved as draft successfully!");
+          router.push("/dashboard");
+        } catch (err) {
+          Alert.alert("Error", "Failed to save draft. Please try again.");
+        }
+      }}
+      style={{ marginTop: 10 }}
+    >
+      Save as Draft
+    </Button>
+
+    <Button
+      mode="contained"
+      onPress={handleSubmit}
+      style={[styles.submitButton, { marginTop: 10 }]}
+    >
+      Submit
+    </Button>
+  </>
+)}
+
     </ScrollView>
   );
 }
