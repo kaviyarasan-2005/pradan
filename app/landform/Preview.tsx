@@ -6,7 +6,7 @@ import { useFormStore } from "../../storage/useFormStore";
 
 export default function Preview() {
   const router = useRouter();
-  const { id,fromsubmit,returnsubmit} = useLocalSearchParams<{ id?: string , returnsubmit?: string,fromsubmit?: string;}>();
+  const { id,fromsubmit,returnsubmit,fromdraft} = useLocalSearchParams<{ id?: string , returnsubmit?: string,fromsubmit?: string, fromdraft?:string;}>();
   const { data, submittedForms,draftForms, setData, submitForm } = useFormStore();
   
 const isSubmittedPreview = !!id;
@@ -259,7 +259,7 @@ const canEdit = () => {
         { label: "Form Status", value: selectedForm.bankDetails?.formStatus },
       ], "/landform/bankDetails")}
 
-{!isSubmittedPreview && (
+{!isSubmittedPreview && !fromdraft&& (
   <>
     <Button
       mode="outlined"

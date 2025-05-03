@@ -18,6 +18,27 @@ export default function DraftsScreen() {
     fetchDrafts();
   }, []);
 
+  // YOU CAN SEE ALL DATA HERE BELOW USEEFFECT;
+
+  // useEffect(() => {
+  //   const printAllStorageData = async () => {
+  //     try {
+  //       const submitted = await AsyncStorage.getItem('submittedForms');
+  //       const drafts = await AsyncStorage.getItem('draftForms');
+  
+  //       console.log("=== Submitted Forms ===");
+  //       console.log(submitted ? JSON.parse(submitted) : "No submitted forms");
+  
+  //       console.log("=== Draft Forms ===");
+  //       console.log(drafts ? JSON.parse(drafts) : "No draft forms");
+  //     } catch (err) {
+  //       console.error("Failed to read storage", err);
+  //     }
+  //   };
+  
+  //   printAllStorageData();
+  // }, []);
+  
   const openDraft = (item) => {
     // Store draft data in the form store
     setData("basicDetails", item.basicDetails);
@@ -26,36 +47,52 @@ export default function DraftsScreen() {
     setData("bankDetails", item.bankDetails);
     setData("id", item.id);
     setData("formType", item.formType);
-    setData("formStatus", item.formStatus ?? "Draft");
+    setData("formStatus", item.formStatus);
   
     // Now navigate — no need to pass id anymore
-    router.push("/landform/Preview");
+    router.push({
+      pathname:"/landform/Preview",
+      params:{fromdraft:"true"}
+    });
   };
   
 
   const uploadAllDrafts = async () => {
     try {
-      for (let draft of drafts) {
-        // Set form data in the store
-        setData("basicDetails", draft.basicDetails);
-        setData("landOwnership", draft.landOwnership);
-        setData("landDevelopment", draft.landDevelopment);
-        setData("bankDetails", draft.bankDetails);
-        setData("id", draft.id); // so submitForm updates instead of inserts
-        setData("formType", draft.formType);
-        setData("formStatus", draft.formStatus);
-
-        await submitForm();
+      const submitted = await AsyncStorage.getItem("submittedForms");
+      const submittedForms = submitted ? JSON.parse(submitted) : [];
+  
+      const newSubmittedForms = drafts.map((draft) => ({
+        ...draft,
+        submittedAt: new Date().toISOString(),
+        formStatus: draft.formStatus === "Draft" ? "Pending" : draft.formStatus,
+      }));
+  
+      const merged = [...submittedForms];
+  
+      for (let draft of newSubmittedForms) {
+        const index = merged.findIndex((f) => f.id === draft.id);
+        if (index > -1) {
+          merged[index] = draft;
+        } else {
+          merged.push(draft);
+        }
       }
-
-      await AsyncStorage.removeItem('draftForms');
+  
+      await AsyncStorage.setItem("submittedForms", JSON.stringify(merged));
+      await AsyncStorage.removeItem("draftForms");
+  
       setDrafts([]);
-      Alert.alert('Success', 'All drafts uploaded to submitted forms');
+      useFormStore.setState({ submittedForms: merged, draftForms: [] });
+  
+      Alert.alert("Success", "All drafts uploaded to submitted forms");
     } catch (error) {
       console.error(error);
-      Alert.alert('Error', 'Failed to upload drafts');
+      Alert.alert("Error", "Failed to upload drafts");
     }
   };
+  
+  
 
   return (
     <View style={{ flex: 1, padding: 16 }}>
